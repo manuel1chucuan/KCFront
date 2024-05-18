@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+$color-primario: rgba(223, 105, 207, 0.397);
+
+body {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.5), $color-primario), url('assets/logokc.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+}
