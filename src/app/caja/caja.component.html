@@ -1,3 +1,17 @@
-<div class="col-sm-12 d-flex justify-content-end mx-0 p-2">
-    hola
+<div class="col-sm-12 d-flex justify-content-start mx-0 p-2">
+
+    <div *ngFor="let product of topPriorityProducts" class="card cardA">
+  <div class="row g-0">
+    <div class="col-md-3">
+      <img src="../../assets/producto.jpg" class="img-fluid rounded-start imgA" alt="Imagen del producto">
+    </div>
+    <div class="col-md-9">
+      <div class="cBody">
+        <p class="card-text limit">{{ product.name }}</p>
+        <p class="card-text precio">${{ product.price }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>

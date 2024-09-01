@@ -3,3 +3,33 @@
     width: 100%;
     height: 100%;
 }
+
+.cardA{
+    width: 15rem; 
+    height: 5rem;  
+    margin: 0.3rem;
+}
+
+.imgA{
+    height: 4.89rem;
+}
+
+.cBody{
+    padding: 0.2rem;
+    max-height: 4.9rem;
+    overflow: hidden;
+}
+
+.limit{
+    height: 2.80rem !important;
+    margin: 0px;
+    font-size: 0.85rem;
+    margin-bottom:0.20rem;
+    overflow: hidden;
+}
+
+.precio{
+    height: 1.5rem !important;
+    margin: 0px;
+    border-top: dashed 1px rgb(204, 204, 204);
+}
