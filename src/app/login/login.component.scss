@@ -1,5 +1,5 @@
 $color-primario: rgb(255, 211, 255);
-$color-border: rgb(99, 99, 99);
+$color-border: rgb(139, 139, 139);
 $border-radius: 8px;
 $border-radius2: 4px;
 
@@ -9,19 +9,17 @@ $border-radius2: 4px;
 }
 
 .label-form{
-    background-image: linear-gradient(to right, $color-primario , white, $color-primario);
     border-top-left-radius: $border-radius2;
     border-top-right-radius: $border-radius2;
     font-size: 2rem;
     font-family:'Times New Roman', Times, serif;
-    color: $color-border;
+    color:  rgb(77, 77, 77);
 }
 
 .label-form-bot{
     padding-bottom: 0.3rem;
     padding-right: 0.5rem;
-    border-bottom: 1px solid $color-primario;
-    background-image: linear-gradient(to top, $color-primario , white);
+
 }
 
 .margen-form{
@@ -30,12 +28,9 @@ $border-radius2: 4px;
 }
 
 .body-form{
-    background-color: white;
     margin-top: 2rem !important;
     padding: 0;
-    border-top: 2px solid $color-primario;
-    border-left: 1px solid $color-primario;
-    border-right: 1px solid $color-primario;
+
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
 }

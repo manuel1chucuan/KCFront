@@ -1,0 +1,70 @@
+.contenedorA{
+    margin-top: 0 !important;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-principal{
+    height: 38px;
+    width: 38px; 
+    cursor: pointer;
+}
+
+.menu-principal:hover{
+    height: 38px;
+    width: 38px; 
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.336);
+    border-radius: 5px;
+}
+
+.logout{
+    height: 38px;
+    width: 38px; 
+    cursor: pointer;
+}
+
+.logout:hover{
+    height: 38px;
+    width: 38px; 
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.336);
+    border-radius: 10px;
+}
+
+.user-icon{
+    height: 38px;
+    width: 38px; 
+}
+
+.user-text{
+    font-size: 1rem;
+}
+
+.user{
+    cursor: pointer;
+    margin-right: 1rem;
+    padding-right: 5px;
+}
+
+.user:hover{
+    cursor: pointer;
+    padding-right: 5px;
+    background-color: rgba(0, 0, 0, 0.336);
+    border-radius: 5px;
+}
+
+.contenido-z{
+    flex: 1;
+}
+
+app-caja {
+    flex: 1; /* Ocupa el espacio restante disponible */
+    background-color: lightblue; /* Solo para visibilidad */
+}
+
+.barra-z{
+
+}
