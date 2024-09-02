@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthServiceService } from '../login/auth-service.service';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 })
 
 export class CajaComponent implements OnInit {
-
+  @Input() controlLongitud: number = 8;
   beautyProducts = [
     {
       id: 1,
@@ -184,16 +184,20 @@ export class CajaComponent implements OnInit {
     // Ordenar el array de productos en base a la prioridad de forma descendente
     this.topPriorityProducts = this.beautyProducts
       .sort((a, b) => b.priority - a.priority)
-      .slice(0, 8); // Tomar los primeros 10 productos
+      .slice(0, this.controlLongitud); // Tomar los primeros productos
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['controlLongitud']) {
+      this.topPriorityProducts = this.beautyProducts
+      .sort((a, b) => b.priority - a.priority)
+      .slice(0, this.controlLongitud); // Tomar los primeros productos
+    }
   }
 
   constructor(private authService: AuthServiceService, private router: Router) { }
 
   onLogOut(): void {
     this.authService.logout();
-  }
-
-  selectHabilidad(habilidad: string) {
-
   }
 }

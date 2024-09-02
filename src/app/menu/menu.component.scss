@@ -81,3 +81,32 @@
     border:dashed 1px rgba(123, 255, 0, 0.801);
     cursor: pointer;
 }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    height: 100vmax;
+    width: 100%;
+
+}
+
+.select-flotante1 {
+    position: absolute;
+    background-color: rgba(247, 247, 247, 0.925);
+    height: 40rem;
+    width: 20rem;
+    z-index: 100; /* Asegúrate de que esté encima del contenedor de fondo */
+    border: solid 1px rgb(192, 192, 192);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-left: 1rem;
+    padding-top: 0.3rem;
+}
+
+.control-frecuentes{
+    background-color: rgb(255, 254, 216);
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+}

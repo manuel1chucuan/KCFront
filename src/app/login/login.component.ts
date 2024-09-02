@@ -9,11 +9,12 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { PrimeNGConfig } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, RouterModule, CommonModule, CajaComponent, ButtonModule, ToastModule],
+  imports: [HttpClientModule, FormsModule, RouterModule, CommonModule, CajaComponent, ButtonModule, ToastModule, DialogModule],
   providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -26,10 +27,6 @@ export class LoginComponent {
 
   ngOnInit() {
     this.primengConfig.ripple = true;
-  }
-
-  showSuccess() {
-    this.messageService.add({severity:'error', summary:'Error', detail:'Ingresa un correo Valido'});
   }
 
   onLogin(): void {

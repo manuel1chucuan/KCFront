@@ -34,3 +34,15 @@ $border-radius2: 4px;
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
 }
+.custom-dialog {
+    position: absolute;
+    top: calc(100% + 10px); /* Ajusta el margen entre el botón y el diálogo */
+    left: 0;
+    margin-left: 0; /* Ajusta la alineación horizontal si es necesario */
+    z-index: 1000; /* Asegúrate de que el diálogo esté por encima de otros elementos */
+  }
+  
+  .dialog-container {
+    position: relative;
+    display: inline-block;
+  }
