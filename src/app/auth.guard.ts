@@ -5,12 +5,12 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   // Validar si localStorage está disponible y accesible
-  const isLocalStorageLoaded = typeof window !== 'undefined' && !!window.localStorage;
+  const isSessionStorage = typeof window !== 'undefined' && !!window.sessionStorage;
 
-  if (!isLocalStorageLoaded) {
+  if (!isSessionStorage) {
     console.error('LocalStorage no está disponible o no está cargado.');
     return false;
   }
 
-  return !!localStorage.getItem('authToken') ? true : router.navigate(['/login']);
+  return !!sessionStorage.getItem('authToken') ? true : router.navigate(['/login']);
 };

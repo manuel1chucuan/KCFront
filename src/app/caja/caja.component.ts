@@ -15,6 +15,29 @@ import { HttpClientModule } from '@angular/common/http';
 
 export class CajaComponent implements OnInit {
   @Input() controlLongitud: number = 8;
+  products = [
+    { name: 'Mascarilla facial', quantity: 1, price: 35.00 },
+    { name: 'Crema hidratante', quantity: 2, price: 50.00 },
+    { name: 'Exfoliante corporal', quantity: 1, price: 40.00 },
+    { name: 'Tónico facial', quantity: 1, price: 30.00 },
+    { name: 'Sérum antioxidante', quantity: 1, price: 60.00 },
+    { name: 'Aceite esencial', quantity: 1, price: 25.00 },
+    { name: 'Gel limpiador', quantity: 2, price: 20.00 },
+    { name: 'Crema para ojos', quantity: 1, price: 45.00 },
+    { name: 'Mascarilla de arcilla', quantity: 1, price: 28.00 },
+    { name: 'Protector solar', quantity: 2, price: 55.00 },
+    { name: 'Bálsamo labial', quantity: 3, price: 15.00 },
+    { name: 'Tónico de rosas', quantity: 1, price: 32.00 },
+    { name: 'Crema de noche', quantity: 1, price: 65.00 },
+    { name: 'Jabón facial', quantity: 2, price: 22.00 },
+    { name: 'Serum de vitamina C', quantity: 1, price: 70.00 },
+    { name: 'Exfoliante de labios', quantity: 1, price: 18.00 },
+    { name: 'Crema corporal', quantity: 1, price: 38.00 },
+    { name: 'Loción tónica', quantity: 1, price: 30.00 },
+    { name: 'Mascarilla hidratante', quantity: 1, price: 45.00 },
+    { name: 'Esencia facial', quantity: 1, price: 50.00 }
+  ];
+  
   beautyProducts = [
     {
       id: 1,

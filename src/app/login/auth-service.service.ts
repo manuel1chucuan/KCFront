@@ -16,7 +16,7 @@ export class AuthServiceService {
   login(correo: string, contrasena: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { correo, contrasena })
       .pipe(
-        tap((response: any) => localStorage.setItem('authToken', response.token)),
+        tap((response: any) => sessionStorage.setItem('authToken', response.token)),
         catchError(this.handleError<any>('login'))
       );
   }
@@ -29,12 +29,12 @@ export class AuthServiceService {
   }
 
   logout(): void {
-    localStorage.removeItem('authToken');
+    sessionStorage.removeItem('authToken');
     this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('authToken');
+    const token = sessionStorage.getItem('authToken');
     return !!token;
   }
 
