@@ -21,20 +21,12 @@
     background-size: 6rem;
     background-repeat: no-repeat;
     background-position: right;
-    border: solid 1px green;
+    border: solid 1px rgb(148, 42, 130);
 }
 
 .cardA:active{
-    width: 15rem; 
-    height: 5rem;  
-    margin: 0.3rem;
     cursor:cell;
-    z-index: 1000;
-    //background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../../assets/mas5.png');
-    background-size: 6rem;
-    background-repeat: no-repeat;
-    background-position: right;
-    border: solid 1px green;
+    border: solid 1px rgb(255, 0, 212);
 }
 
 .imgA{
