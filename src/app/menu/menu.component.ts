@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { CajaComponent } from '../caja/caja.component';
+import { FiltroPrincipal } from '../services/fliltro-principal.service';
 
 @Component({
   selector: 'app-menu',
@@ -15,6 +16,7 @@ import { CajaComponent } from '../caja/caja.component';
 })
 export class MenuComponent {
   selectedValue: number = 8;
+  filtro: string = '';
   showMessage: boolean = false; // Controla la visibilidad del mensaje
   handleClick() {
     this.showMessage = !this.showMessage; // Alterna la visibilidad del mensaje
@@ -22,13 +24,18 @@ export class MenuComponent {
   closeMessage() {
     this.showMessage = false;
   }
-  constructor(private authService: AuthServiceService, private router: Router) { }
+  constructor(private authService: AuthServiceService, private router: Router, private dataService: FiltroPrincipal) { }
 
   onLogOut(): void {
     this.authService.logout();
   }
 
-  selectHabilidad(habilidad: string) {
+  aplicarFiltro(): void {
+    console.log(this.filtro);
+    // Realiza el filtrado de datos aquí
+    const datosFiltrados = [""]; // Aplica tu lógica de filtro
 
+    // Llama al método del servicio para establecer los datos filtrados
+    this.dataService.setFilteredData(this.filtro);
   }
 }

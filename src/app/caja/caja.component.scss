@@ -54,17 +54,43 @@
 }
 
 .caja-lado-izquierdo-row {
-    background-color: rgba(150, 150, 150, 0.459);
+    background-color: rgba(255, 165, 240, 0.616);
     margin: 0px;
     height: 100%;
     border-radius: 0px 10px 0px 0px;
+    padding-top: 0.15rem;
+    padding-right: 0.15rem;
+    border-top: solid 1px rgb(131, 131, 131);
+    border-right: solid 1px rgb(131, 131, 131);
+}
+
+.caja-lado-izquierdo2-row {
+    background-color: rgba(255, 255, 255, 0.89);
+    margin: 0px;
+    height: 100%;
+    border-radius: 0px 10px 0px 0px;
+    border: solid 1px rgb(131, 131, 131);
+    position: relative !important;
 }
 
 .caja-lado-derecho-row {
-    background-color: rgba(150, 150, 150, 0.459);
+    background-color: rgba(255, 165, 240, 0.616);
     margin: 0px;
     height: 100%;
     border-radius: 10px 0px 0px 0px;
+    padding-top: 0.15rem;
+    padding-left: 0.15rem;
+    border-top: solid 1px rgb(131, 131, 131);
+    border-left: solid 1px rgb(131, 131, 131);
+}
+
+.caja-lado-derecho2-row {
+    background-color: rgba(255, 255, 255, 0.89);
+    margin: 0px;
+    height: 100%;
+    border-radius: 10px 0px 0px 0px;
+    border: solid 1px rgb(131, 131, 131);
+    position: relative !important;
 }
 
 .caja-centro {
@@ -118,4 +144,24 @@
 
 .tabla-overflow2-2::-webkit-scrollbar{
     display: none;
+}
+
+.eliminacion{
+    color: rgb(196, 33, 33); 
+    width: 9%; 
+    cursor: pointer;
+}
+.eliminacion:hover{
+    color: rgb(250, 0, 0); 
+    text-decoration: underline;
+}
+
+.eliminacion-individual{
+    color: rgb(175, 70, 70);
+    width: 9%;
+    text-align: center;
+    cursor: pointer;
+}
+.eliminacion-individual:hover{
+    color: rgb(250, 0, 0); 
 }

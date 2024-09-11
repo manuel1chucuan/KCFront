@@ -4,6 +4,8 @@ import { AuthServiceService } from '../login/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { FiltroPrincipal } from '../services/fliltro-principal.service';
+import e from 'express';
 
 @Component({
   selector: 'app-caja',
@@ -15,27 +17,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 export class CajaComponent implements OnInit {
   @Input() controlLongitud: number = 8;
-  products = [
-    { name: 'Mascarilla facial', quantity: 1, price: 35.00 },
-    { name: 'Crema hidratante', quantity: 2, price: 50.00 },
-    { name: 'Exfoliante corporal', quantity: 1, price: 40.00 },
-    { name: 'Tónico facial', quantity: 1, price: 30.00 },
-    { name: 'Sérum antioxidante', quantity: 1, price: 60.00 },
-    { name: 'Aceite esencial', quantity: 1, price: 25.00 },
-    { name: 'Gel limpiador', quantity: 2, price: 20.00 },
-    { name: 'Crema para ojos', quantity: 1, price: 45.00 },
-    { name: 'Mascarilla de arcilla', quantity: 1, price: 28.00 },
-    { name: 'Protector solar', quantity: 2, price: 55.00 },
-    { name: 'Bálsamo labial', quantity: 3, price: 15.00 },
-    { name: 'Tónico de rosas', quantity: 1, price: 32.00 },
-    { name: 'Crema de noche', quantity: 1, price: 65.00 },
-    { name: 'Jabón facial', quantity: 2, price: 22.00 },
-    { name: 'Serum de vitamina C', quantity: 1, price: 70.00 },
-    { name: 'Exfoliante de labios', quantity: 1, price: 18.00 },
-    { name: 'Crema corporal', quantity: 1, price: 38.00 },
-    { name: 'Loción tónica', quantity: 1, price: 30.00 },
-    { name: 'Mascarilla hidratante', quantity: 1, price: 45.00 },
-    { name: 'Esencia facial', quantity: 1, price: 50.00 }
+  filterListaProductosMasComprados: any[] = [];
+  products: any[] = [
+    { id: 99, name: 'Mascarilla facial', quantity: 1, price: 35.00, pTotal: 35.00 }
   ];
   
   beautyProducts = [
@@ -202,12 +186,16 @@ export class CajaComponent implements OnInit {
   ];
 
   topPriorityProducts: any[] = [];
-
+  total: number = 0;
+  
   ngOnInit(): void {
-    // Ordenar el array de productos en base a la prioridad de forma descendente
-    this.topPriorityProducts = this.beautyProducts
+    this.dataService.getFilteredData().subscribe(data => {
+      this.filterListaProductosMasComprados = this.beautyProducts.filter(item => item.name.toLowerCase().includes(data.toLowerCase()));
+      this.topPriorityProducts = this.filterListaProductosMasComprados
       .sort((a, b) => b.priority - a.priority)
-      .slice(0, this.controlLongitud); // Tomar los primeros productos
+      .slice(0, this.controlLongitud);
+    });
+    this.calcularTotal();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -218,7 +206,51 @@ export class CajaComponent implements OnInit {
     }
   }
 
-  constructor(private authService: AuthServiceService, private router: Router) { }
+  agregarProductos(productToAdd: any){
+    if (productToAdd) {
+      // Si el producto ya existe en la lista de productos, aumenta la cantidad
+      const existingProduct = this.products.find(product => product.id === productToAdd.id);
+      
+      if (existingProduct) {
+        existingProduct.quantity += 1;
+        existingProduct.pTotal = existingProduct.quantity * existingProduct.price;
+      } else {
+        this.products.push({ ...productToAdd, quantity: 1, pTotal:productToAdd.price });
+      }
+      this.calcularTotal();
+    }
+  }
+
+  onQuantityChange(productIn: any) {
+    if (productIn.quantity <= 0)
+    {
+      const index = this.products.findIndex(product => product.id === productIn.id);
+      this.products.splice(index, 1);
+    } else {
+      productIn.pTotal = productIn.quantity * productIn.price;
+    }
+    this.calcularTotal();
+  }
+
+  limpiarTicket(){
+    this.products = [];
+    this.calcularTotal();
+  }
+
+  quitarProductoTicket(productIn:any){
+    const index = this.products.findIndex(product => product.id === productIn.id);
+    this.products.splice(index, 1);
+    this.calcularTotal();
+  }
+
+  calcularTotal(){
+    this.total=0;
+    this.products.forEach(element => {
+      this.total += element.pTotal;
+    });
+  }
+
+  constructor(private authService: AuthServiceService, private router: Router, private dataService: FiltroPrincipal) { }
 
   onLogOut(): void {
     this.authService.logout();
