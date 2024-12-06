@@ -1,7 +1,7 @@
 <div class="container-fluid mt-3 contenedorA">
     <div class="row">
         <div class="col-sm-2 d-flex justify-content-start mx-0 p-2">
-            <svg data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop"
+            <svg (click)="handleClick2()"
                 width="16" height="16" fill="currentColor" class="bi bi-grid-3x3-gap menu-principal" viewBox="0 0 16 16">
                 <path d="M4 2v2H2V2zm1 12v-2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m5 10v-2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1M9 2v2H7V2zm5 0v2h-2V2zM4 7v2H2V7zm5 0v2H7V7zm5 0h-2v2h2zM4 12v2H2v-2zm5 0v2H7v-2zm5 0v2h-2v-2zM12 1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm-1 6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm1 4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1z"/>
             </svg>
@@ -31,13 +31,8 @@
         </div>
     </div>
     <div class="row contenido-z">
-        <div *ngIf="showMessage" class="overlay" (click)="closeMessage()">
-        
-        </div>
-        <div *ngIf="showMessage" class="select-flotante1" (click)="$event.stopPropagation()">
-            <div class="row justify-content-end">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeMessage()"></button>
-            </div>
+        <div *ngIf="showTogle" class="overlay" (click)="closeMessage()"></div>
+        <div *ngIf="showTogle" class="select-flotante1" (click)="$event.stopPropagation()">
             <h6>
                 <span>
                     <svg width="20" height="20" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16" style="margin-top: -4px;">
@@ -59,17 +54,35 @@
             </div>
 
         </div>
+
+        <div *ngIf="showTogle2" class="overlay" (click)="closeMessage2()"></div>
+        <div *ngIf="showTogle2" class="select-flotante2" (click)="$event.stopPropagation()">
+
+            <div class="navegacion-div">
+                <img src="../../assets/bella.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
+                <label class="navegacion-lbl">Servicios</label>
+            </div>
+
+            <div class="navegacion-div">
+                <img src="../../assets/inventario.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
+                <label class="navegacion-lbl">Inventario</label>
+            </div>
+
+            <div class="navegacion-div">
+                <img src="../../assets/empleados.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
+                <label class="navegacion-lbl">Empleados</label>
+            </div>
+
+            <div class="navegacion-div">
+                <img src="../../assets/sucursal2.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
+                <label class="navegacion-lbl">Sucursales</label>
+            </div>
+
+            <div class="navegacion-div">
+                <img src="../../assets/ventas.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
+                <label class="navegacion-lbl">Ventas</label>
+            </div>
+        </div>
         <app-caja [controlLongitud]="selectedValue"></app-caja>
     </div>
 </div>
-
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasWithBackdropLabel">Offcanvas with backdrop</h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-      <p>.....</p>
-    </div>
-  </div>
-  

@@ -17,12 +17,20 @@ import { FiltroPrincipal } from '../services/fliltro-principal.service';
 export class MenuComponent {
   selectedValue: number = 8;
   filtro: string = '';
-  showMessage: boolean = false; // Controla la visibilidad del mensaje
+  showTogle: boolean = false; // Controla la visibilidad del mensaje
+  showTogle2: boolean = false; // Controla la visibilidad del mensaje
   handleClick() {
-    this.showMessage = !this.showMessage; // Alterna la visibilidad del mensaje
+    this.showTogle = !this.showTogle; // Alterna la visibilidad del mensaje
   }
   closeMessage() {
-    this.showMessage = false;
+    this.showTogle = false;
+  }
+
+  handleClick2() {
+    this.showTogle2 = !this.showTogle2; // Alterna la visibilidad del mensaje
+  }
+  closeMessage2() {
+    this.showTogle2 = false;
   }
   constructor(private authService: AuthServiceService, private router: Router, private dataService: FiltroPrincipal) { }
 
