@@ -3,7 +3,6 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthServiceService } from '../login/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { CajaComponent } from "../caja/caja.component";
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -14,7 +13,7 @@ import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, RouterModule, CommonModule, CajaComponent, ButtonModule, ToastModule, DialogModule],
+  imports: [FormsModule, RouterModule, CommonModule, CajaComponent, ButtonModule, ToastModule, DialogModule],
   providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],

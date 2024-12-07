@@ -3,14 +3,12 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthServiceService } from '../login/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { FiltroPrincipal } from '../services/fliltro-principal.service';
-import e from 'express';
 
 @Component({
   selector: 'app-caja',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, RouterModule, CommonModule],
+  imports: [ FormsModule, RouterModule, CommonModule],
   templateUrl: './caja.component.html',
   styleUrl: './caja.component.scss'
 })

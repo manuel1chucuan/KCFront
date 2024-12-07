@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AuthServiceService } from '../login/auth-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { CajaComponent } from '../caja/caja.component';
 import { FiltroPrincipal } from '../services/fliltro-principal.service';
 import { ServiciosComponent } from "../servicios/servicios.component";
@@ -15,7 +14,8 @@ import { VentasComponent } from '../ventas/ventas.component';
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, RouterModule, CommonModule, CajaComponent, ServiciosComponent, EmpleadosComponent, 
+  imports: [
+  FormsModule, RouterModule, CommonModule, CajaComponent, ServiciosComponent, EmpleadosComponent, 
     InventarioComponent, SucursalesComponent, VentasComponent],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
@@ -45,7 +45,7 @@ export class MenuComponent {
   closeMessage2() {
     this.showTogle2 = false;
   }
-  constructor(private authService: AuthServiceService, private router: Router, private dataService: FiltroPrincipal) { }
+  constructor(private authService: AuthServiceService, private dataService: FiltroPrincipal) { }
 
   onLogOut(): void {
     this.authService.logout();
