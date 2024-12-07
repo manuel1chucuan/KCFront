@@ -41,7 +41,7 @@ export class CajaComponent implements OnInit {
     },
     {
       id: 3,
-      name: 'Sérum antiarrugas',
+      name: 'Sérum antiarrugas para controla toditititas las arrugas malvavisco',
       description: 'Sérum concentrado para reducir las líneas de expresión y arrugas.',
       price: 39.99,
       available: true,
