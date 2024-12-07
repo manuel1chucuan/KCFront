@@ -6,11 +6,17 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { CajaComponent } from '../caja/caja.component';
 import { FiltroPrincipal } from '../services/fliltro-principal.service';
+import { ServiciosComponent } from "../servicios/servicios.component";
+import { EmpleadosComponent } from '../empleados/empleados.component';
+import { InventarioComponent } from '../inventario/inventario.component';
+import { SucursalesComponent } from '../sucursales/sucursales.component';
+import { VentasComponent } from '../ventas/ventas.component';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, RouterModule, CommonModule, CajaComponent],
+  imports: [HttpClientModule, FormsModule, RouterModule, CommonModule, CajaComponent, ServiciosComponent, EmpleadosComponent, 
+    InventarioComponent, SucursalesComponent, VentasComponent],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })
@@ -19,6 +25,13 @@ export class MenuComponent {
   filtro: string = '';
   showTogle: boolean = false; // Controla la visibilidad del mensaje
   showTogle2: boolean = false; // Controla la visibilidad del mensaje
+
+  componenteActual: string = 'caja'; // Componente inicial
+
+  mostrarComponente(componente: string): void {
+    this.componenteActual = componente;
+    this.closeMessage2();
+  }
   handleClick() {
     this.showTogle = !this.showTogle; // Alterna la visibilidad del mensaje
   }

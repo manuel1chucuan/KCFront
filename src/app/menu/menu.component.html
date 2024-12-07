@@ -9,7 +9,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
                     <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
                 </svg>
-                Caja
+                Ajustes
             </span>
         </div>
         <div class="col-sm-7 d-flex justify-content-end mx-0 p-2">
@@ -58,31 +58,41 @@
         <div *ngIf="showTogle2" class="overlay" (click)="closeMessage2()"></div>
         <div *ngIf="showTogle2" class="select-flotante2" (click)="$event.stopPropagation()">
 
-            <div class="navegacion-div">
+            <div class="navegacion-div" (click)="mostrarComponente('caja')">
+                <img src="../../assets/caja.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
+                <label class="navegacion-lbl">Caja</label>
+            </div>
+
+            <div class="navegacion-div" (click)="mostrarComponente('servicios')">
                 <img src="../../assets/bella.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Servicios</label>
             </div>
 
-            <div class="navegacion-div">
+            <div class="navegacion-div" (click)="mostrarComponente('inventario')">
                 <img src="../../assets/inventario.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Inventario</label>
             </div>
 
-            <div class="navegacion-div">
+            <div class="navegacion-div" (click)="mostrarComponente('empleados')">
                 <img src="../../assets/empleados.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Empleados</label>
             </div>
 
-            <div class="navegacion-div">
+            <div class="navegacion-div" (click)="mostrarComponente('sucursales')">
                 <img src="../../assets/sucursal2.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Sucursales</label>
             </div>
 
-            <div class="navegacion-div">
+            <div class="navegacion-div" (click)="mostrarComponente('ventas')">
                 <img src="../../assets/ventas.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Ventas</label>
             </div>
         </div>
-        <app-caja [controlLongitud]="selectedValue"></app-caja>
+        <app-caja *ngIf="componenteActual === 'caja'" [controlLongitud]="selectedValue"></app-caja>
+        <app-servicios *ngIf="componenteActual === 'servicios'"></app-servicios>
+        <app-inventario *ngIf="componenteActual === 'inventario'"></app-inventario>
+        <app-empleados *ngIf="componenteActual === 'empleados'"></app-empleados>
+        <app-sucursales *ngIf="componenteActual === 'sucursales'"></app-sucursales>
+        <app-ventas *ngIf="componenteActual === 'ventas'"></app-ventas>
     </div>
 </div>

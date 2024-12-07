@@ -104,7 +104,7 @@
 
 .select-flotante2 {
     position: absolute;
-    background-color: rgba(247, 247, 247, 0.925);
+    background-color: rgb(255, 255, 255);
     width: auto;
     z-index: 100; /* Asegúrate de que esté encima del contenedor de fondo */
     border: solid 1px rgb(192, 192, 192);
@@ -133,10 +133,16 @@ app-caja{
     margin-left: 0.5rem;
     margin-right: 0.5rem;
     cursor: pointer;
+    padding: 0.5rem;
 }
 
 .navegacion-div:hover{
     background-color: rgb(255, 248, 255);
+    border: solid 1px rgb(214, 214, 214);  
+}
+
+.navegacion-div:active{
+    background-color: rgb(223, 214, 223);
     border: solid 1px rgb(214, 214, 214);  
 }
 .navegacion-lbl{
