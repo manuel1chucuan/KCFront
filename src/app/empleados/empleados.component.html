@@ -1,18 +1,330 @@
 <div class="empleados-vista">
     <div class="row d-flex contenedor-principal">
-        <div class="col-md-4" style="background-color: aliceblue;">
-        </div>
-        <div class="col-md-8" style="background-color: rgb(87, 131, 170); padding: 1rem;">
-
-            <div class="card" style="width:10rem">
-                <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
-                <div class="card-body" style="padding: 0.5rem;">
-                  <h6 class="card-title">John Doe</h6>
-                  <div>1</div>
+        <div class="col-md-4" style="background-color: rgba(255, 255, 255, 0.767); padding: 1rem; border-radius: 8px; border: solid 1px rgb(216, 216, 216);">
+            <!-- Navegación de pestañas -->
+            <ul class="nav nav-tabs" id="userTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="addUserTab" data-bs-toggle="tab" data-bs-target="#addUser" type="button" role="tab" aria-controls="addUser" aria-selected="true">Agregar Usuario</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="manageUsersTab" data-bs-toggle="tab" data-bs-target="#manageUsers" type="button" role="tab" aria-controls="manageUsers" aria-selected="false">Gestión de Usuarios</button>
+                </li>
+            </ul>
+        
+            <!-- Contenido de las pestañas -->
+            <div class="tab-content" id="userTabsContent" style="margin-top: 1rem;">
+                <!-- Pestaña de Agregar Usuario -->
+                
+                <div class="tab-pane fade show active" id="addUser" role="tabpanel" aria-labelledby="addUserTab">
+                    <div class="mb-3">
+                      <h6>Nombre</h6>
+                      <input type="text" class="form-control" id="userName" [(ngModel)]="nuevoUsuario.nombreDeUsuario" placeholder="Ingresa el nombre" required (keydown.enter)="crearUsuario()">
+                    </div>
+                    <div class="mb-3">
+                      <h6>Correo Electrónico</h6>
+                      <input type="email" class="form-control" id="userEmail" [(ngModel)]="nuevoUsuario.correo" placeholder="Ingresa el correo" required (keydown.enter)="crearUsuario()">
+                    </div>
+                    <div class="mb-3">
+                      <h6>Contraseña</h6>
+                      <input type="password" class="form-control" id="userPassword" [(ngModel)]="nuevoUsuario.contrasena" placeholder="Ingresa la contraseña" required (keydown.enter)="crearUsuario()">
+                    </div>
+                    <h6 class="mt-3">Configuraciones</h6>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="admini" [(ngModel)]="nuevoUsuario.admini">
+                      <label class="form-check-label" for="admini">Administrador</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="caja" [(ngModel)]="nuevoUsuario.caja">
+                      <label class="form-check-label" for="caja">Caja</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="servicio" [(ngModel)]="nuevoUsuario.servicio">
+                      <label class="form-check-label" for="servicio">Servicio</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="inventario" [(ngModel)]="nuevoUsuario.inventario">
+                      <label class="form-check-label" for="inventario">Inventario</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="activo" [(ngModel)]="nuevoUsuario.activo" checked>
+                      <label class="form-check-label" for="activo">Activo</label>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                      <button class="btn btn-primary" (click)="crearUsuario()">Agregar Usuario</button>
+                    </div>
+                </div>
+        
+                <!-- Pestaña de Gestión de Usuarios -->
+                <div class="tab-pane fade" id="manageUsers" role="tabpanel" aria-labelledby="manageUsersTab">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <input type="text" class="form-control" placeholder="Buscar usuario..." style="width: 70%;">
+                        <button class="btn btn-secondary" style="width: 25%;">Buscar</button>
+                    </div>
                 </div>
             </div>
+        </div>
+        
+        <div class="col-md-8" style="height: 100%;position: relative;">
+            <div class="overflow-div-ext">
+                <div class="d-flex flex-wrap align-content-start overflow-div">
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
 
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="width:10rem;height: 15rem; flex: 0 0 auto;">
+                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">John Doe</h6>
+                            <div>1</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-    
 </div>

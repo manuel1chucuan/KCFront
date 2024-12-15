@@ -1,9 +1,21 @@
 .empleados-vista {
-    background-color: rgba(250, 235, 215, 0.295);
     width: 100%;
     height: 100%;
 }
 
 .contenedor-principal{
+    height: 100%;
+    padding: 0.5rem;
+}
+
+.overflow-div {
+    gap: 1rem; 
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.overflow-div-ext {
+    position:absolute;
+    overflow: auto; 
     height: 100%;
 }
