@@ -10,16 +10,16 @@ export interface CrearUsuario {
 }
 
 export interface Usuario {
-    id: string;                  // ID único del usuario
-    nombreDeUsuario: string;     // Nombre del usuario
-    admini: boolean;             // Si tiene privilegios de administrador
-    caja: boolean;               // Acceso al módulo de caja
-    servicio: boolean;           // Acceso al módulo de servicio
-    inventario: boolean;         // Acceso al módulo de inventario
-    activo: boolean;             // Si el usuario está activo
-    contrasena: string;          // Contraseña encriptada
-    correo: string;              // Correo electrónico
-    fechaCreacion: string;       // Fecha de creación en formato ISO
-    fechaInactivo: string;       // Fecha de inactividad (o por defecto)
-    version: number;             // Versión del usuario
+    ID: string;                  // ID único del usuario
+    NombreDeUsuario: string;     // Nombre del usuario
+    Admini: boolean;             // Si tiene privilegios de administrador
+    Caja: boolean;               // Acceso al módulo de caja
+    Servicio: boolean;           // Acceso al módulo de servicio
+    Inventario: boolean;         // Acceso al módulo de inventario
+    Activo: boolean;             // Si el usuario está activo
+    Contrasena: string;          // Contraseña encriptada
+    Correo: string;              // Correo electrónico
+    FechaCreacion: string;       // Fecha de creación en formato ISO
+    FechaInactivo: string;       // Fecha de inactividad (o por defecto)
+    Version: number;             // Versión del usuario
 }

@@ -31,10 +31,32 @@ export class UsuarioService {
       );
   }
 
-  // Obtener todos los usuarios
-  obtenerUsuarios(): Observable<Usuario[]> {
+  modificarUsuario(usuario: Usuario): Observable<void> {
     return this.http
-      .get<Usuario[]>(`${this.apiUrl}/consultartodos`, { headers: this.getHeaders() })
+      .put<void>(`${this.apiUrl}/update/${usuario.ID}`, usuario, { headers: this.getHeaders() })
+      .pipe(
+        catchError((error) => {
+          console.error('Error al modificar usuario:', error);
+          throw error;
+        })
+      );
+  }
+
+  eliminarUsuario(id: string): Observable<void> {
+    return this.http
+      .delete<void>(`${this.apiUrl}/eliminaruno/${id}`, { headers: this.getHeaders() })
+      .pipe(
+        catchError((error) => {
+          console.error('Error al eliminar usuario:', error);
+          throw error;
+        })
+      );
+  }
+
+  // Obtener todos los usuarios
+  obtenerUsuarios(): Observable<{ data: Usuario[] }> {
+    return this.http
+      .get<{ data: Usuario[] }>(`${this.apiUrl}/consultartodos`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error obteniendo usuarios:', error);
