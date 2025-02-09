@@ -1,3 +1,4 @@
+//////////////////////////////////////Usuarios////////////////////////////////////////
 export interface CrearUsuario {
     nombreDeUsuario: string;
     admini: boolean;
@@ -10,16 +11,71 @@ export interface CrearUsuario {
 }
 
 export interface Usuario {
-    ID: string;                  // ID único del usuario
-    NombreDeUsuario: string;     // Nombre del usuario
-    Admini: boolean;             // Si tiene privilegios de administrador
-    Caja: boolean;               // Acceso al módulo de caja
-    Servicio: boolean;           // Acceso al módulo de servicio
-    Inventario: boolean;         // Acceso al módulo de inventario
-    Activo: boolean;             // Si el usuario está activo
-    Contrasena: string;          // Contraseña encriptada
-    Correo: string;              // Correo electrónico
-    FechaCreacion: string;       // Fecha de creación en formato ISO
-    FechaInactivo: string;       // Fecha de inactividad (o por defecto)
-    Version: number;             // Versión del usuario
+    ID: string;
+    NombreDeUsuario: string;
+    Admini: boolean;
+    Caja: boolean;
+    Servicio: boolean;
+    Inventario: boolean;
+    Activo: boolean;
+    Contrasena: string;
+    Correo: string;
+    FechaCreacion: string;
+    FechaInactivo: string;
+    Version: number;
 }
+
+
+//////////////////////////////////////Servicios////////////////////////////////////////
+export interface CrearServicio {
+    idServicio: number;
+    nombre: string;
+    descripcion: string;
+}
+
+
+export interface Servicio {
+    ID: string;
+    IdServicio: number;
+    Nombre: string;
+    Descripcion: string;
+    FechaModificacion: Date;
+    Modifico: string;
+    ServiciosPorSucursal: ServicioPorSucursal[];
+    Version: number;
+}
+export interface ServicioPorSucursal {
+    IdSucursal: string;
+    Precio: number;
+    FechaCreacion: Date;
+    CreadoPor: string;
+}
+
+//////////////////////////////////////Sucursales////////////////////////////////////////
+export interface CrearSucursal {
+    nombre: string;
+    codigoPostal: number;
+    estado: string;
+    municipio: string;
+    colonia: string;
+    calle: string;
+    numeroInt?: number; // Opcional
+    numeroExt: number;
+}
+
+export interface Sucursal {
+    ID: string;
+    IdSucursal: number;
+    Nombre: string;
+    FechaModificacion: Date;
+    Modifico: string;
+    CodigoPostal: number;
+    Estado: string;
+    Municipio: string;
+    Colonia: string;
+    Calle: string;
+    NumeroInt: number;
+    NumeroExt: number;
+    Version: number;
+}
+

@@ -1,21 +1,30 @@
 <div class="empleados-vista">
     <div class="row d-flex contenedor-principal">
-        <div class="col-md-4" style="background-color: rgba(255, 255, 255, 0.767); padding: 1rem; border-radius: 8px; border: solid 1px rgb(216, 216, 216);">
-            <!-- Navegación de pestañas -->
-            <ul class="nav nav-tabs" id="userTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="addUserTab" data-bs-toggle="tab" data-bs-target="#addUser" type="button" role="tab" aria-controls="addUser" aria-selected="true">Agregar Usuario</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="manageUsersTab" data-bs-toggle="tab" data-bs-target="#manageUsers" type="button" role="tab" aria-controls="manageUsers" aria-selected="false">Gestión de Usuarios</button>
-                </li>
+        <div class="col-md-4" style="height: 100%;position: relative;background-color: rgba(255, 255, 255, 0.767);padding: 0px; border-radius: 8px; border: solid 1px rgb(216, 216, 216);">
+          <div class="overflow-div-ext2" style="padding: 1rem; width: 100%;">
+          <!-- Navegación de pestañas -->
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <button class="nav-link" 
+                        [ngClass]="{'active': pestanaActiva === 'gestionUsuarios'}" 
+                        (click)="pestanaActiva = 'gestionUsuarios'">
+                  Gestión de Usuarios
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link" 
+                        [ngClass]="{'active': pestanaActiva === 'agregarUsuario'}" 
+                        (click)="pestanaActiva = 'agregarUsuario'">
+                  Agregar Usuario
+                </button>
+              </li>
             </ul>
         
             <!-- Contenido de las pestañas -->
             <div class="tab-content" id="userTabsContent" style="margin-top: 1rem;">
                 <!-- Pestaña de Agregar Usuario -->
                 
-                <div class="tab-pane fade show active" id="addUser" role="tabpanel" aria-labelledby="addUserTab">
+                <div class="tab-pane fade" id="addUser" [ngClass]="{'show active': pestanaActiva === 'agregarUsuario'}">
                     <div class="mb-3">
                       <h6>Nombre</h6>
                       <input type="text" class="form-control" id="userName" [(ngModel)]="nuevoUsuario.nombreDeUsuario" placeholder="Ingresa el nombre" required (keydown.enter)="crearUsuario()">
@@ -55,11 +64,7 @@
                 </div>
         
                 <!-- Pestaña de Gestión de Usuarios -->
-                <div class="tab-pane fade" id="manageUsers" role="tabpanel" aria-labelledby="manageUsersTab">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <input type="text" class="form-control" placeholder="Buscar usuario..." style="width: 70%;">
-                        <button class="btn btn-secondary" style="width: 25%;">Buscar</button>
-                    </div>
+                <div class="tab-pane fade show active" id="manageUsers" [ngClass]="{'show active': pestanaActiva === 'gestionUsuarios'}">
 
                     <div *ngIf="usuarioSeleccionado" class="card card-large" style="margin-top: 20px;">
                         <div class="card-body">
@@ -76,7 +81,7 @@
                             <input type="email" [(ngModel)]="usuarioSeleccionado.Correo" class="form-control">
                             </div>
                       
-                          <div class="form-check">
+                          <div class="form-check mt-2">
                             <input class="form-check-input" type="checkbox" id="adminiE" [(ngModel)]="usuarioSeleccionado.Admini">
                             <label class="form-check-label" for="adminiE">Administrador:</label>
                           </div>
@@ -96,7 +101,7 @@
                             <label class="form-check-label" for="inventarioE">Inventario:</label>
                           </div>
 
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" id="activoE" [(ngModel)]="usuarioSeleccionado.Activo">
                             <label class="form-check-label" for="activoE">Activo:</label>
                           </div>
@@ -118,6 +123,7 @@
                       
                 </div>
             </div>
+          </div>  
         </div>
         
         <div class="col-md-8" style="height: 100%;position: relative;">

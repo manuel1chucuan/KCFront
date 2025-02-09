@@ -86,10 +86,12 @@ export class EmpleadosComponent {
     });
   }
 
-  usuarioSeleccionado: Usuario | null = null; // Para almacenar el usuario seleccionado
+  usuarioSeleccionado: Usuario | null = null; 
+  pestanaActiva: string = 'gestionUsuarios'; // 🔥 Cambié "pestañaActiva" a "pestanaActiva"
 
   seleccionarUsuario(usuario: Usuario): void {
-    this.usuarioSeleccionado = usuario; // Asignamos el usuario al ser clickeado
+    this.usuarioSeleccionado = usuario;
+    this.pestanaActiva = 'gestionUsuarios'; // 🔥 También cambié aquí
   }
 
   // Método para guardar los cambios realizados
@@ -113,7 +115,7 @@ export class EmpleadosComponent {
       error: (err) => {
         console.error('Error al modificar usuario:', err);
         this.obtenerUsuarios();
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error al crear usuario, por favor intenta con datos diferentes', life: 10000});
+        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error al actualizar usuario, por favor intenta con datos diferentes', life: 10000});
       }
     });
 
@@ -131,6 +133,7 @@ export class EmpleadosComponent {
       next: () => {
         console.log('Usuario eliminado correctamente');
         this.obtenerUsuarios();
+        this.usuarioSeleccionado = null;
         this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Usuario eliminado correctamente.', life: 10000});
         // Puedes realizar alguna acción adicional aquí (como mostrar un mensaje de éxito)
       },

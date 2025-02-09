@@ -1,1 +1,173 @@
-<p>sucursales works!</p>
+<div class="sucursales-vista">
+    <div class="row d-flex contenedor-principal">
+        <div class="col-md-4" style="height: 100%;position: relative;background-color: rgba(255, 255, 255, 0.767);padding: 0px; border-radius: 8px; border: solid 1px rgb(216, 216, 216);">
+          <div class="overflow-div-ext2" style="padding: 1rem; width: 100%;">
+          <!-- Navegación de pestañas -->
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <button class="nav-link" 
+                        [ngClass]="{'active': pestanaActiva === 'gestionSucursales'}" 
+                        (click)="pestanaActiva = 'gestionSucursales'">
+                  Gestión de Sucursales
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link" 
+                        [ngClass]="{'active': pestanaActiva === 'agregarSucursales'}" 
+                        (click)="pestanaActiva = 'agregarSucursales'">
+                  Agregar Sucursal
+                </button>
+              </li>
+            </ul>
+        
+            <!-- Contenido de las pestañas -->
+            <div class="tab-content" id="sucTabsContent" style="margin-top: 1rem;">
+                <!-- Pestaña de Agregar Usuario -->
+                
+                <div class="tab-pane fade" id="addScursal" [ngClass]="{'show active': pestanaActiva === 'agregarSucursales'}">
+
+                    <div class="mb-1">
+                      <h6>Nombre</h6>
+                      <input type="text" class="form-control" id="sucursalName" [(ngModel)]="nuevaSucursal.nombre" placeholder="Ingresa el nombre" required>
+                    </div>
+
+                    <div class="mb-1">
+                      <h6>Calle</h6>
+                      <input type="text" class="form-control" id="sucursalCalle" [(ngModel)]="nuevaSucursal.calle" placeholder="Ingresa la calle" required>
+                    </div>
+
+                    <div class="row">
+                        <!-- Botón de eliminar (alineado a la izquierda) -->
+                        <div class="col-6">
+                            <div class="mb-1">
+                                <h6>Numero exterior</h6>
+                                <input type="number" class="form-control" id="sucursalNumero" [(ngModel)]="nuevaSucursal.numeroExt" placeholder="Ingresa el numero" required>
+                              </div>
+                        </div>
+                      
+                        <!-- Botón de guardar (alineado a la derecha) -->
+                        <div class="col-6">
+                            <div class="mb-1">
+                                <h6>Numero interior</h6>
+                                <input type="number" class="form-control" id="sucursalNumeroInt" [(ngModel)]="nuevaSucursal.numeroInt" placeholder="Ingresa el numero">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-1">
+                        <h6>Colonia</h6>
+                        <input type="text" class="form-control" id="sucursalColonia" [(ngModel)]="nuevaSucursal.colonia" placeholder="Ingresa la colonia" required>
+                    </div>
+
+                    <div class="mb-1">
+                        <h6>CP</h6>
+                        <input type="number" class="form-control" id="sucursalCp" [(ngModel)]="nuevaSucursal.codigoPostal" placeholder="Ingresa el codigo postal">
+                    </div>
+                    
+                    <div class="mb-1">
+                        <h6>Municipio</h6>
+                        <input type="text" class="form-control" id="sucursalMunicipio" [(ngModel)]="nuevaSucursal.municipio" placeholder="Ingresa el municipio" required>
+                    </div>
+
+                    <div class="mb-1">
+                        <h6>Estado</h6>
+                        <input type="text" class="form-control" id="sucursalEstado" [(ngModel)]="nuevaSucursal.estado" placeholder="Ingresa el estado" required>
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4">
+                      <button class="btn btn-primary" (click)="crearSucursal()" style="width: 100%;">Agregar sucursal</button>
+                    </div>
+                </div>
+        
+                <!-- Pestaña de Gestión de Usuarios -->
+                <div class="tab-pane fade show active" id="manageSucursales" [ngClass]="{'show active': pestanaActiva === 'gestionSucursales'}">
+
+                    <div *ngIf="sucursalSeleccionada" class="card card-large" style="margin-top: 20px;">
+                        <div class="card-body">
+
+                            <div>
+                                <strong>Nombre:</strong>
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.Nombre" class="form-control">
+                            </div>
+                            
+                            <div>
+                                <strong>Calle:</strong>
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.Calle" class="form-control">
+                            </div>
+
+                            <div>
+                                <strong>Numero exterior:</strong>
+                                <input type="number" [(ngModel)]="sucursalSeleccionada.NumeroExt" class="form-control">
+                            </div>
+
+                            <div>
+                                <strong>Numero interior:</strong>
+                                <input type="number" [(ngModel)]="sucursalSeleccionada.NumeroInt" class="form-control">
+                            </div>
+
+                            <div>
+                                <strong>Colonia:</strong>
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.Colonia" class="form-control">
+                            </div>
+
+                            <div>
+                                <strong>CP:</strong>
+                                <input type="number" [(ngModel)]="sucursalSeleccionada.CodigoPostal" class="form-control">
+                            </div>
+
+                            <div>
+                                <strong>Municipio:</strong>
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.Municipio" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <strong>Estado:</strong>
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.Estado" class="form-control">
+                            </div>
+
+
+                      
+
+                          <div class="row">
+                            <!-- Botón de eliminar (alineado a la izquierda) -->
+                            <div class="col-6" style="text-align: left;">
+                              <button class="btn btn-danger btn-sm" (click)="eliminarSucursal()" style="width: 100%;">Eliminar Sucursal</button>
+                            </div>
+                          
+                            <!-- Botón de guardar (alineado a la derecha) -->
+                            <div class="col-6" style="text-align: right;">
+                              <button class="btn btn-primary btn-sm" (click)="guardarCambios()" style="width: 100%;">Guardar Cambios</button>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                      
+                </div>
+            </div>
+          </div>  
+        </div>
+        
+        <div class="col-md-8" style="height: 100%;position: relative;">
+            <div class="overflow-div-ext">
+                <div class="d-flex flex-wrap align-content-start overflow-div">
+
+                    <div *ngFor="let sucursal of sucursales" class="card card4" style="width:10rem;height: 15rem; flex: 0 0 auto;"
+                    [ngClass] = "{
+                        'selected-card': sucursalSeleccionada && sucursalSeleccionada.ID === sucursal.ID,
+                        'card-default': !(sucursalSeleccionada && sucursalSeleccionada.ID === sucursal.ID)
+                      }" 
+                     (click)="seleccionarSucursal(sucursal)">
+                        <img class="card-img-top" src="../../assets/sucursal2.png" alt="Card image" style="width:100%">
+                        <div class="card-body" style="padding: 0.5rem;">
+                            <h6 class="card-title">{{ sucursal.Nombre }}</h6>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>

@@ -1,0 +1,66 @@
+.sucursales-vista {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.74);
+}
+
+.contenedor-principal{
+    height: 100%;
+    padding: 0.5rem;
+}
+
+.overflow-div {
+    gap: 1rem; 
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.overflow-div2 {
+    gap: 1rem; 
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.overflow-div-ext {
+    position:absolute;
+    overflow: auto; 
+    height: 100%;
+}
+
+.overflow-div-ext2 {
+  position:absolute;
+  overflow: auto; 
+  height: 100%;
+}
+
+.card4 {
+    transition: background-color 0.8s, border 0.8s;
+}
+
+.card4:hover{
+    background-color: rgb(231, 231, 231);
+    cursor: pointer;
+    border: solid 1px rgb(128, 128, 128);
+}
+
+.card-large {
+    width: auto;
+    height: auto;
+    flex: 0 0 auto;
+    margin: 20px auto;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .selected-card {
+    background-color: rgb(231, 231, 231);
+    cursor: pointer;
+    border: solid 1px rgb(128, 128, 128);
+  }
+  
+  .card-default {
+    background-color: white; /* O cualquier estilo predeterminado */
+    border: solid 1px rgb(201, 201, 201);
+  }
+  

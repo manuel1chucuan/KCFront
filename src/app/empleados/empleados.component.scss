@@ -15,10 +15,21 @@
     padding-right: 0.5rem;
 }
 
+.overflow-div2 {
+    gap: 1rem; 
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
 .overflow-div-ext {
     position:absolute;
     overflow: auto; 
     height: 100%;
+}
+
+.overflow-div-ext2 {
+  position:absolute;
+  overflow: auto; 
+  height: 100%;
 }
 
 .card4 {
