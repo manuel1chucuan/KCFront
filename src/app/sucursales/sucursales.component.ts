@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { CrearSucursal, Sucursal } from '../objetos/usuario';
+import { CrearSucursal, Sucursal } from '../models/modelos';
 import { UsuarioService } from '../services/web-services-empleados.service';
 import { SucursalesService } from '../services/web-services-sucursales.service';
 import { MessageService } from 'primeng/api'; 

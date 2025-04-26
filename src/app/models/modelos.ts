@@ -28,7 +28,6 @@ export interface Usuario {
 
 //////////////////////////////////////Servicios////////////////////////////////////////
 export interface CrearServicio {
-    idServicio: number;
     nombre: string;
     descripcion: string;
 }
@@ -36,7 +35,6 @@ export interface CrearServicio {
 
 export interface Servicio {
     ID: string;
-    IdServicio: number;
     Nombre: string;
     Descripcion: string;
     FechaModificacion: Date;
@@ -65,7 +63,6 @@ export interface CrearSucursal {
 
 export interface Sucursal {
     ID: string;
-    IdSucursal: number;
     Nombre: string;
     FechaModificacion: Date;
     Modifico: string;

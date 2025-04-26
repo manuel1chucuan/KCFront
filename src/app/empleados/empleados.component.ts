@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { CrearUsuario, Usuario } from '../objetos/usuario';
+import { CrearUsuario, Usuario } from '../models/modelos';
 import { UsuarioService } from '../services/web-services-empleados.service';
 import { MessageService } from 'primeng/api'; 
 import { PrimeNGConfig } from 'primeng/api'; 
