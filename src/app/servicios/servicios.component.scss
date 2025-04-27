@@ -68,7 +68,6 @@
   .separador-servicio{
     margin-bottom: 0.2rem;
     padding: 0.2rem;
-    height: 7rem;
   }
 
   .contenido-servicio{
@@ -77,4 +76,5 @@
     height: 100%;
     border: solid 1px rgb(201, 201, 201);
     border-radius: 4px;
+    min-height: 3rem;
   }
