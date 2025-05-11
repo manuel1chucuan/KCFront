@@ -42,6 +42,7 @@ export interface Servicio {
     ServiciosPorSucursal: ServicioPorSucursal[];
     Version: number;
 }
+
 export interface ServicioPorSucursal {
     IdSucursal: string;
     Precio: number;

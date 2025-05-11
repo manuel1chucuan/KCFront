@@ -28,8 +28,14 @@ export class MenuComponent {
 
   componenteActual: string = 'caja'; // Componente inicial
 
+  ngOnInit() {
+    const almacenado = localStorage.getItem('componenteActual');
+    this.componenteActual = almacenado ? almacenado : 'caja'; // valor por defecto
+  }
+
   mostrarComponente(componente: string): void {
     this.componenteActual = componente;
+    localStorage.setItem('componenteActual', componente);
     this.closeMessage2();
   }
   handleClick() {
@@ -48,6 +54,7 @@ export class MenuComponent {
   constructor(private authService: AuthServiceService, private dataService: FiltroPrincipal) { }
 
   onLogOut(): void {
+    localStorage.setItem('componenteActual', 'caja');
     this.authService.logout();
   }
 

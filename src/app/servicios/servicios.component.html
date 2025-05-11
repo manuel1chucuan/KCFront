@@ -77,72 +77,26 @@
           </div>  
         </div>
         
-        <div class="col-md-8" style="height: 100%;position: relative;">
-            <div class="d-flex flex-column">
-                <div class="p-2 bg-info separador-servicio">
-                    <div class="contenido-servicio">
+        <div class="col-md-8" style="height: 100%;position: relative;padding: 0px;">
+          <div class="overflow-div-ext">
+            <div class="d-flex flex-column overflow-div">
 
-                        <p style="padding-left: 0.4rem;">Depilacion de ceja [<span style="color: grey;">Se depila con hilo o con cera</span>]</p>
-                        <div class="d-flex flex-wrap bg-light">
-                          <div class="p-2 border">Flex item 1</div>
-                          <div class="p-2 border">Flex item 2</div>
-                          <div class="p-2 border">Flex item 3</div>
-                          <div class="p-2 border">Flex item 4</div>
-                          <div class="p-2 border">Flex item 5</div>
-                          <div class="p-2 border">Flex item 6</div>
-                          <div class="p-2 border">Flex item 7</div>
-                          <div class="p-2 border">Flex item 8</div>
-                          <div class="p-2 border">Flex item 9</div>
-                          <div class="p-2 border">Flex item 10</div>
-                          <div class="p-2 border">Flex item 11</div>
-                          <div class="p-2 border">Flex item 12</div>
-                          <div class="p-2 border">Flex item 13 </div>
-                          <div class="p-2 border">Flex item 14</div>
-                          <div class="p-2 border">Flex item 15</div>
-                          <div class="p-2 border">Flex item 16</div>
-                          <div class="p-2 border">Flex item 17</div>
-                          <div class="p-2 border">Flex item 18</div>
-                          <div class="p-2 border">Flex item 19</div>
-                          <div class="p-2 border">Flex item 20</div>
-                          <div class="p-2 border">Flex item 21</div>
-                          <div class="p-2 border">Flex item 22</div>
-                          <div class="p-2 border">Flex item 23</div>
-                          <div class="p-2 border">Flex item 24</div>
-                          <div class="p-2 border">Flex item 25</div>
-                        </div>
-                    </div>
+              <div *ngFor="let servicio of servicios" class="separador-servicio"
+              [ngClass] = "{
+              'selected-card': servicioSeleccionado && servicioSeleccionado.ID === servicio.ID,
+              'card-default': !(servicioSeleccionado && servicioSeleccionado.ID === servicio.ID)}">
+                <div class="contenido-servicio">
+                  <p class="servicio-select" (click)="seleccionarServicio(servicio)">{{ servicio.Nombre }} 
+                    [<span style="color: grey;">{{ servicio.Descripcion }}</span>]
+                  </p>
+                  <div class="d-flex flex-wrap contenido-servicio-interno">
+                    <div *ngFor="let sucursal of servicio.ServiciosPorSucursal" class="p-2 border mini-contenido">Sucursal: {{ sucursal.IdSucursal }} | Precio: ${{ sucursal.Precio }}</div>
+                  </div>
                 </div>
-                <div class="p-2 bg-info separador-servicio">
-                    <div class="contenido-servicio">
-                        
-                    </div>
-                </div>
-                <div class="p-2 bg-info separador-servicio">
-                    <div class="contenido-servicio">
-                        
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
 
-
-            <div class="overflow-div-ext">
-                <div class="d-flex flex-wrap align-content-start overflow-div">
-
-                    <div *ngFor="let servicio of servicios" class="card card4" style="width:10rem;height: 15rem; flex: 0 0 auto;"
-                    [ngClass] = "{
-                        'selected-card': servicioSeleccionado && servicioSeleccionado.ID === servicio.ID,
-                        'card-default': !(servicioSeleccionado && servicioSeleccionado.ID === servicio.ID)
-                      }" 
-                     (click)="seleccionarServicio(servicio)">
-                        <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
-                        <div class="card-body" style="padding: 0.5rem;">
-                            <h6 class="card-title">{{ servicio.Nombre }}</h6>
-                            <h6 class="card-title">{{ servicio.Descripcion }}</h6>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
         </div>
     </div>
 </div>
