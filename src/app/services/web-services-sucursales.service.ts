@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class SucursalesService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl + "/sucursal";
 
   constructor(private http: HttpClient) {}
 

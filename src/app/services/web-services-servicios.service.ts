@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class SuerviciosService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl+ "/servicio";
   constructor(private http: HttpClient) {}
 
   private getHeaders() {
