@@ -20,7 +20,7 @@ import { MessagesModule } from 'primeng/messages';
 })
 export class ServiciosComponent {
 
-  nuevoServicio: CrearServicio = {
+    nuevoServicio: CrearServicio = {
       nombre: '',
       descripcion: ''
     };
@@ -64,6 +64,7 @@ export class ServiciosComponent {
     
           if (response && response.data && Array.isArray(response.data)) {
             this.servicios = response.data;
+            this.servicioSeleccionado = this.servicios.find(s => s.ID === this.servicioSeleccionado?.ID) ?? null;
           } else {
             console.error('La API no devolvió un array dentro de "data".', response);
             this.servicios = [];
@@ -77,20 +78,32 @@ export class ServiciosComponent {
     }
   
     servicioSeleccionado: Servicio | null = null; 
+    nombreServicioSeleccionado: string = "";
+    descripcionServicioSeleccionado: string = "";
     pestanaActiva: string = 'agregarServicio';
   
     seleccionarServicio(servicio: Servicio): void {
       this.servicioSeleccionado = servicio;
+      this.nombreServicioSeleccionado = this.servicioSeleccionado.Nombre;
+      this.descripcionServicioSeleccionado = this.servicioSeleccionado.Descripcion;
       this.pestanaActiva = 'gestionServicios';
     }
   
     guardarCambios(): void {
+      
+      if (!this.servicioSeleccionado ) {
+        console.log('No hay servicio seleccionado.');
+        return;
+      }
+
+      this.servicioSeleccionado.Nombre = this.nombreServicioSeleccionado;
+      this.servicioSeleccionado.Descripcion = this.descripcionServicioSeleccionado;
       if (!this.servicioSeleccionado?.Nombre) {
         console.log('El nombre es obligatorio.');
         this.messageService.add({severity: 'error', summary: 'Error', detail: 'El nombre es obligatorio.', life: 10000});
         return;
       }
-
+      
       this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
         next: () => {
           console.log('Servicio modificado correctamente');
@@ -159,6 +172,16 @@ export class ServiciosComponent {
         nombre: '',
         descripcion: ''
       };
+    }
+
+    showToglePrecio: boolean = false;
+
+    handleClickAddPrecio() {
+      this.showToglePrecio = !this.showToglePrecio;
+    }
+
+    closeMessagePrecio() {
+      this.showToglePrecio = false;
     }
 
 }
