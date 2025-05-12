@@ -90,7 +90,12 @@
                     [<span style="color: grey;">{{ servicio.Descripcion }}</span>]
                   </p>
                   <div class="d-flex flex-wrap contenido-servicio-interno">
-                    <div *ngFor="let sucursal of servicio.ServiciosPorSucursal" class="p-2 border mini-contenido">Sucursal: {{ sucursal.IdSucursal }} | Precio: ${{ sucursal.Precio }}</div>
+                    <div *ngFor="let sucursal of servicio.ServiciosPorSucursal" class="p-2 border mini-contenido">
+                      {{ getNombreSucursal(sucursal.IdSucursal)}} 
+                      <span class="mini-contenido-interno">
+                        ${{ sucursal.Precio }}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

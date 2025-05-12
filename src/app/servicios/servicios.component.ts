@@ -148,6 +148,11 @@ export class ServiciosComponent {
         }
       });
     }
+
+    getNombreSucursal(id: string): string {
+      const sucursal = this.sucursales.find(s => s.ID === id);
+      return sucursal ? sucursal.Nombre : 'Sucursal desconocida';
+    }
   
     limpiarFormulario(): void {
       this.nuevoServicio = {

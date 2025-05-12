@@ -45,6 +45,7 @@ export class LoginComponent {
 
     this.authService.login(this.correo, this.contrasena).subscribe({
       next: (response) => {
+        localStorage.setItem('componenteActual', 'caja');
         this.router.navigate(['/menu']);
       },
       error: (err) => {

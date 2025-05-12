@@ -83,10 +83,24 @@
   }
 
   .mini-contenido{
-    padding: 0px !important;
-    color: rgb(83, 83, 83);
+    padding: 0.1rem !important;
+    padding-left: 0.3rem !important;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 2px rgb(119, 119, 119);
     margin: 0.2rem;
     font-size: 12px;
-    background-color: white;
+    background-color: rgb(243, 151, 238);
+    border-radius: 4px;
+  }
+
+  .mini-contenido-interno{
+    color: rgb(117, 117, 117);
+    background-color: rgb(255, 255, 255);
+    margin-right: 0.14rem;
+    margin-left: 0.3rem;
     text-shadow: none;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+    border-radius: 2px;
+    font-weight: bold;
   }
