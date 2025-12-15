@@ -44,11 +44,12 @@ export interface Servicio {
 }
 
 export interface ServicioPorSucursal {
-    IdSucursal: string;
-    Precio: number;
-    FechaCreacion: Date;
-    CreadoPor: string;
+  IdSucursal: string;
+  Precio: number;
+  FechaCreacion?: Date | null;
+  CreadoPor?: string | null;
 }
+
 
 //////////////////////////////////////Sucursales////////////////////////////////////////
 export interface CrearSucursal {

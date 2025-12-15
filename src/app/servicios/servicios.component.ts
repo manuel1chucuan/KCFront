@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { CrearServicio, Servicio, Sucursal } from '../models/modelos';
+import { CrearServicio, Servicio, Sucursal, ServicioPorSucursal } from '../models/modelos';
 import { ServiciosService } from '../services/web-services-servicios.service';
 import { SucursalesService } from '../services/web-services-sucursales.service';
 import { MessageService } from 'primeng/api'; 
@@ -24,9 +24,17 @@ export class ServiciosComponent {
       nombre: '',
       descripcion: ''
     };
+
+    nuevoDetalleDelServicio: ServicioPorSucursal = {
+      IdSucursal: '',
+      Precio: 0,
+      FechaCreacion: null,
+      CreadoPor: null
+    };
   
     servicios: Servicio[] = [];
     sucursales: Sucursal[] = [];
+    sucursalesDisponibles: Sucursal[] = [];
   
     constructor(private serviciosService: ServiciosService,private sucursalesService: SucursalesService, 
       private primengConfig: PrimeNGConfig , private messageService: MessageService) {}
@@ -81,6 +89,8 @@ export class ServiciosComponent {
     nombreServicioSeleccionado: string = "";
     descripcionServicioSeleccionado: string = "";
     pestanaActiva: string = 'agregarServicio';
+    nuevoPrecio: number = 0;
+    sucursalSeleccionadaId: string | null = null;
   
     seleccionarServicio(servicio: Servicio): void {
       this.servicioSeleccionado = servicio;
@@ -175,13 +185,139 @@ export class ServiciosComponent {
     }
 
     showToglePrecio: boolean = false;
+    showTogleUpdatePrecio: boolean = false;
+    precioAnterior: number | null = null;
+    servicioPorSucursalSeleccionado: ServicioPorSucursal = {
+      IdSucursal: '',
+      Precio: 0,
+      FechaCreacion: null,
+      CreadoPor: null
+    };
 
-    handleClickAddPrecio() {
-      this.showToglePrecio = !this.showToglePrecio;
+    cancelarUpdatePrecio() 
+    {
+      if 
+      (
+        this.precioAnterior !== null &&
+        this.servicioPorSucursalSeleccionado
+      ) 
+      {
+        this.servicioPorSucursalSeleccionado.Precio = this.precioAnterior;
+      }
+
+      this.showTogleUpdatePrecio = false;
     }
+
+    handleClickUpdatePrecio(servicio: Servicio, servicioPorSucursal: ServicioPorSucursal) {
+        this.servicioSeleccionado = servicio;
+        this.servicioPorSucursalSeleccionado = servicioPorSucursal;
+        this.precioAnterior = servicioPorSucursal.Precio;
+        this.showTogleUpdatePrecio = !this.showTogleUpdatePrecio;
+      }
+
+    handleClickAddPrecio(servicio: Servicio) {
+        this.servicioSeleccionado = servicio;
+
+        this.filtrarSucursalesDisponibles();
+        this.showToglePrecio = !this.showToglePrecio;
+      }
+
+    filtrarSucursalesDisponibles(): void {
+      if (!this.servicioSeleccionado?.ServiciosPorSucursal) {
+        this.sucursalesDisponibles = [...this.sucursales];
+        return;
+      }
+
+      const sucursalesConPrecio = this.servicioSeleccionado.ServiciosPorSucursal
+        .map(sp => sp.IdSucursal);
+
+      this.sucursalesDisponibles = this.sucursales.filter(
+        suc => !sucursalesConPrecio.includes(suc.ID)
+      );
+    }
+
+    guardarUpdatePrecio() {
+      if (!this.servicioSeleccionado) {return;}
+      this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Precio modificado correctamente',
+            life: 8000
+          });
+          this.showTogleUpdatePrecio = false;
+          this.obtenerServicios();
+        },
+        error: () => {
+          // rollback si falla backend
+          if (this.precioAnterior !== null) {
+            this.servicioPorSucursalSeleccionado.Precio = this.precioAnterior;
+          }
+        }
+      });
+    }
+
+
+    guardarPrecio(): void {
+      if (!this.servicioSeleccionado || !this.sucursalSeleccionadaId || this.nuevoPrecio === null) {
+        return;
+      }
+
+      if (!this.servicioSeleccionado.ServiciosPorSucursal) {
+        this.servicioSeleccionado.ServiciosPorSucursal = [];
+      }
+
+      const nuevoDetalle: ServicioPorSucursal = {
+        IdSucursal: this.sucursalSeleccionadaId,
+        Precio: this.nuevoPrecio,
+        FechaCreacion: null,
+        CreadoPor: null
+      };
+
+      // 👉 PUSH NECESARIO
+      this.servicioSeleccionado.ServiciosPorSucursal.push(nuevoDetalle);
+
+      // Guardamos índice para posible rollback
+      const index = this.servicioSeleccionado.ServiciosPorSucursal.length - 1;
+
+      this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Precio agregado correctamente',
+            life: 8000
+          });
+
+          this.sucursalSeleccionadaId = null;
+          this.closeMessagePrecio();
+          this.obtenerServicios();
+        },
+        error: (err) => {
+          console.error('Error al guardar precio:', err);
+
+          // 🔥 rollback SOLO si falla el PUT
+          this.servicioSeleccionado?.ServiciosPorSucursal.splice(index, 1);
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo guardar el precio. Cambio revertido',
+            life: 8000
+          });
+        }
+      });
+    }
+
 
     closeMessagePrecio() {
-      this.showToglePrecio = false;
+      this.closeModal();
     }
+
+    closeModal() {
+    this.showToglePrecio = false;
+    this.nuevoPrecio = 0;
+  }
 
 }
