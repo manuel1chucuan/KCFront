@@ -17,7 +17,6 @@ export class CajaComponent implements OnInit {
   @Input() controlLongitud: number = 8;
   filterListaProductosMasComprados: any[] = [];
   products: any[] = [
-    { id: 99, name: 'Mascarilla facial', quantity: 1, price: 35.00, pTotal: 35.00 }
   ];
   
   beautyProducts = [

@@ -4,17 +4,30 @@ import { FormsModule } from '@angular/forms';
 import { CrearSucursal, Sucursal } from '../models/modelos';
 import { UsuarioService } from '../services/web-services-empleados.service';
 import { SucursalesService } from '../services/web-services-sucursales.service';
-import { MessageService } from 'primeng/api'; 
+import { MessageService, ConfirmationService } from 'primeng/api'; 
 import { PrimeNGConfig } from 'primeng/api'; 
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages'; // 🔥 IMPORTANTE
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-sucursales',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, ToastModule, DialogModule, MessagesModule], // 🔥 Asegurar que MessagesModule está importado
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonModule,
+    ToastModule,
+    DialogModule,
+    ConfirmDialogModule   // 🔥 ESTE ES EL IMPORTANTE
+  ],
+  providers: [
+    ConfirmationService,
+    MessageService
+  ],
   templateUrl: './sucursales.component.html',
   styleUrl: './sucursales.component.scss'
 })
@@ -34,7 +47,11 @@ export class SucursalesComponent {
 
   sucursales: Sucursal[] = []; // Lista de usuarios
 
-  constructor(private usuarioService: UsuarioService, private sucursalesService: SucursalesService, private primengConfig: PrimeNGConfig , private messageService: MessageService) {}
+  constructor(private usuarioService: UsuarioService, 
+    private sucursalesService: SucursalesService, 
+    private primengConfig: PrimeNGConfig , 
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,) {}
 
   ngOnInit() {
     this.primengConfig.ripple = true;
@@ -139,23 +156,71 @@ export class SucursalesComponent {
 
   eliminarSucursal(): void {
     if (!this.sucursalSeleccionada?.ID) {
-      this.messageService.add({severity: 'error', summary: 'Error', detail: 'Seleciona una sucursal.', life: 10000});
       return;
     }
-    this.sucursalesService.eliminarSucursal(this.sucursalSeleccionada.ID).subscribe({
-      next: () => {
-        this.obtenerSucursales();
-        this.sucursalSeleccionada = null;
-        this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Sucursal eliminada correctamente.', life: 10000});
-        // Puedes realizar alguna acción adicional aquí (como mostrar un mensaje de éxito)
-      },
-      error: (err) => {
-        this.obtenerSucursales();
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error al eliminar sucursal', life: 10000});
-        // Manejo de errores, como mostrar un mensaje de error
+
+    this.sucursalesService.eliminarSucursal(this.sucursalSeleccionada.ID)
+      .subscribe({
+        next: () => {
+          this.obtenerSucursales();
+          this.sucursalSeleccionada = null;
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Sucursal eliminada correctamente',
+            life: 5000
+          });
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo eliminar la sucursal',
+            life: 5000
+          });
+        }
+      });
+  }
+
+  confirmarEliminarSucursal(): void {
+    if (!this.sucursalSeleccionada?.ID) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'Selecciona una sucursal'
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'Confirmar eliminación',
+      text: '¿Seguro que deseas eliminar la sucursal?',
+      icon: 'warning',
+
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+
+      reverseButtons: true,
+      focusCancel: true,
+
+      backdrop: true,
+
+      scrollbarPadding: false, // 🔥 CLAVE
+      heightAuto: false,        // 🔥 CLAVE
+
+      customClass: {
+        confirmButton: 'swal-confirm-btn',
+        cancelButton: 'swal-cancel-btn'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.eliminarSucursal();
       }
     });
   }
+
 
   limpiarFormulario(): void {
     this.nuevaSucursal = {

@@ -9,6 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages'; // 🔥 IMPORTANTE
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-empleados',
@@ -94,57 +95,163 @@ export class EmpleadosComponent {
     this.pestanaActiva = 'gestionUsuarios'; // 🔥 También cambié aquí
   }
 
-  // Método para guardar los cambios realizados
-  guardarCambios(): void {
+  confirmarGuardarCambios(): void {
+
     if (!this.usuarioSeleccionado?.NombreDeUsuario) {
-      console.log('El nombre de usuario es obligatorio.');
-      this.messageService.add({severity: 'error', summary: 'Error', detail: 'El nombre de usuario es obligatorio.', life: 10000});
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'El nombre de usuario es obligatorio.',
+        life: 10000
+      });
       return;
     }
+
+    if (!this.usuarioSeleccionado?.Correo) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'El correo es obligatorio.',
+        life: 10000
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'Confirmar cambios',
+      text: '¿Seguro que deseas guardar los cambios del usuario?',
+      icon: 'warning',
+
+      showCancelButton: true,
+      confirmButtonText: 'Guardar',
+      cancelButtonText: 'Cancelar',
+
+      reverseButtons: true,
+      focusCancel: true,
+
+      scrollbarPadding: false,
+      heightAuto: false,
+
+      customClass: {
+        confirmButton: 'swal-confirm-btn',
+        cancelButton: 'swal-cancel-btn'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.guardarCambios(); // 🔥 mismo patrón que eliminar
+      }
+    });
+  }
+
+
+  // Método para guardar los cambios realizados
+  guardarCambios(): void {
     if (!this.usuarioSeleccionado?.Correo) {
       this.messageService.add({severity: 'error', summary: 'Error', detail: 'El correo es obligatorio.', life: 10000});
       return;
     }
-
     this.usuarioService.modificarUsuario(this.usuarioSeleccionado).subscribe({
       next: () => {
-        console.log('Usuario modificado correctamente');
         this.obtenerUsuarios();
-        this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Usuario modificado exitosamente.', life: 10000});
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado',
+          text: 'Usuario modificado correctamente',
+          timer: 1500,
+          showConfirmButton: false,
+          scrollbarPadding: false,
+          heightAuto: false
+        });
       },
       error: (err) => {
         console.error('Error al modificar usuario:', err);
         this.obtenerUsuarios();
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error al actualizar usuario, por favor intenta con datos diferentes', life: 10000});
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo actualizar el usuario',
+          scrollbarPadding: false,
+          heightAuto: false
+        });
       }
     });
-
-    console.log('Usuario actualizado:', this.usuarioSeleccionado);
-    // Aquí puedes agregar la lógica para enviar estos cambios al backend y actualizar la base de datos
   }
 
   eliminarUsuario(): void {
     if (!this.usuarioSeleccionado?.ID) {
-      console.log('Seleciona un usuario.');
-      this.messageService.add({severity: 'error', summary: 'Error', detail: 'Seleciona un usuario.', life: 10000});
       return;
     }
-    this.usuarioService.eliminarUsuario(this.usuarioSeleccionado.ID).subscribe({
-      next: () => {
-        console.log('Usuario eliminado correctamente');
-        this.obtenerUsuarios();
-        this.usuarioSeleccionado = null;
-        this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Usuario eliminado correctamente.', life: 10000});
-        // Puedes realizar alguna acción adicional aquí (como mostrar un mensaje de éxito)
-      },
-      error: (err) => {
-        console.error('Error al eliminar usuario:', err);
-        this.obtenerUsuarios();
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error al eliminar usuario', life: 10000});
-        // Manejo de errores, como mostrar un mensaje de error
+
+    this.usuarioService.eliminarUsuario(this.usuarioSeleccionado.ID)
+      .subscribe({
+        next: () => {
+          this.obtenerUsuarios();
+          this.usuarioSeleccionado = null;
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Eliminado',
+            text: 'Usuario eliminado correctamente',
+            timer: 1500,
+            showConfirmButton: false,
+            scrollbarPadding: false,
+            heightAuto: false
+          });
+        },
+        error: (err) => {
+          console.error('Error al eliminar usuario:', err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo eliminar el usuario',
+            scrollbarPadding: false,
+            heightAuto: false
+          });
+        }
+      });
+  }
+
+  confirmarEliminarUsuario(): void {
+    if (!this.usuarioSeleccionado?.ID) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atención',
+        detail: 'Selecciona un usuario',
+        life: 5000
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'Confirmar eliminación',
+      text: `¿Seguro que deseas eliminar al usuario seleccionado?`,
+      icon: 'warning',
+
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+
+      reverseButtons: true,
+      focusCancel: true,
+
+      scrollbarPadding: false,
+      heightAuto: false,
+
+      customClass: {
+        confirmButton: 'swal-confirm-btn',
+        cancelButton: 'swal-cancel-btn'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.eliminarUsuario(); // 🔥 aquí sí elimina
       }
     });
   }
+
+
 
   limpiarFormulario(): void {
     this.nuevoUsuario = {

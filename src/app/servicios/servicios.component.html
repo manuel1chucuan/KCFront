@@ -60,12 +60,12 @@
                             <div class="row" style="padding-top:1rem;">
                                 <!-- Botón de eliminar (alineado a la izquierda) -->
                                 <div class="col-6" style="text-align: left;">
-                                <button class="btn btn-danger btn-sm" (click)="eliminarServicio()" style="width: 100%;">Eliminar Servicio</button>
+                                <button class="btn btn-danger btn-sm" (click)="confirmarEliminarServicio()" style="width: 100%;">Eliminar Servicio</button>
                                 </div>
                             
                                 <!-- Botón de guardar (alineado a la derecha) -->
                                 <div class="col-6" style="text-align: right;">
-                                <button class="btn btn-primary btn-sm" (click)="guardarCambios()" style="width: 100%;">Guardar Cambios</button>
+                                <button class="btn btn-primary btn-sm" (click)="confirmarGuardarCambios()" style="width: 100%;">Guardar Cambios</button>
                                 </div>
                             </div>
 
@@ -149,8 +149,10 @@
     <div class="mb-2">
       <label>Precio</label>
       <input type="number"
-             class="form-control"
-             [(ngModel)]="nuevoPrecio" />
+              [value]="nuevoPrecio ?? ''"
+              (focus)="limpiarPrecio()"
+              (input)="onPrecioInput($event)"
+              class="form-control"/>
     </div>
 
   </ng-container>
@@ -198,25 +200,35 @@
       <label>Precio</label>
       <input type="number"
               class="form-control"
-              [(ngModel)]="servicioPorSucursalSeleccionado.Precio" />
+              [(ngModel)]="servicioPorSucursalSeleccionado.Precio"/>
     </div>
 
   <!-- BOTONES -->
-  <div class="d-flex justify-content-end gap-2 mt-3">
-    <button class="btn btn-primary"
-            (click)="guardarUpdatePrecio()"
-            [disabled]="
-              nuevoPrecio === null ||
-              nuevoPrecio === undefined||
-              servicioPorSucursalSeleccionado.Precio === precioAnterior
-            ">
-      Guardar
-    </button>
+<div class="d-flex justify-content-between align-items-center mt-3">
 
-    <button class="btn btn-secondary"
-            (click)="cancelarUpdatePrecio()">
-      Cancelar
-    </button>
+  <!-- ELIMINAR -->
+  <button class="btn btn-danger"
+          (click)="confirmarEliminarPrecioSucursal()">
+    Eliminar precio
+  </button>
+
+    <!-- GUARDAR / CANCELAR -->
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary"
+              (click)="guardarUpdatePrecio()"
+              [disabled]="
+                nuevoPrecio === null ||
+                nuevoPrecio === undefined ||
+                servicioPorSucursalSeleccionado.Precio === precioAnterior
+              ">
+        Guardar
+      </button>
+
+      <button class="btn btn-secondary"
+              (click)="cancelarUpdatePrecio()">
+        Cancelar
+      </button>
+    </div>
   </div>
 </div>
 

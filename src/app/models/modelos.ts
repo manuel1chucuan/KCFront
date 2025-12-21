@@ -45,7 +45,7 @@ export interface Servicio {
 
 export interface ServicioPorSucursal {
   IdSucursal: string;
-  Precio: number;
+  Precio: number | null;
   FechaCreacion?: Date | null;
   CreadoPor?: string | null;
 }

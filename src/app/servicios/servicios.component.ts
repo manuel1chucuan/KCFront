@@ -10,6 +10,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-servicios',
@@ -89,7 +90,7 @@ export class ServiciosComponent {
     nombreServicioSeleccionado: string = "";
     descripcionServicioSeleccionado: string = "";
     pestanaActiva: string = 'agregarServicio';
-    nuevoPrecio: number = 0;
+    nuevoPrecio: number | null = null;
     sucursalSeleccionadaId: string | null = null;
   
     seleccionarServicio(servicio: Servicio): void {
@@ -99,57 +100,230 @@ export class ServiciosComponent {
       this.pestanaActiva = 'gestionServicios';
     }
   
+    confirmarGuardarCambios(): void {
+      if (!this.servicioSeleccionado) {
+        return;
+      }
+
+      // Validación previa (antes de preguntar)
+      if (!this.nombreServicioSeleccionado) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'El nombre es obligatorio',
+          life: 5000
+        });
+        return;
+      }
+
+      Swal.fire({
+        title: 'Guardar cambios',
+        text: '¿Deseas guardar los cambios realizados en el servicio?',
+        icon: 'question',
+
+        showCancelButton: true,
+        confirmButtonText: 'Guardar',
+        cancelButtonText: 'Cancelar',
+
+        reverseButtons: true,
+        focusConfirm: true,
+
+        scrollbarPadding: false,
+        heightAuto: false,
+
+        customClass: {
+          confirmButton: 'swal-confirm-btn',
+          cancelButton: 'swal-cancel-btn'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.guardarCambios(); // 🔥 aquí sí guarda
+        }
+      });
+    }
+
+
     guardarCambios(): void {
-      
-      if (!this.servicioSeleccionado ) {
-        console.log('No hay servicio seleccionado.');
+      if (!this.servicioSeleccionado) {
         return;
       }
 
       this.servicioSeleccionado.Nombre = this.nombreServicioSeleccionado;
       this.servicioSeleccionado.Descripcion = this.descripcionServicioSeleccionado;
-      if (!this.servicioSeleccionado?.Nombre) {
-        console.log('El nombre es obligatorio.');
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'El nombre es obligatorio.', life: 10000});
+
+      this.serviciosService.modificarServicio(this.servicioSeleccionado)
+        .subscribe({
+          next: () => {
+            this.obtenerServicios();
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Guardado',
+              text: 'Servicio modificado exitosamente',
+              timer: 1500,
+              showConfirmButton: false,
+              scrollbarPadding: false,
+              heightAuto: false
+            });
+          },
+          error: (err) => {
+            console.error('Error al modificar servicio:', err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error al actualizar servicio, intenta con datos diferentes',
+              scrollbarPadding: false,
+              heightAuto: false
+            });
+          }
+        });
+    }
+
+    confirmarEliminarPrecioSucursal(): void {
+
+      if (!this.servicioSeleccionado || !this.servicioPorSucursalSeleccionado) {
         return;
       }
-      
+
+      this.showTogleUpdatePrecio = false;
+
+      Swal.fire({
+        title: '¿Eliminar precio?',
+        text: 'Se eliminará el precio de esta sucursal',
+        icon: 'warning',
+
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+
+        backdrop: true,
+        reverseButtons: true,
+        scrollbarPadding: false,
+        heightAuto: false
+      }).then((result) => {
+
+        if (!result.isConfirmed) {
+          this.showTogleUpdatePrecio = true;
+          return;
+        }
+
+        this.eliminarPrecioSucursal(); // 🔥 acción real
+      });
+    }
+    
+    eliminarPrecioSucursal(): void {
+
+      if (!this.servicioSeleccionado || !this.servicioPorSucursalSeleccionado) {
+        return;
+      }
+
+      // 🔥 quitamos la relación precio–sucursal
+      this.servicioSeleccionado.ServiciosPorSucursal =
+        this.servicioSeleccionado.ServiciosPorSucursal
+          .filter(sp => sp.IdSucursal !== this.servicioPorSucursalSeleccionado.IdSucursal);
+
       this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
         next: () => {
-          console.log('Servicio modificado correctamente');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Precio eliminado de la sucursal',
+            life: 3000
+          });
+
+          this.showTogleUpdatePrecio = false;
           this.obtenerServicios();
-          this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Servicio modificado exitosamente.', life: 10000});
         },
-        error: (err) => {
-          console.error('Error al modificar servicio:', err);
-          this.obtenerServicios();
-          this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error al actualizar servicio, por favor intenta con datos diferentes', life: 10000});
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo eliminar el precio',
+            life: 3000
+          });
+
+          // opcional: reabrir modal
+          this.showTogleUpdatePrecio = true;
         }
       });
-  
-      console.log('Servicio actualizado:', this.servicioSeleccionado);
     }
+
+
+
+    confirmarEliminarServicio(): void {
+      if (!this.servicioSeleccionado?.ID) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Atención',
+          detail: 'Selecciona un servicio',
+          life: 5000
+        });
+        return;
+      }
+
+      Swal.fire({
+        title: 'Confirmar eliminación',
+        text: '¿Seguro que deseas eliminar el servicio?',
+        icon: 'warning',
+
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+
+        reverseButtons: true,
+        focusCancel: true,
+
+        scrollbarPadding: false,
+        heightAuto: false,
+
+        customClass: {
+          confirmButton: 'swal-confirm-btn',
+          cancelButton: 'swal-cancel-btn'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.eliminarServicio(); // 🔥 aquí sí elimina
+        }
+      });
+    }
+
   
     eliminarServicio(): void {
       if (!this.servicioSeleccionado?.ID) {
-        console.log('Seleciona un servicio.');
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Seleciona un servicio.', life: 10000});
         return;
       }
-      this.serviciosService.eliminarServicio(this.servicioSeleccionado.ID).subscribe({
-        next: () => {
-          console.log('Servicio eliminado correctamente');
-          this.obtenerServicios();
-          this.servicioSeleccionado = null;
-          this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Servicio eliminado correctamente.', life: 10000});
-        },
-        error: (err) => {
-          console.error('Error al eliminar usuario:', err);
-          this.obtenerServicios();
-          this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error al eliminar servicio', life: 10000});
-        }
-      });
+
+      this.serviciosService.eliminarServicio(this.servicioSeleccionado.ID)
+        .subscribe({
+          next: () => {
+            this.obtenerServicios();
+            this.servicioSeleccionado = null;
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado',
+              text: 'Servicio eliminado correctamente',
+              timer: 1500,
+              showConfirmButton: false,
+              scrollbarPadding: false,
+              heightAuto: false
+            });
+          },
+          error: (err) => {
+            console.error('Error al eliminar servicio:', err);
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo eliminar el servicio',
+              scrollbarPadding: false,
+              heightAuto: false
+            });
+          }
+        });
     }
+
 
     obtenerSucursales(): void {
       this.sucursalesService.obtenerSucursales().subscribe({
@@ -237,26 +411,56 @@ export class ServiciosComponent {
     }
 
     guardarUpdatePrecio() {
-      if (!this.servicioSeleccionado) {return;}
-      this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Éxito',
-            detail: 'Precio modificado correctamente',
-            life: 8000
-          });
-          this.showTogleUpdatePrecio = false;
-          this.obtenerServicios();
-        },
-        error: () => {
-          // rollback si falla backend
-          if (this.precioAnterior !== null) {
-            this.servicioPorSucursalSeleccionado.Precio = this.precioAnterior;
+      if (!this.servicioSeleccionado) {
+        return;
+      }
+      this.showTogleUpdatePrecio = false;
+      // Swal SOLO para confirmar
+        Swal.fire({
+          title: '¿Guardar cambios?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Guardar',
+          cancelButtonText: 'Cancelar',
+          backdrop: true,
+          scrollbarPadding: false,
+          reverseButtons: true,
+          heightAuto: false
+        }).then((result) => {
+
+          if (!result.isConfirmed){
+            this.showTogleUpdatePrecio = true;
+            return;
+          } 
+          if (!this.servicioSeleccionado) {
+            return;
           }
-        }
-      });
+
+          this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
+            next: () => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Precio modificado correctamente',
+                life: 3000
+              });
+
+              this.showTogleUpdatePrecio = false;
+              this.obtenerServicios();
+            },
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo actualizar el precio',
+                life: 3000
+              });
+            }
+          });
+        });
+
     }
+
 
 
     guardarPrecio(): void {
@@ -316,8 +520,19 @@ export class ServiciosComponent {
     }
 
     closeModal() {
-    this.showToglePrecio = false;
-    this.nuevoPrecio = 0;
+      this.showToglePrecio = false;
+      this.nuevoPrecio = 0;
+    }
+
+  limpiarPrecio(): void {
+    if (this.nuevoPrecio === 0) {
+      this.nuevoPrecio = null;
+    }
+  }
+
+  onPrecioInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.nuevoPrecio = value === '' ? null : Number(value);
   }
 
 }
