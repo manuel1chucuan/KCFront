@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router'; // CLEANUP: no se usan
 import { AuthServiceService } from '../login/auth-service.service';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'; // necesario para habilitar ngModel en el HTML
+import { CommonModule } from '@angular/common'; // necesario para operativas básicas en HTML (ngFor, ngIf, etc.)
 import { FiltroPrincipal } from '../services/fliltro-principal.service';
 
 @Component({
@@ -12,13 +12,16 @@ import { FiltroPrincipal } from '../services/fliltro-principal.service';
   templateUrl: './caja.component.html',
   styleUrl: './caja.component.scss'
 })
-
+                         //  REFACTOR: utilizar este tipado estricto en todos los componentes
 export class CajaComponent implements OnInit {
+  // input proveniente del componente menu
   @Input() controlLongitud: number = 8;
   filterListaProductosMasComprados: any[] = [];
   products: any[] = [
   ];
   
+  // productos hardcodeados
+  // TODO: deberían provenir de la API
   beautyProducts = [
     {
       id: 1,
@@ -186,15 +189,25 @@ export class CajaComponent implements OnInit {
   total: number = 0;
   
   ngOnInit(): void {
+    // setea valores para this.filterListaProductosMasComprados y this.topPriorityProducts.
+    // data es el input en la barra de búsqueda, seteado en el servicio FiltroPrincipal como observable
     this.dataService.getFilteredData().subscribe(data => {
+      // se filtran los productos hardcodeados comparando su nombre con el 
+      // input de la barra de busqueda
       this.filterListaProductosMasComprados = this.beautyProducts.filter(item => item.name.toLowerCase().includes(data.toLowerCase()));
+      // los productos ordenados por prioridad 
       this.topPriorityProducts = this.filterListaProductosMasComprados
       .sort((a, b) => b.priority - a.priority)
+      // se parten con base al valor de this.controlLongitud, el cual se controla en Ajustes
       .slice(0, this.controlLongitud);
     });
+    // calcula el toal de los precios
+    // CLEANUP: innecesario, el componente inicia siempre sin productos agregados
     this.calcularTotal();
   }
 
+  // reordena los productos como en ngOnInit cada que el input controlLongitud cambia
+  // desde Ajustes
   ngOnChanges(changes: SimpleChanges) {
     if (changes['controlLongitud']) {
       this.topPriorityProducts = this.beautyProducts
@@ -203,6 +216,8 @@ export class CajaComponent implements OnInit {
     }
   }
 
+  // al dar click a cualquiera de los productos, se agregan al orden de venta
+  // recibe el producto clickeado
   agregarProductos(productToAdd: any){
     if (productToAdd) {
       // Si el producto ya existe en la lista de productos, aumenta la cantidad
@@ -210,45 +225,63 @@ export class CajaComponent implements OnInit {
       
       if (existingProduct) {
         existingProduct.quantity += 1;
+        // pTotal es la suma de precios de un sólo producto agregado más de una vez
         existingProduct.pTotal = existingProduct.quantity * existingProduct.price;
       } else {
+        // si el producto no existe en la lista de productos, se agrega con cantidad 1
         this.products.push({ ...productToAdd, quantity: 1, pTotal:productToAdd.price });
       }
+      // recalcula el total de los precios con cada producto agregado
       this.calcularTotal();
     }
   }
 
+  // al dar click en el input de tipo number en la orden de venta
+  // recibe el producto al que pertenece el input
   onQuantityChange(productIn: any) {
     if (productIn.quantity <= 0)
+    // si se cambia la cantidad a 0 (o menor)
     {
+      // se obtiene el producto al que pertenece el input 
       const index = this.products.findIndex(product => product.id === productIn.id);
+      // se elimina el producto de la orden de venta
       this.products.splice(index, 1);
     } else {
+      // cualquier otra cantidad, aumenta la cantidad y el precio del producto
       productIn.pTotal = productIn.quantity * productIn.price;
     }
+    // recalcula el total de los precios con cada cambio de cantidad
     this.calcularTotal();
   }
 
+  // al dar click en Limpiar
   limpiarTicket(){
+    // elimina todos los productos de la orden de venta
     this.products = [];
+    // recalcula el total de los precios
+    // REFACTOR: llamada innecesaria a la función. Simplemente setea this.total a 0
     this.calcularTotal();
   }
 
+  // al dar click en el ícono de basura en cualquier producto de la orden de venta
   quitarProductoTicket(productIn:any){
-    const index = this.products.findIndex(product => product.id === productIn.id);
-    this.products.splice(index, 1);
+    const index = this.products.findIndex(product => product.id === productIn.id); // obtiene la posición del producto que se quiere remover
+    this.products.splice(index, 1); // se remueve el producto
     this.calcularTotal();
   }
 
   calcularTotal(){
     this.total=0;
+    // setea el valor de total sumando los precios de this.products
     this.products.forEach(element => {
       this.total += element.pTotal;
     });
   }
 
+  // REFACTOR: el constructor de esta clase esta en medio de los métodos
   constructor(private authService: AuthServiceService, private router: Router, private dataService: FiltroPrincipal) { }
 
+  // CLEANUP: innecesario. Ya se usa esto en el componente menu
   onLogOut(): void {
     this.authService.logout();
   }

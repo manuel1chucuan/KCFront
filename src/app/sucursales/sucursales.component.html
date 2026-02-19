@@ -1,5 +1,6 @@
 <div class="sucursales-vista">
     <div class="row d-flex contenedor-principal">
+        <!-- lado izquierdo -->
         <div class="col-md-4" style="height: 100%;position: relative;background-color: rgba(255, 255, 255, 0.767);padding: 0px; border-radius: 8px; border: solid 1px rgb(216, 216, 216);">
           <div class="overflow-div-ext2" style="padding: 1rem; width: 100%;">
           <!-- Navegación de pestañas -->
@@ -22,12 +23,13 @@
         
             <!-- Contenido de las pestañas -->
             <div class="tab-content" id="sucTabsContent" style="margin-top: 1rem;">
-                <!-- Pestaña de Agregar Usuario -->
+                <!-- Pestaña de Agregar Sucursal -->
                 
                 <div class="tab-pane fade" id="addScursal" [ngClass]="{'show active': pestanaActiva === 'agregarSucursales'}">
 
                     <div class="mb-1">
                       <h6>Nombre</h6>
+                                                                              <!-- ngModel conecta el valor de un input con una variable -->
                       <input type="text" class="form-control" id="sucursalName" [(ngModel)]="nuevaSucursal.nombre" placeholder="Ingresa el nombre" required>
                     </div>
 
@@ -37,7 +39,6 @@
                     </div>
 
                     <div class="row">
-                        <!-- Botón de eliminar (alineado a la izquierda) -->
                         <div class="col-6">
                             <div class="mb-1">
                                 <h6>Numero exterior</h6>
@@ -45,7 +46,6 @@
                               </div>
                         </div>
                       
-                        <!-- Botón de guardar (alineado a la derecha) -->
                         <div class="col-6">
                             <div class="mb-1">
                                 <h6>Numero interior</h6>
@@ -74,12 +74,13 @@
                         <input type="text" class="form-control" id="sucursalEstado" [(ngModel)]="nuevaSucursal.estado" placeholder="Ingresa el estado" required>
                     </div>
 
+                    <!-- Botón Agregar sucursal -->
                     <div class="d-flex justify-content-center mt-4">
                       <button class="btn btn-primary" (click)="crearSucursal()" style="width: 100%;">Agregar sucursal</button>
                     </div>
                 </div>
         
-                <!-- Pestaña de Gestión de Usuarios -->
+                <!-- Pestaña de Gestión de Sucursales -->
                 <div class="tab-pane fade show active" id="manageSucursales" [ngClass]="{'show active': pestanaActiva === 'gestionSucursales'}">
 
                     <div *ngIf="sucursalSeleccionada" class="card card-large" style="margin-top: 20px;">
@@ -148,10 +149,12 @@
           </div>  
         </div>
         
+        <!-- lado derecho -->
         <div class="col-md-8" style="height: 100%;position: relative;">
             <div class="overflow-div-ext">
                 <div class="d-flex flex-wrap align-content-start overflow-div">
 
+                    <!-- itera y renderiza las sucursales -->
                     <div *ngFor="let sucursal of sucursales" class="card card4" style="width:10rem;height: 15rem; flex: 0 0 auto;"
                       [ngClass] = "{
                           'selected-card': sucursalSeleccionada && sucursalSeleccionada.ID === sucursal.ID,
@@ -171,5 +174,7 @@
     </div>
 </div>
 
+<!-- CLEANUP o TODO: no se usa. Usar o quitar -->
 <p-confirmDialog></p-confirmDialog>
+<!-- renderiza las notificaciones de MessageService -->
 <p-toast></p-toast>

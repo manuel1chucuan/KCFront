@@ -77,4 +77,3 @@ export interface Sucursal {
     NumeroExt: number;
     Version: number;
 }
-

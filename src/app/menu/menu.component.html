@@ -1,10 +1,13 @@
 <div class="container-fluid mt-3 contenedorA">
+    <!-- navbar -->
     <div class="row">
         <div class="col-sm-2 d-flex justify-content-start mx-0 p-2">
+            <!-- menú -->
             <svg (click)="handleClick2()"
                 width="16" height="16" fill="currentColor" class="bi bi-grid-3x3-gap menu-principal" viewBox="0 0 16 16">
                 <path d="M4 2v2H2V2zm1 12v-2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m5 10v-2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1m0-5V2a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1M9 2v2H7V2zm5 0v2h-2V2zM4 7v2H2V7zm5 0v2H7V7zm5 0h-2v2h2zM4 12v2H2v-2zm5 0v2H7v-2zm5 0v2h-2v-2zM12 1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm-1 6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm1 4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1z"/>
             </svg>
+            <!-- ajustes -->
             <span class="poss text-dark" (click)="handleClick()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
                     <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
@@ -12,18 +15,23 @@
                 Ajustes
             </span>
         </div>
+        <!-- buscador -->
         <div class="col-sm-7 d-flex justify-content-end mx-0 p-2">
             <div class="input-group">
+                                                                            <!-- ngModel conecta el valor de un input con una variable -->
                 <input class="form-control" type="text" placeholder="Buscar..." [(ngModel)]="filtro" (input)="aplicarFiltro()" name="filtro">
               </div>
         </div>
         <div class="col-sm-3 d-flex justify-content-end mx-0 p-2">
+            <!-- usuario -->
             <span class="user">
                 <svg width="16" height="16" fill="currentColor" class="bi bi-person-gear me-1 user-icon" viewBox="0 0 16 16">
                     <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
                 </svg>
+                            <!-- // TODO: cambiar valor hardcoded por variable -->
                 <span class="user-text">Manuel Chucuan</span>
             </span>
+            <!-- cerrar sesión -->
             <svg (click)="onLogOut()" style="color: rgb(163, 39, 39);" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right logout" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
                 <path  fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
@@ -31,7 +39,10 @@
         </div>
     </div>
     <div class="row contenido-z">
+        <!-- *ngIf renderiza el componente si el valor del atributo es true -->
+        <!-- sirve para activar la función closeMessage -->
         <div *ngIf="showTogle" class="overlay" (click)="closeMessage()"></div>
+        <!-- el componente que se renderiza al dar click en "Ajustes" -->
         <div *ngIf="showTogle" class="select-flotante1" (click)="$event.stopPropagation()">
             <h6>
                 <span>
@@ -54,8 +65,9 @@
             </div>
 
         </div>
-
+        <!-- sirve para activar la función closeMessage2 -->
         <div *ngIf="showTogle2" class="overlay" (click)="closeMessage2()"></div>
+        <!-- el componente que se renderiza al dar click en el menú (navbar) -->
         <div *ngIf="showTogle2" class="select-flotante2" (click)="$event.stopPropagation()">
 
             <div class="navegacion-div" (click)="mostrarComponente('caja')">
@@ -88,6 +100,8 @@
                 <label class="navegacion-lbl">Ventas</label>
             </div>
         </div>
+        <!-- las 6 vistas se renderizan condicionalmente con *ngIf -->
+                                                      <!-- se manda controlLongitud como input del componente caja -->
         <app-caja *ngIf="componenteActual === 'caja'" [controlLongitud]="selectedValue"></app-caja>
         <app-servicios *ngIf="componenteActual === 'servicios'"></app-servicios>
         <app-inventario *ngIf="componenteActual === 'inventario'"></app-inventario>

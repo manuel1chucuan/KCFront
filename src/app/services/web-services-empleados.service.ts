@@ -5,8 +5,9 @@ import { CrearUsuario, Usuario } from '../models/modelos';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
+// con @Injectable, Angular instancia la clase e inyecta sus dependencias al ser necesitada por primera vez
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root', // existe una sola instancia del servicio en toda la aplicación
 })
 export class UsuarioService {
   private apiUrl = environment.apiUrl + "/usuario" ;
