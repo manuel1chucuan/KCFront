@@ -1,5 +1,6 @@
 <div class="empleados-vista">
     <div class="row d-flex contenedor-principal">
+        <!-- lado izquierdo -->
         <div class="col-md-4" style="height: 100%;position: relative;background-color: rgba(255, 255, 255, 0.767);padding: 0px; border-radius: 8px; border: solid 1px rgb(216, 216, 216);">
           <div class="overflow-div-ext2" style="padding: 1rem; width: 100%;">
           <!-- Navegación de pestañas -->
@@ -22,8 +23,7 @@
         
             <!-- Contenido de las pestañas -->
             <div class="tab-content" id="userTabsContent" style="margin-top: 1rem;">
-                <!-- Pestaña de Agregar Usuario -->
-                
+                <!-- Pestaña de Agregar Usuario -->                
                 <div class="tab-pane fade" id="addUser" [ngClass]="{'show active': pestanaActiva === 'agregarUsuario'}">
                     <div class="mb-3">
                       <h6>Nombre</h6>
@@ -58,6 +58,7 @@
                       <input class="form-check-input" type="checkbox" id="activo" [(ngModel)]="nuevoUsuario.activo" checked>
                       <label class="form-check-label" for="activo">Activo</label>
                     </div>
+                    <!-- Botón Agregar Usuario -->
                     <div class="d-flex justify-content-center mt-4">
                       <button class="btn btn-primary" (click)="crearUsuario()" style="width: 100%;">Agregar Usuario</button>
                     </div>
@@ -126,10 +127,12 @@
           </div>  
         </div>
         
+        <!-- lado derecho -->
         <div class="col-md-8" style="height: 100%;position: relative;">
             <div class="overflow-div-ext">
                 <div class="d-flex flex-wrap align-content-start overflow-div">
 
+                    <!-- itera y renderiza los usuarios -->
                     <div *ngFor="let usuario of usuarios" class="card card4" style="width:10rem;height: 15rem; flex: 0 0 auto;"
                     [ngClass] = "{
                         'selected-card': usuarioSeleccionado && usuarioSeleccionado.ID === usuario.ID,
@@ -148,4 +151,5 @@
     </div>
 </div>
 
+<!-- renderiza las notificaciones de MessageService -->
 <p-toast></p-toast>

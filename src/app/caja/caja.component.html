@@ -1,5 +1,6 @@
 <div class="col-sm-12 d-flex justify-content-around mx-0 p-2" style="min-height: 6.7rem;">
 
+    <!-- itera y renderiza los productos -->
     <div *ngFor="let product of topPriorityProducts" class="card cardA" >
         <div class="row g-0" (click)="agregarProductos(product)">
             <div class="col-md-3">
@@ -16,12 +17,14 @@
 </div>
 
 <div class="row d-flex fijar-caja">
+    <!-- lado izquiero, acutalmente vació -->
     <div class="col-md-3 p-0">
         <div class="row caja-lado-izquierdo-row">
             <div class="row caja-lado-izquierdo2-row">
             </div>
         </div>
     </div>
+    <!-- orden de venta -->
     <div class="col-md-6 pb-2 px-4">
         <div class="caja-centro">
             <div class="caja-centro2">
@@ -42,11 +45,14 @@
                         </table>
                     </div>
                     <div class="tabla-overflow2-2">
+                        <!-- tabla de productos en la orden de venta -->
                         <table class="table table-sm">
                         <tbody>
+                            <!-- itera sobre los productos seleccionados y renderiza una fila en la tabla por cada uno -->
                             <tr *ngFor="let product of products">
                                 <td style="width: 50%;">{{ product.name }}</td>
                                 <td style="width: 13%;">
+                                                                                        <!-- ngModel conecta el valor de un input con una variable -->
                                     <input style="height: 1.5rem;width: 90%;" type="number" [(ngModel)]="product.quantity" (change)="onQuantityChange(product)"/>
                                 </td>
                                 <td style="width: 13%;">{{ product.price | currency:'USD':'symbol' }}</td>
@@ -60,6 +66,7 @@
                         </tbody>
                         </table>
                     </div>
+                    <!-- muestra el precio total de la suma de los productos -->
                     <div class="tabla-overflow2-3 d-flex justify-content-end p-2">
                         <h6>Total: <span style="color: rgb(131, 131, 131);">{{ total | currency:'USD':'symbol' }}</span></h6>
                     </div>     
@@ -67,6 +74,7 @@
             </div>
         </div>
     </div>
+    <!-- lado derecho, actualmente vacío -->
     <div class="col-md-3 p-0">
         <div class="row caja-lado-derecho-row">
             <div class="row caja-lado-derecho2-row">

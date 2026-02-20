@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
+// función que permite el acceso a un componente, o redirecciona a /login
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
@@ -12,5 +13,8 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
+  // retorna true si hay token en sessionStorage
+  // rediriecciona a /login en caso contrario
+  // TODO: el token no esta siendo validado 
   return !!sessionStorage.getItem('authToken') ? true : router.navigate(['/login']);
 };

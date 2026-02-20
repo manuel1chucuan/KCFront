@@ -2,15 +2,21 @@
     <div class="row">
       <div class="col-sm-4"></div>
       <div class="col-sm-4 body-form">
+        <!-- título de la app -->
         <div class="d-flex justify-content-center label-form">
             <label for="email" class="form-label">KC Venta - Caja Express</label>
         </div>
+        <!-- campo para ingresar corre -->
         <div class="mb-1 margen-form mt-2">
+                                                        <!-- ngModel conecta el valor de un input con una variable -->
+            <!-- TODO: debería poder ingresar con usuraio también -->
             <input type="text" class="form-control" id="email" placeholder="Usuario" name="email" [(ngModel)]="correo">
         </div>
+        <!-- campo para ingresar contraseña -->
         <div class="mb-2 margen-form">
             <input type="password" class="form-control" id="pwd" placeholder="Contraseña" name="pswd" [(ngModel)]="contrasena" (keydown.enter)="onLogin()">
         </div>
+        <!-- botón para iniciar sesión -->
         <div class="d-flex flex-row-reverse label-form-bot">
             <button class="btn btn-secondary btn-sm" (click)="onLogin()">Iniciar sesion</button>
         </div>
@@ -18,6 +24,7 @@
       <div class="col-sm-4"></div>
     </div>
 
+    <!-- renderiza las notificaciones de MessageService -->
     <p-toast></p-toast>
   </div>
   

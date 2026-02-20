@@ -3,6 +3,7 @@
 $color-primario: rgba(255, 198, 247, 0.397);
 
 body {
+    // el logo de la app está siempre en el background de toda la app
     background-image: linear-gradient(rgba(255, 255, 255, 0.5), $color-primario), url('assets/logokc.png');
     background-size: cover;
     background-repeat: no-repeat;
