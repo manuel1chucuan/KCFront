@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 
+// este código se ejecuta en construcción (ng build).
+// en desarrollo (ng serve), Angular crea su propio server
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
@@ -28,6 +30,7 @@ export function app(): express.Express {
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
+    // aquí Angular se ejecuta dentro de Node para generar HTML
     commonEngine
       .render({
         bootstrap,

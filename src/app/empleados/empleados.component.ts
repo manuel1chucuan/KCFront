@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common'; // necesario para operativas básicas en HTML (ngFor, ngIf, etc.)
+import { FormsModule } from '@angular/forms'; // necesario para habilitar ngModel en el HTML
 import { CrearUsuario, Usuario } from '../models/modelos';
 import { UsuarioService } from '../services/web-services-empleados.service';
-import { MessageService } from 'primeng/api'; 
-import { PrimeNGConfig } from 'primeng/api'; 
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
-import { MessagesModule } from 'primeng/messages'; // 🔥 IMPORTANTE
+import { MessageService } from 'primeng/api'; // imprime notificaciones
+import { PrimeNGConfig } from 'primeng/api'; // para habilitar efecto ripple
+import { DialogModule } from 'primeng/dialog'; // CLEANUP o TODO: no se usa. Usar o quitar
+import { ButtonModule } from 'primeng/button'; // CLEANUP o TODO: no se usa. Usar o quitar
+import { ToastModule } from 'primeng/toast'; // importa el tag <p-toast> en el componente
+import { MessagesModule } from 'primeng/messages'; // 🔥 IMPORTANTE // CLEANUP o TODO: no se usa. Usar o quitar
 import Swal from 'sweetalert2';
 
 @Component({
@@ -35,11 +35,15 @@ export class EmpleadosComponent {
   constructor(private usuarioService: UsuarioService, private primengConfig: PrimeNGConfig , private messageService: MessageService) {}
 
   ngOnInit() {
-    this.primengConfig.ripple = true;
+    // habilita un efecto animado en componentes primeng
+    // REFACTOR: esta línea debería existir una sola vez en AppComponent, con eso aplica en toda la app
+    this.primengConfig.ripple = true; 
     this.obtenerUsuarios(); // Cargar usuarios al iniciar el componente
   }
 
+  // al hacer click en Agregar Usuario o hacer enter en cualquier input de Agregar Usuario
   crearUsuario(): void {
+    // validaciones del formulario
     if (!this.nuevoUsuario.nombreDeUsuario) {
       console.log('El nombre de usuario es obligatorio.');
       this.messageService.add({severity: 'error', summary: 'Error', detail: 'El nombre de usuario es obligatorio.', life: 10000});
@@ -54,12 +58,13 @@ export class EmpleadosComponent {
       return;
     }
 
+    // petición a la API para crear un usuario
     this.usuarioService.crearUsuario(this.nuevoUsuario).subscribe({
       next: (usuarioCreado) => {
         console.log('Usuario creado:', usuarioCreado);
         this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Usuario creado exitosamente.', life: 10000});
         this.limpiarFormulario();
-        this.obtenerUsuarios(); // Refrescar la lista después de crear un usuario
+        this.obtenerUsuarios(); // Refrescar la lista después de crear un usuario 
       },
       error: (err) => {
         console.error('Error al crear el usuario:', err);
@@ -68,6 +73,7 @@ export class EmpleadosComponent {
     });
   }
 
+  // obtiene los usuarios a través de UsuariosService
   obtenerUsuarios(): void {
     this.usuarioService.obtenerUsuarios().subscribe({
       next: (response: any) => { // Se define como 'any' porque la API devuelve un objeto con 'data'
@@ -87,16 +93,21 @@ export class EmpleadosComponent {
     });
   }
 
+  // REFACTOR: variables declaradas en medio de la clase
   usuarioSeleccionado: Usuario | null = null; 
   pestanaActiva: string = 'gestionUsuarios'; // 🔥 Cambié "pestañaActiva" a "pestanaActiva"
 
+  // al hacer click en cualquier usuario,
+  // recibe el usuario seleccionada
   seleccionarUsuario(usuario: Usuario): void {
     this.usuarioSeleccionado = usuario;
+    // "navega" a la pestaña Gestión de Sucursales en el lado izquiero del componente
     this.pestanaActiva = 'gestionUsuarios'; // 🔥 También cambié aquí
   }
 
+  // al hacer click en Guardar Cambios en la pestaña Gestión de Usuarios
   confirmarGuardarCambios(): void {
-
+    // validaciones del formulario
     if (!this.usuarioSeleccionado?.NombreDeUsuario) {
       this.messageService.add({
         severity: 'error',
@@ -117,6 +128,7 @@ export class EmpleadosComponent {
       return;
     }
 
+    // renderiza el alert de confirmación para modificar un usuario
     Swal.fire({
       title: 'Confirmar cambios',
       text: '¿Seguro que deseas guardar los cambios del usuario?',
@@ -146,13 +158,16 @@ export class EmpleadosComponent {
 
   // Método para guardar los cambios realizados
   guardarCambios(): void {
+    // REFACTOR: innecesario. Esta validación ya está en confirmarGuardarCambios
     if (!this.usuarioSeleccionado?.Correo) {
       this.messageService.add({severity: 'error', summary: 'Error', detail: 'El correo es obligatorio.', life: 10000});
       return;
     }
+
+    // petición a la API para modificar un usuario
     this.usuarioService.modificarUsuario(this.usuarioSeleccionado).subscribe({
       next: () => {
-        this.obtenerUsuarios();
+        this.obtenerUsuarios(); // para actualizar los usuarios con el usuario modificado
 
         Swal.fire({
           icon: 'success',
@@ -166,7 +181,7 @@ export class EmpleadosComponent {
       },
       error: (err) => {
         console.error('Error al modificar usuario:', err);
-        this.obtenerUsuarios();
+        this.obtenerUsuarios(); // CLEANUP: innecesario. Al haber error, no cambia el estado
 
         Swal.fire({
           icon: 'error',
@@ -179,16 +194,20 @@ export class EmpleadosComponent {
     });
   }
 
+  // al hacer click en Eliminar en el alert de confirmación para eliminar un usuario
   eliminarUsuario(): void {
+    // validación para prevenir errores de sistema (mal estado)
     if (!this.usuarioSeleccionado?.ID) {
       return;
     }
 
+    // petición a la API para eliminar un usuario
     this.usuarioService.eliminarUsuario(this.usuarioSeleccionado.ID)
       .subscribe({
         next: () => {
+          // obtiene nuevamente los usuarios para solo renderizar los no eliminadas
           this.obtenerUsuarios();
-          this.usuarioSeleccionado = null;
+          this.usuarioSeleccionado = null; // el contenido en pestaña Gestión de Usuarios desaparece
 
           Swal.fire({
             icon: 'success',
@@ -214,7 +233,9 @@ export class EmpleadosComponent {
       });
   }
 
+  // al hacer click en Eliminar Usuario en la pestaña Gestión de Usuario
   confirmarEliminarUsuario(): void {
+    // validación para prevenir errores de sistema (mal estado)
     if (!this.usuarioSeleccionado?.ID) {
       this.messageService.add({
         severity: 'warn',
@@ -225,6 +246,7 @@ export class EmpleadosComponent {
       return;
     }
 
+    // renderiza el alert de confirmación para eliminar un usuario
     Swal.fire({
       title: 'Confirmar eliminación',
       text: `¿Seguro que deseas eliminar al usuario seleccionado?`,
@@ -251,8 +273,7 @@ export class EmpleadosComponent {
     });
   }
 
-
-
+  // limpia el formulario Agregar Usuario
   limpiarFormulario(): void {
     this.nuevoUsuario = {
       nombreDeUsuario: '',
