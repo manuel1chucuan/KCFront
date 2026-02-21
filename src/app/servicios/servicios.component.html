@@ -216,11 +216,7 @@
     <div class="d-flex gap-2">
       <button class="btn btn-primary"
               (click)="guardarUpdatePrecio()"
-              [disabled]="
-                nuevoPrecio === null ||
-                nuevoPrecio === undefined ||
-                servicioPorSucursalSeleccionado.Precio === precioAnterior
-              ">
+              [disabled]="servicioPorSucursalSeleccionado.Precio === precioAnterior">
         Guardar
       </button>
 

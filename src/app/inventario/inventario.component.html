@@ -1,1 +1,252 @@
-<p>inventario works!</p>
+<div class="empleados-vista">
+    <div class="row d-flex contenedor-principal">
+      <!-- lado izquierdo -->
+        <div class="col-md-4" style="height: 100%;position: relative;background-color: rgba(255, 255, 255, 0.767);padding: 0px; border-radius: 8px; border: solid 1px rgb(216, 216, 216);">
+          <div class="overflow-div-ext2" style="padding: 1rem; width: 100%;">
+          <!-- Navegación de pestañas -->
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <button class="nav-link" 
+                        [ngClass]="{'active': pestanaActiva === 'gestionServicios'}"  
+                        (click)="pestanaActiva = 'gestionServicios'">
+                  Gestión de Servicio
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link" 
+                        [ngClass]="{'active': pestanaActiva === 'agregarServicio'}" 
+                        (click)="pestanaActiva = 'agregarServicio'">
+                  Agregar Servicio
+                </button>
+              </li>
+            </ul>
+        
+            <!-- Contenido de las pestañas -->
+            <div class="tab-content" id="ServicesTabsContent" style="margin-top: 1rem;">
+                <!-- Pestaña de Agregar servicio -->
+                
+                <div class="tab-pane fade" id="addService" [ngClass]="{'show active': pestanaActiva === 'agregarServicio'}">
+                    <div class="mb-3">
+                      <h6>Servicio</h6>
+                       <!-- este input setea this.nuevoServicio.nombre -->
+                                                                              <!-- ngModel conecta el valor de un input con una variable -->
+                      <input type="text" class="form-control" id="ServiceName" [(ngModel)]="nuevoServicio.nombre" placeholder="Ingresa el nombre" required (keydown.enter)="crearServicio()">
+                    </div>
+                    <div class="mb-3">
+                      <h6>Descripcion</h6>
+                      <!-- este input setea this.nuevoServicio.descripcion -->
+                      <input type="text" class="form-control" id="ServiceDescription" [(ngModel)]="nuevoServicio.descripcion" placeholder="Breve descripcion" (keydown.enter)="crearServicio()">
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4">
+                      <button class="btn btn-primary" (click)="crearServicio()" style="width: 100%;">Agregar Servicio</button>
+                    </div>
+                </div>
+        
+                <!-- Pestaña de Gestión de Servicio -->
+                <div class="tab-pane fade show active" id="manageUsers" [ngClass]="{'show active': pestanaActiva === 'gestionServicios'}">
+
+                    <div *ngIf="servicioSeleccionado" class="card card-large" style="margin-top: 20px;">
+                        <div class="card-body">
+
+                            <!-- Nombre Editable -->
+                            <div>
+                            <strong>Servicio:</strong>
+                            <!-- IMPROVEMENT: reemplazar por this.servicioSeleccionado.Nombre -->
+                            <input type="text" [(ngModel)]="nombreServicioSeleccionado" class="form-control">
+                            </div>
+                            
+                            <!-- Correo Editable -->
+                            <div>
+                            <strong>Descripcion:</strong>
+                            <!-- IMPROVEMENT: reemplazar por this.servicioSeleccionado.Descripcion -->
+                            <input type="text" [(ngModel)]="descripcionServicioSeleccionado" class="form-control">
+                            </div>
+                      
+                            <div class="row" style="padding-top:1rem;">
+                                <!-- Botón de eliminar (alineado a la izquierda) -->
+                                <div class="col-6" style="text-align: left;">
+                                <button class="btn btn-danger btn-sm" (click)="confirmarEliminarServicio()" style="width: 100%;">Eliminar Servicio</button>
+                                </div>
+                            
+                                <!-- Botón de guardar (alineado a la derecha) -->
+                                <div class="col-6" style="text-align: right;">
+                                <button class="btn btn-primary btn-sm" (click)="confirmarGuardarCambios()" style="width: 100%;">Guardar Cambios</button>
+                                </div>
+                            </div>
+
+                        </div>
+                      </div>
+                      
+                </div>
+            </div>
+          </div>  
+        </div>
+        
+        <!-- lado derecho -->
+        <div class="col-md-8" style="height: 100%;position: relative;padding: 0px;">
+          <div class="overflow-div-ext">
+            <div class="d-flex flex-column overflow-div">
+
+              <!-- itera y renderiza los servicios -->
+              <div *ngFor="let servicio of servicios" class="separador-servicio"
+              [ngClass] = "{
+              'selected-card': servicioSeleccionado && servicioSeleccionado.ID === servicio.ID,
+              'card-default': !(servicioSeleccionado && servicioSeleccionado.ID === servicio.ID)}">
+                <div class="contenido-servicio" (click)="seleccionarServicio(servicio)">
+                  <p class="servicio-select">{{ servicio.Nombre }} 
+                    [<span style="color: grey;">{{ servicio.Descripcion }}</span>]
+                  </p>
+
+                  <div class="d-flex flex-wrap contenido-servicio-interno">
+                    <!-- itera y renderiza las sucursales -->
+                    <div *ngFor="let sucursal of servicio.ServiciosPorSucursal" 
+                    class="p-2 border mini-contenido"
+                    (click)="handleClickUpdatePrecio(servicio,sucursal)">
+                      {{ getNombreSucursal(sucursal.IdSucursal)}} 
+                      <span class="mini-contenido-interno">
+                        ${{ sucursal.Precio }}
+                      </span>
+                    </div>
+
+                    <!-- botón para agregar sucursal -->
+                    <div class="mini-contenido-plus" (click)="handleClickAddPrecio(servicio)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                      </svg>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- sirve para activar la función closeMessagePrecio -->
+<div *ngIf="showToglePrecio" class="overlay" (click)="closeMessagePrecio()"></div>
+<!-- el componente que se renderiza al dar click en el botón para agregar sucursal -->
+<div *ngIf="showToglePrecio"
+     class="select-flotante2"
+     (click)="$event.stopPropagation()">
+
+  <h3>{{ servicioSeleccionado?.Nombre }}</h3>
+  <p>{{ servicioSeleccionado?.Descripcion }}</p>
+
+  <!-- SIN SUCURSALES DISPONIBLES -->
+  <div *ngIf="sucursalesDisponibles.length === 0"
+       class="alert alert-info mt-3">
+    Todas las sucursales ya tienen un precio asignado para este servicio.
+  </div>
+
+  <!-- FORM SOLO SI HAY SUCURSALES -->
+  <ng-container *ngIf="sucursalesDisponibles.length > 0">
+
+    <!-- SELECT SUCURSAL -->
+    <div class="mb-2">
+      <label>Sucursal</label>
+      <select class="form-control" [(ngModel)]="sucursalSeleccionadaId">
+        <option [ngValue]="null" disabled>Seleccione sucursal</option>
+        <option *ngFor="let suc of sucursalesDisponibles" [value]="suc.ID">
+          {{ suc.Nombre }}
+        </option>
+      </select>
+    </div>
+
+    <!-- INPUT PRECIO -->
+    <div class="mb-2">
+      <label>Precio</label>
+      <input type="number"
+              [value]="nuevoPrecio ?? ''"
+              (focus)="limpiarPrecio()"
+              (input)="onPrecioInput($event)"
+              class="form-control"/>
+    </div>
+
+  </ng-container>
+
+  <!-- BOTONES -->
+  <div class="d-flex justify-content-end gap-2 mt-3">
+    <button class="btn btn-primary"
+            (click)="guardarPrecio()"
+            [disabled]="
+              sucursalesDisponibles.length === 0 ||
+              !sucursalSeleccionadaId ||
+              nuevoPrecio === null ||
+              nuevoPrecio === undefined
+            ">
+      Guardar
+    </button>
+
+    <button class="btn btn-secondary"
+            (click)="closeMessagePrecio()">
+      Cancelar
+    </button>
+  </div>
+</div>
+
+<!-- sirve para activar la función cancelarUpdatePrecio -->
+<div *ngIf="showTogleUpdatePrecio" class="overlay" (click)="cancelarUpdatePrecio()"></div>
+<!-- el componente que se renderiza al dar click en cualquier sucursal -->
+<div *ngIf="showTogleUpdatePrecio"
+     class="select-flotante2"
+     (click)="$event.stopPropagation()">
+
+  <h3>{{ servicioSeleccionado?.Nombre }}</h3>
+  <p>{{ servicioSeleccionado?.Descripcion }}</p>
+
+  <div class="mb-2">
+    <label>Sucursal</label>
+    <input
+      type="text"
+      class="form-control"
+      [value]="getNombreSucursal(servicioPorSucursalSeleccionado.IdSucursal)"
+      disabled
+    />
+  </div>
+
+    <!-- INPUT PRECIO -->
+    <div class="mb-2">
+      <label>Precio</label>
+      <input type="number"
+              class="form-control"
+              [(ngModel)]="servicioPorSucursalSeleccionado.Precio"/>
+    </div>
+
+  <!-- BOTONES -->
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+  <!-- ELIMINAR -->
+  <button class="btn btn-danger"
+          (click)="confirmarEliminarPrecioSucursal()">
+    Eliminar precio
+  </button>
+
+    <!-- GUARDAR / CANCELAR -->
+    <div class="d-flex gap-2">
+      <!-- TODO: al parecer el botón está siempre deshabilitado, quizá haya un error en las condiciones
+      de disabled -->
+      <button class="btn btn-primary"
+              (click)="guardarUpdatePrecio()"
+              [disabled]="
+                nuevoPrecio === null ||
+                nuevoPrecio === undefined ||
+                servicioPorSucursalSeleccionado.Precio === precioAnterior
+              ">
+        Guardar
+      </button>
+
+      <button class="btn btn-secondary"
+              (click)="cancelarUpdatePrecio()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- renderiza las notificaciones de MessageService -->
+<p-toast></p-toast>

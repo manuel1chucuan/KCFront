@@ -1,0 +1,176 @@
+.empleados-vista {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.74);
+}
+
+.contenedor-principal{
+    height: 100%;
+    padding: 0.5rem;
+}
+
+.overflow-div {
+    gap: 1rem; 
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.overflow-div2 {
+    gap: 1rem; 
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.overflow-div-ext {
+    position:absolute;
+    overflow: auto; 
+    height: 100%;
+    width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.overflow-div-ext2 {
+  position:absolute;
+  overflow: auto; 
+  height: 100%;
+}
+
+.selected-card {
+  background-color: rgb(255, 255, 255);
+  border-radius: 4px;
+  text-shadow: 1px 1px 4px rgb(212, 212, 212);
+  border: solid 1px rgb(224, 53, 216);
+}
+
+.card-default {
+  background-color: rgb(255, 255, 255);
+  border-radius: 4px;
+  border: solid 1px rgb(201, 201, 201);
+}
+
+///////////////////////////////////////////////////////////////////////
+.separador-servicio{
+  padding: 0px;
+}
+
+.contenido-servicio{
+  transition: background-color 0.8s, border 0.8s;
+  width: 100%;
+  height: 100%;
+  
+  border-radius: 4px;
+  min-height: 3rem;
+}
+.contenido-servicio:has(.servicio-select:hover){
+  transition: background-color 0.8s, border 0.8s;
+  background-color: rgb(250, 250, 250);
+}
+
+.contenido-servicio-interno{
+  padding: 0.1rem;
+}
+
+.servicio-select{
+  padding-left: 0.4rem;
+  margin: 0px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.servicio-select:hover {
+  text-shadow: 1px 1px 4px rgb(212, 212, 212);
+}
+
+.mini-contenido{
+  padding: 0.1rem !important;
+  padding-left: 0.3rem !important;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 2px rgb(119, 119, 119);
+  margin: 0.2rem;
+  font-size: 12px;
+  background-color: rgb(243, 151, 238);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.mini-contenido:hover{
+  background-color: rgb(214, 60, 206);
+}
+
+.mini-contenido:active{
+  background-color: rgb(253, 0, 241);
+}
+
+.mini-contenido-interno{
+  color: rgb(117, 117, 117);
+  background-color: rgb(255, 255, 255);
+  margin-right: 0.14rem;
+  margin-left: 0.3rem;
+  text-shadow: none;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.mini-contenido-plus{
+  padding: 0.1rem !important;
+  color:  rgb(121, 180, 121);
+  margin: 0.2rem;
+  font-size: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.mini-contenido-plus:hover{
+  color:  rgb(0, 179, 0);
+  background-color: rgba(155, 155, 155, 0.103);
+}
+
+.mini-contenido-plus:active{
+  color:  rgb(0, 255, 0);
+  background-color: transparent;
+}
+
+
+
+/////////////////////////////////////////////////////////////////
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  height: 100vmax;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.322);
+
+}
+
+.select-flotante1 {
+    position: absolute;
+    background-color: rgba(247, 247, 247, 0.925);
+    height: 75%;
+    width: 20rem;
+    z-index: 100; /* Asegúrate de que esté encima del contenedor de fondo */
+    border: solid 1px rgb(192, 192, 192);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-left: 1rem;
+    padding-top: 0.3rem;
+}
+
+.select-flotante2 {
+  position: fixed;            /* Siempre en el mismo lugar en pantalla */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centrado exacto en ambas direcciones */
+  width: 400px;
+  min-height: 200px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  z-index: 10000; /* Asegura que esté por encima del overlay */
+}
