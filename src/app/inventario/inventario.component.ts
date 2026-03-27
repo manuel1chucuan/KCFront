@@ -28,10 +28,10 @@ export class InventarioComponent {
       };
   
       nuevoDetalleDelServicio: ServicioPorSucursal = {
-        IdSucursal: '',
-        Precio: 0,
-        FechaCreacion: null,
-        CreadoPor: null
+        idSucursal: '',
+        precio: 0,
+        fechaCreacion: null,
+        creadoPor: null
       };
     
       servicios: Servicio[] = [];
@@ -86,7 +86,7 @@ export class InventarioComponent {
               this.servicios = response.data; 
               // al ejecutar obtenerServicios() en ngOnInit() o al eliminar un servicio, this.servicioSeleccionado
               // será null; en otras ejecuciones, hay que actualizarlo por la nueva respuesta   
-              this.servicioSeleccionado = this.servicios.find(s => s.ID === this.servicioSeleccionado?.ID) ?? null;
+              this.servicioSeleccionado = this.servicios.find(s => s.id === this.servicioSeleccionado?.id) ?? null;
             } else {
               console.error('La API no devolvió un array dentro de "data".', response);
               this.servicios = [];
@@ -113,8 +113,8 @@ export class InventarioComponent {
       seleccionarServicio(servicio: Servicio): void {
         this.servicioSeleccionado = servicio;
         // CLEANUP: variables innecesarias 
-        this.nombreServicioSeleccionado = this.servicioSeleccionado.Nombre;
-        this.descripcionServicioSeleccionado = this.servicioSeleccionado.Descripcion;
+        this.nombreServicioSeleccionado = this.servicioSeleccionado.nombre;
+        this.descripcionServicioSeleccionado = this.servicioSeleccionado.descripcion;
   
         // "navega" a la pestaña Gestión de Servicios en el lado izquiero del componente
         this.pestanaActiva = 'gestionServicios';
@@ -175,8 +175,8 @@ export class InventarioComponent {
         }
   
         // CLEANUP: innecesario
-        this.servicioSeleccionado.Nombre = this.nombreServicioSeleccionado;
-        this.servicioSeleccionado.Descripcion = this.descripcionServicioSeleccionado;
+        this.servicioSeleccionado.nombre = this.nombreServicioSeleccionado;
+        this.servicioSeleccionado.descripcion = this.descripcionServicioSeleccionado;
   
         // modifica un servicio a travez través de ServiciosService
         this.serviciosService.modificarServicio(this.servicioSeleccionado)
@@ -257,9 +257,9 @@ export class InventarioComponent {
   
         // elimina un ServiciosPorSucursal de el Servicio 
         // 🔥 quitamos la relación precio–sucursal
-        this.servicioSeleccionado.ServiciosPorSucursal =
-          this.servicioSeleccionado.ServiciosPorSucursal
-            .filter(sp => sp.IdSucursal !== this.servicioPorSucursalSeleccionado.IdSucursal);
+        this.servicioSeleccionado.serviciosPorSucursal =
+          this.servicioSeleccionado.serviciosPorSucursal
+            .filter(sp => sp.idSucursal !== this.servicioPorSucursalSeleccionado.idSucursal);
   
         // petición para modificar el Servicio eliminandole un ServicioPorSucursal
         this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
@@ -294,7 +294,7 @@ export class InventarioComponent {
       // al hacer click en Eliminar Servicio
       confirmarEliminarServicio(): void {
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado?.ID) {
+        if (!this.servicioSeleccionado?.id) {
           this.messageService.add({
             severity: 'warn',
             summary: 'Atención',
@@ -334,12 +334,12 @@ export class InventarioComponent {
     // al hacer click en Eliminar Servicio en el alert de confirmación para eliminar un servicio
       eliminarServicio(): void {
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado?.ID) {
+        if (!this.servicioSeleccionado?.id) {
           return;
         }
   
         // petición para eliminar el Servicio
-        this.serviciosService.eliminarServicio(this.servicioSeleccionado.ID)
+        this.serviciosService.eliminarServicio(this.servicioSeleccionado.id)
           .subscribe({
             next: () => {
               // obtiene nuevamente los servicios para solo renderizar los no eliminados
@@ -398,8 +398,8 @@ export class InventarioComponent {
       // recibe el id de un ServicioPorSucursal
       getNombreSucursal(id: string): string {
         // el id ServicioPorSucursal siempre es el mismo id que una Sucursal
-        const sucursal = this.sucursales.find(s => s.ID === id);
-        return sucursal ? sucursal.Nombre : 'Sucursal desconocida';
+        const sucursal = this.sucursales.find(s => s.id === id);
+        return sucursal ? sucursal.nombre : 'Sucursal desconocida';
       }
     
       // limpia el formulario Agregar Servicio
@@ -416,10 +416,10 @@ export class InventarioComponent {
       showTogleUpdatePrecio: boolean = false;
       precioAnterior: number | null = null;
       servicioPorSucursalSeleccionado: ServicioPorSucursal = {
-        IdSucursal: '',
-        Precio: 0,
-        FechaCreacion: null,
-        CreadoPor: null
+        idSucursal: '',
+        precio: 0,
+        fechaCreacion: null,
+        creadoPor: null
       };
   
       // al dar click en Cancelar en el modal de sucursal,
@@ -436,7 +436,7 @@ export class InventarioComponent {
         // el precio del ServicioPorSucursal seleccionado regresa al precio original
         // (se cancela la modificación del precio)  
         {
-          this.servicioPorSucursalSeleccionado.Precio = this.precioAnterior;
+          this.servicioPorSucursalSeleccionado.precio = this.precioAnterior;
         }
   
         // cierra el modal de sucursal
@@ -453,7 +453,7 @@ export class InventarioComponent {
           // setea this.servicioPorSucursalSeleccionado 
           this.servicioPorSucursalSeleccionado = servicioPorSucursal;
           // el "precio anterior" es el precio original con el que se creó el ServicioPorSucursal
-          this.precioAnterior = servicioPorSucursal.Precio;
+          this.precioAnterior = servicioPorSucursal.precio;
           // renderiza el modal de sucursal
           // IMPROVEMENT: simplemente igualar a true
           this.showTogleUpdatePrecio = !this.showTogleUpdatePrecio;
@@ -478,7 +478,7 @@ export class InventarioComponent {
         // si el Servicio seleccionado no tiene ServiciosPorSucursal
         // CLEANUP: imposible aunque un servicio no tenga nada en ServiciosPorSucursal,
         // el valor de su propiedad ServiciosPorSucursal será al menos "[]"
-        if (!this.servicioSeleccionado?.ServiciosPorSucursal) {
+        if (!this.servicioSeleccionado?.serviciosPorSucursal) {
           // setea sucursalesDisponibles con todas las sucursales (obtenidas en ngOnInit)
           this.sucursalesDisponibles = [...this.sucursales];
           return;
@@ -486,12 +486,12 @@ export class InventarioComponent {
   
         // IMPROVEMENT: las sucursales "con precio" son las ids de las sucursales del servicio seleccionado??
         // el nombre de la variable confunde ya que el precio no parece tener nada que ver
-        const sucursalesConPrecio = this.servicioSeleccionado.ServiciosPorSucursal
-          .map(sp => sp.IdSucursal);
+        const sucursalesConPrecio = this.servicioSeleccionado.serviciosPorSucursal
+          .map(sp => sp.idSucursal);
   
         // setea sucursalesDisponibles filtrando las sucursales que YA pertenecen al servicio seleccionado
         this.sucursalesDisponibles = this.sucursales.filter(
-          suc => !sucursalesConPrecio.includes(suc.ID)
+          suc => !sucursalesConPrecio.includes(suc.id)
         );
   
       }
@@ -566,23 +566,23 @@ export class InventarioComponent {
   
         // CLEANUP: imposible. Todos los servicios tienen el valor de ServiciosPorSucursal 
         // en minimamente "[]"
-        if (!this.servicioSeleccionado.ServiciosPorSucursal) {
-          this.servicioSeleccionado.ServiciosPorSucursal = [];
+        if (!this.servicioSeleccionado.serviciosPorSucursal) {
+          this.servicioSeleccionado.serviciosPorSucursal = [];
         }
   
         // el "nuevo detalle" es un nuevo ServicioPorSucursal agregado al servicio seleccionado
         const nuevoDetalle: ServicioPorSucursal = {
-          IdSucursal: this.sucursalSeleccionadaId, // se crea con la misma id que la sucursal seleccionada
-          Precio: this.nuevoPrecio, // nuevoPrecio es seteado en onPrecioInput
-          FechaCreacion: null,
-          CreadoPor: null
+          idSucursal: this.sucursalSeleccionadaId, // se crea con la misma id que la sucursal seleccionada
+          precio: this.nuevoPrecio, // nuevoPrecio es seteado en onPrecioInput
+          fechaCreacion: null,
+          creadoPor: null
         };
   
         // 👉 PUSH NECESARIO
-        this.servicioSeleccionado.ServiciosPorSucursal.push(nuevoDetalle);
+        this.servicioSeleccionado.serviciosPorSucursal.push(nuevoDetalle);
   
         // Guardamos índice para posible rollback
-        const index = this.servicioSeleccionado.ServiciosPorSucursal.length - 1;
+        const index = this.servicioSeleccionado.serviciosPorSucursal.length - 1;
   
         // petición para modificar el servicio agregandole un nuevo ServicioPorSucursal
         this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
@@ -603,7 +603,7 @@ export class InventarioComponent {
             console.error('Error al guardar precio:', err);
   
             // 🔥 rollback SOLO si falla el PUT
-            this.servicioSeleccionado?.ServiciosPorSucursal.splice(index, 1);
+            this.servicioSeleccionado?.serviciosPorSucursal.splice(index, 1);
   
             this.messageService.add({
               severity: 'error',

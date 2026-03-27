@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root', // existe una sola instancia del servicio en toda la aplicación
 })
 export class UsuarioService {
-  private apiUrl = environment.apiUrl + "/usuario" ;
+  private apiUrl = environment.apiUrl + "/usuarios" ;
 
   constructor(private http: HttpClient) {}
 
@@ -24,7 +24,7 @@ export class UsuarioService {
   // Crear un nuevo usuario
   crearUsuario(usuario: CrearUsuario): Observable<Usuario> {
     return this.http
-      .post<Usuario>(`${this.apiUrl}/insert`, usuario, { headers: this.getHeaders() })
+      .post<Usuario>(`${this.apiUrl}`, usuario, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error creando usuario:', error);
@@ -35,7 +35,7 @@ export class UsuarioService {
 
   modificarUsuario(usuario: Usuario): Observable<void> {
     return this.http
-      .put<void>(`${this.apiUrl}/update/${usuario.ID}`, usuario, { headers: this.getHeaders() })
+      .patch<void>(`${this.apiUrl}/${usuario.id}`, usuario, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error al modificar usuario:', error);
@@ -46,7 +46,7 @@ export class UsuarioService {
 
   eliminarUsuario(id: string): Observable<void> {
     return this.http
-      .delete<void>(`${this.apiUrl}/eliminaruno/${id}`, { headers: this.getHeaders() })
+      .delete<void>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error al eliminar usuario:', error);
@@ -58,7 +58,7 @@ export class UsuarioService {
   // Obtener todos los usuarios
   obtenerUsuarios(): Observable<{ data: Usuario[] }> {
     return this.http
-      .get<{ data: Usuario[] }>(`${this.apiUrl}/consultartodos`, { headers: this.getHeaders() })
+      .get<{ data: Usuario[] }>(`${this.apiUrl}`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error obteniendo usuarios:', error);
@@ -70,7 +70,7 @@ export class UsuarioService {
   // Obtener un usuario por su ID
   obtenerUsuarioPorId(id: string): Observable<Usuario> {
     return this.http
-      .get<Usuario>(`${this.apiUrl}/consultaruno/${id}`, { headers: this.getHeaders() })
+      .get<Usuario>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error(`Error obteniendo el usuario con ID ${id}:`, error);

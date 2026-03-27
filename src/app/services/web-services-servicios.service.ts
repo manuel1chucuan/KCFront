@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root', // existe una sola instancia del servicio en toda la aplicación
 })
 export class ServiciosService {
-  private apiUrl = environment.apiUrl+ "/servicio";
+  private apiUrl = environment.apiUrl+ "/servicios";
   constructor(private http: HttpClient) {}
 
   private getHeaders() {
@@ -23,7 +23,7 @@ export class ServiciosService {
   // Crear un nuevo servicio
   crearServicio(servicio: CrearServicio): Observable<void> {
     return this.http
-      .post<void>(`${this.apiUrl}/insert`, servicio, { headers: this.getHeaders() })
+      .post<void>(`${this.apiUrl}`, servicio, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error creando servicio:', error);
@@ -35,7 +35,7 @@ export class ServiciosService {
   //Modificar un servicio
   modificarServicio(servicio: Servicio): Observable<void> {
     return this.http
-      .put<void>(`${this.apiUrl}/modificar/${servicio.ID}`, servicio, { headers: this.getHeaders() })
+      .patch<void>(`${this.apiUrl}/${servicio.id}`, servicio, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error al modificar servicio:', error);
@@ -47,7 +47,7 @@ export class ServiciosService {
   //Eliminar un servicio
   eliminarServicio(id: string): Observable<void> {
     return this.http
-      .delete<void>(`${this.apiUrl}/eliminaruno/${id}`, { headers: this.getHeaders() })
+      .delete<void>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error al eliminar servicio:', error);
@@ -59,7 +59,7 @@ export class ServiciosService {
   // Obtener todos los servicios
   obtenerServicios(): Observable<{ data: Servicio[] }> {
     return this.http
-      .get<{ data: Servicio[] }>(`${this.apiUrl}/consultartodos`, { headers: this.getHeaders() })
+      .get<{ data: Servicio[] }>(`${this.apiUrl}`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error obteniendo servicios:', error);
@@ -71,7 +71,7 @@ export class ServiciosService {
   // Obtener un servicio por su ID
   obtenerUnaSucursalPorId(id: string): Observable<Servicio> {
     return this.http
-      .get<Servicio>(`${this.apiUrl}/consultaruno/${id}`, { headers: this.getHeaders() })
+      .get<Servicio>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error(`Error obteniendo el servicio con ID ${id}:`, error);

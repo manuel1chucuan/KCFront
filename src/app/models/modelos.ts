@@ -11,18 +11,18 @@ export interface CrearUsuario {
 }
 
 export interface Usuario {
-    ID: string;
-    NombreDeUsuario: string;
-    Admini: boolean;
-    Caja: boolean;
-    Servicio: boolean;
-    Inventario: boolean;
-    Activo: boolean;
-    Contrasena: string;
-    Correo: string;
-    FechaCreacion: string;
-    FechaInactivo: string;
-    Version: number;
+    id: string;
+    nombreDeUsuario: string;
+    admini: boolean;
+    caja: boolean;
+    servicio: boolean;
+    inventario: boolean;
+    activo: boolean;
+    contrasena: string;
+    correo: string;
+    fechaCreacion: string;
+    fechaInactivo: string;
+    version: number;
 }
 
 
@@ -34,20 +34,20 @@ export interface CrearServicio {
 
 
 export interface Servicio {
-    ID: string;
-    Nombre: string;
-    Descripcion: string;
-    FechaModificacion: Date;
-    Modifico: string;
-    ServiciosPorSucursal: ServicioPorSucursal[];
-    Version: number;
+    id: string;
+    nombre: string;
+    descripcion: string;
+    fechaModificacion: Date;
+    modifico: string;
+    serviciosPorSucursal: ServicioPorSucursal[];
+    version: number;
 }
 
 export interface ServicioPorSucursal {
-  IdSucursal: string;
-  Precio: number | null;
-  FechaCreacion?: Date | null;
-  CreadoPor?: string | null;
+  idSucursal: string;
+  precio: number | null;
+  fechaCreacion?: Date | null;
+  creadoPor?: string | null;
 }
 
 
@@ -64,16 +64,16 @@ export interface CrearSucursal {
 }
 
 export interface Sucursal {
-    ID: string;
-    Nombre: string;
-    FechaModificacion: Date;
-    Modifico: string;
-    CodigoPostal: number;
-    Estado: string;
-    Municipio: string;
-    Colonia: string;
-    Calle: string;
-    NumeroInt: number;
-    NumeroExt: number;
-    Version: number;
+    id: string;
+    nombre: string;
+    fechaModificacion: Date;
+    modifico: string;
+    codigoPostal: number;
+    estado: string;
+    municipio: string;
+    colonia: string;
+    calle: string;
+    numeroInt: number;
+    numeroExt: number;
+    version: number;
 }

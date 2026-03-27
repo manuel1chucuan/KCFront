@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root', // existe una sola instancia del servicio en toda la aplicación
 })
 export class SucursalesService {
-  private apiUrl = environment.apiUrl + "/sucursal";
+  private apiUrl = environment.apiUrl + "/sucursales";
 
   constructor(private http: HttpClient) {}
 
@@ -24,7 +24,7 @@ export class SucursalesService {
   // Crear un nuevo usuario
   crearSucursal(sucursal: CrearSucursal): Observable<void> {
     return this.http
-      .post<void>(`${this.apiUrl}/insert`, sucursal, { headers: this.getHeaders() })
+      .post<void>(`${this.apiUrl}`, sucursal, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error creando sucursal:', error);
@@ -35,7 +35,7 @@ export class SucursalesService {
 
   modificarSucursal(sucursal: Sucursal): Observable<void> {
     return this.http
-      .put<void>(`${this.apiUrl}/modificar/${sucursal.ID}`, sucursal, { headers: this.getHeaders() })
+      .patch<void>(`${this.apiUrl}/${sucursal.id}`, sucursal, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error al modificar sucursal:', error);
@@ -46,7 +46,7 @@ export class SucursalesService {
 
   eliminarSucursal(id: string): Observable<void> {
     return this.http
-      .delete<void>(`${this.apiUrl}/eliminaruna/${id}`, { headers: this.getHeaders() })
+      .delete<void>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error al eliminar sucursal:', error);
@@ -58,7 +58,7 @@ export class SucursalesService {
   // Obtener todos los usuarios
   obtenerSucursales(): Observable<{ data: Sucursal[] }> {
     return this.http
-      .get<{ data: Sucursal[] }>(`${this.apiUrl}/consultartodas`, { headers: this.getHeaders() })
+      .get<{ data: Sucursal[] }>(`${this.apiUrl}`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error('Error obteniendo sucursales:', error);
@@ -70,7 +70,7 @@ export class SucursalesService {
   // Obtener un usuario por su ID
   obtenerUnaSucursalPorId(id: string): Observable<Sucursal> {
     return this.http
-      .get<Sucursal>(`${this.apiUrl}/consultaruna/${id}`, { headers: this.getHeaders() })
+      .get<Sucursal>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() })
       .pipe(
         catchError((error) => {
           console.error(`Error obteniendo la sucursal con ID ${id}:`, error);
