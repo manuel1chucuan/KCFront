@@ -73,37 +73,37 @@
                             <!-- Nombre Editable -->
                             <div>
                             <strong>Nombre:</strong>
-                            <input type="text" [(ngModel)]="usuarioSeleccionado.NombreDeUsuario" class="form-control">
+                            <input type="text" [(ngModel)]="usuarioSeleccionado.nombreDeUsuario" class="form-control">
                             </div>
                             
                             <!-- Correo Editable -->
                             <div>
                             <strong>Correo:</strong>
-                            <input type="email" [(ngModel)]="usuarioSeleccionado.Correo" class="form-control">
+                            <input type="email" [(ngModel)]="usuarioSeleccionado.correo" class="form-control">
                             </div>
                       
                           <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" id="adminiE" [(ngModel)]="usuarioSeleccionado.Admini">
+                            <input class="form-check-input" type="checkbox" id="adminiE" [(ngModel)]="usuarioSeleccionado.admini">
                             <label class="form-check-label" for="adminiE">Administrador:</label>
                           </div>
 
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="cajaE" [(ngModel)]="usuarioSeleccionado.Caja">
+                            <input class="form-check-input" type="checkbox" id="cajaE" [(ngModel)]="usuarioSeleccionado.caja">
                             <label class="form-check-label" for="cajaE">Caja:</label>
                           </div>
 
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="servicioE" [(ngModel)]="usuarioSeleccionado.Servicio">
+                            <input class="form-check-input" type="checkbox" id="servicioE" [(ngModel)]="usuarioSeleccionado.servicio">
                             <label class="form-check-label" for="servicioE">Servicio:</label>
                           </div>
 
                           <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="inventarioE" [(ngModel)]="usuarioSeleccionado.Inventario">
+                            <input class="form-check-input" type="checkbox" id="inventarioE" [(ngModel)]="usuarioSeleccionado.inventario">
                             <label class="form-check-label" for="inventarioE">Inventario:</label>
                           </div>
 
                           <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="activoE" [(ngModel)]="usuarioSeleccionado.Activo">
+                            <input class="form-check-input" type="checkbox" id="activoE" [(ngModel)]="usuarioSeleccionado.activo">
                             <label class="form-check-label" for="activoE">Activo:</label>
                           </div>
 
@@ -135,13 +135,13 @@
                     <!-- itera y renderiza los usuarios -->
                     <div *ngFor="let usuario of usuarios" class="card card4" style="width:10rem;height: 15rem; flex: 0 0 auto;"
                     [ngClass] = "{
-                        'selected-card': usuarioSeleccionado && usuarioSeleccionado.ID === usuario.ID,
-                        'card-default': !(usuarioSeleccionado && usuarioSeleccionado.ID === usuario.ID)
+                        'selected-card': usuarioSeleccionado && usuarioSeleccionado.id === usuario.id,
+                        'card-default': !(usuarioSeleccionado && usuarioSeleccionado.id === usuario.id)
                       }" 
                      (click)="seleccionarUsuario(usuario)">
                         <img class="card-img-top" src="../../assets/empleados.png" alt="Card image" style="width:100%">
                         <div class="card-body" style="padding: 0.5rem;">
-                            <h6 class="card-title">{{ usuario.NombreDeUsuario }}</h6>
+                            <h6 class="card-title">{{ usuario.nombreDeUsuario }}</h6>
                         </div>
                     </div>
 

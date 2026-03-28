@@ -146,11 +146,11 @@ export class SucursalesComponent {
   // Método para guardar los cambios realizados
   guardarCambios(): void {
     // validaciones del formulario
-    if (!this.sucursalSeleccionada?.Nombre) {
+    if (!this.sucursalSeleccionada?.nombre) {
       this.messageService.add({severity: 'error', summary: 'Error', detail: 'El nombre de la sucursal es obligatorio.', life: 10000});
       return;
     }
-    if (!this.sucursalSeleccionada?.CodigoPostal) {
+    if (!this.sucursalSeleccionada?.codigoPostal) {
       this.messageService.add({severity: 'error', summary: 'Error', detail: 'El cp de la sucursal es obligatorio.', life: 10000});
       return;
     }
@@ -177,12 +177,12 @@ export class SucursalesComponent {
   // al hacer click en Eliminar en el alert de confirmación para eliminar una sucursal
   eliminarSucursal(): void {
     // validación para prevenir errores de sistema (mal estado)
-    if (!this.sucursalSeleccionada?.ID) {
+    if (!this.sucursalSeleccionada?.id) {
       return;
     }
 
     // petición a la API para eliminar una sucursal
-    this.sucursalesService.eliminarSucursal(this.sucursalSeleccionada.ID)
+    this.sucursalesService.eliminarSucursal(this.sucursalSeleccionada.id)
       .subscribe({
         next: () => {
           // obtiene nuevamente las sucursales para solo renderizar las no eliminadas
@@ -210,7 +210,7 @@ export class SucursalesComponent {
   // al hacer click en Eliminar Sucursal en la pestaña Gestión de Sucursales
   confirmarEliminarSucursal(): void {
     // validación para prevenir errores de sistema (mal estado)
-    if (!this.sucursalSeleccionada?.ID) {
+    if (!this.sucursalSeleccionada?.id) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Atención',

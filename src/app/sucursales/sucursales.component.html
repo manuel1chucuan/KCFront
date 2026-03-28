@@ -88,42 +88,42 @@
 
                             <div>
                                 <strong>Nombre:</strong>
-                                <input type="text" [(ngModel)]="sucursalSeleccionada.Nombre" class="form-control">
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.nombre" class="form-control">
                             </div>
                             
                             <div>
                                 <strong>Calle:</strong>
-                                <input type="text" [(ngModel)]="sucursalSeleccionada.Calle" class="form-control">
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.calle" class="form-control">
                             </div>
 
                             <div>
                                 <strong>Numero exterior:</strong>
-                                <input type="number" [(ngModel)]="sucursalSeleccionada.NumeroExt" class="form-control">
+                                <input type="number" [(ngModel)]="sucursalSeleccionada.numeroExt" class="form-control">
                             </div>
 
                             <div>
                                 <strong>Numero interior:</strong>
-                                <input type="number" [(ngModel)]="sucursalSeleccionada.NumeroInt" class="form-control">
+                                <input type="number" [(ngModel)]="sucursalSeleccionada.numeroInt" class="form-control">
                             </div>
 
                             <div>
                                 <strong>Colonia:</strong>
-                                <input type="text" [(ngModel)]="sucursalSeleccionada.Colonia" class="form-control">
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.colonia" class="form-control">
                             </div>
 
                             <div>
                                 <strong>CP:</strong>
-                                <input type="number" [(ngModel)]="sucursalSeleccionada.CodigoPostal" class="form-control">
+                                <input type="number" [(ngModel)]="sucursalSeleccionada.codigoPostal" class="form-control">
                             </div>
 
                             <div>
                                 <strong>Municipio:</strong>
-                                <input type="text" [(ngModel)]="sucursalSeleccionada.Municipio" class="form-control">
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.municipio" class="form-control">
                             </div>
 
                             <div class="mb-3">
                                 <strong>Estado:</strong>
-                                <input type="text" [(ngModel)]="sucursalSeleccionada.Estado" class="form-control">
+                                <input type="text" [(ngModel)]="sucursalSeleccionada.estado" class="form-control">
                             </div>
 
 
@@ -157,14 +157,14 @@
                     <!-- itera y renderiza las sucursales -->
                     <div *ngFor="let sucursal of sucursales" class="card card4" style="width:10rem;height: 15rem; flex: 0 0 auto;"
                       [ngClass] = "{
-                          'selected-card': sucursalSeleccionada && sucursalSeleccionada.ID === sucursal.ID,
-                          'card-default': !(sucursalSeleccionada && sucursalSeleccionada.ID === sucursal.ID)
+                          'selected-card': sucursalSeleccionada && sucursalSeleccionada.id === sucursal.id,
+                          'card-default': !(sucursalSeleccionada && sucursalSeleccionada.id === sucursal.id)
                         }" 
                       (click)="seleccionarSucursal(sucursal)">
                         <img class="card-img-top" src="../../assets/sucursal2.png" alt="Card image" style="width:100%">
                         <div class="card-body" style="padding: 0.5rem;">
-                            <h6 class="card-title">{{ sucursal.Nombre }}</h6>
-                            <h6 class="card-title">{{ sucursal.Municipio }}</h6>
+                            <h6 class="card-title">{{ sucursal.nombre }}</h6>
+                            <h6 class="card-title">{{ sucursal.municipio }}</h6>
                         </div>
                     </div>
 

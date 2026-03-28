@@ -91,21 +91,21 @@
               <!-- itera y renderiza los servicios -->
               <div *ngFor="let servicio of servicios" class="separador-servicio"
               [ngClass] = "{
-              'selected-card': servicioSeleccionado && servicioSeleccionado.ID === servicio.ID,
-              'card-default': !(servicioSeleccionado && servicioSeleccionado.ID === servicio.ID)}">
+              'selected-card': servicioSeleccionado && servicioSeleccionado.id === servicio.id,
+              'card-default': !(servicioSeleccionado && servicioSeleccionado.id === servicio.id)}">
                 <div class="contenido-servicio" (click)="seleccionarServicio(servicio)">
-                  <p class="servicio-select">{{ servicio.Nombre }} 
-                    [<span style="color: grey;">{{ servicio.Descripcion }}</span>]
+                  <p class="servicio-select">{{ servicio.nombre }} 
+                    [<span style="color: grey;">{{ servicio.descripcion }}</span>]
                   </p>
 
                   <div class="d-flex flex-wrap contenido-servicio-interno">
                     <!-- itera y renderiza las sucursales -->
-                    <div *ngFor="let sucursal of servicio.ServiciosPorSucursal" 
+                    <div *ngFor="let sucursal of servicio.serviciosPorSucursal" 
                     class="p-2 border mini-contenido"
                     (click)="handleClickUpdatePrecio(servicio,sucursal)">
-                      {{ getNombreSucursal(sucursal.IdSucursal)}} 
+                      {{ getNombreSucursal(sucursal.idSucursal)}} 
                       <span class="mini-contenido-interno">
-                        ${{ sucursal.Precio }}
+                        ${{ sucursal.precio }}
                       </span>
                     </div>
 
@@ -134,8 +134,8 @@
      class="select-flotante2"
      (click)="$event.stopPropagation()">
 
-  <h3>{{ servicioSeleccionado?.Nombre }}</h3>
-  <p>{{ servicioSeleccionado?.Descripcion }}</p>
+  <h3>{{ servicioSeleccionado?.nombre }}</h3>
+  <p>{{ servicioSeleccionado?.descripcion }}</p>
 
   <!-- SIN SUCURSALES DISPONIBLES -->
   <div *ngIf="sucursalesDisponibles.length === 0"
@@ -151,8 +151,8 @@
       <label>Sucursal</label>
       <select class="form-control" [(ngModel)]="sucursalSeleccionadaId">
         <option [ngValue]="null" disabled>Seleccione sucursal</option>
-        <option *ngFor="let suc of sucursalesDisponibles" [value]="suc.ID">
-          {{ suc.Nombre }}
+        <option *ngFor="let suc of sucursalesDisponibles" [value]="suc.id">
+          {{ suc.nombre }}
         </option>
       </select>
     </div>
@@ -196,15 +196,15 @@
      class="select-flotante2"
      (click)="$event.stopPropagation()">
 
-  <h3>{{ servicioSeleccionado?.Nombre }}</h3>
-  <p>{{ servicioSeleccionado?.Descripcion }}</p>
+  <h3>{{ servicioSeleccionado?.nombre }}</h3>
+  <p>{{ servicioSeleccionado?.descripcion }}</p>
 
   <div class="mb-2">
     <label>Sucursal</label>
     <input
       type="text"
       class="form-control"
-      [value]="getNombreSucursal(servicioPorSucursalSeleccionado.IdSucursal)"
+      [value]="getNombreSucursal(servicioPorSucursalSeleccionado.idSucursal)"
       disabled
     />
   </div>
@@ -214,7 +214,7 @@
       <label>Precio</label>
       <input type="number"
               class="form-control"
-              [(ngModel)]="servicioPorSucursalSeleccionado.Precio"/>
+              [(ngModel)]="servicioPorSucursalSeleccionado.precio"/>
     </div>
 
   <!-- BOTONES -->
@@ -235,7 +235,7 @@
               [disabled]="
                 nuevoPrecio === null ||
                 nuevoPrecio === undefined ||
-                servicioPorSucursalSeleccionado.Precio === precioAnterior
+                servicioPorSucursalSeleccionado.precio === precioAnterior
               ">
         Guardar
       </button>

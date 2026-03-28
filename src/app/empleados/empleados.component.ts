@@ -108,7 +108,7 @@ export class EmpleadosComponent {
   // al hacer click en Guardar Cambios en la pestaña Gestión de Usuarios
   confirmarGuardarCambios(): void {
     // validaciones del formulario
-    if (!this.usuarioSeleccionado?.NombreDeUsuario) {
+    if (!this.usuarioSeleccionado?.nombreDeUsuario) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -118,7 +118,7 @@ export class EmpleadosComponent {
       return;
     }
 
-    if (!this.usuarioSeleccionado?.Correo) {
+    if (!this.usuarioSeleccionado?.correo) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -159,7 +159,7 @@ export class EmpleadosComponent {
   // Método para guardar los cambios realizados
   guardarCambios(): void {
     // REFACTOR: innecesario. Esta validación ya está en confirmarGuardarCambios
-    if (!this.usuarioSeleccionado?.Correo) {
+    if (!this.usuarioSeleccionado?.correo) {
       this.messageService.add({severity: 'error', summary: 'Error', detail: 'El correo es obligatorio.', life: 10000});
       return;
     }
@@ -197,12 +197,12 @@ export class EmpleadosComponent {
   // al hacer click en Eliminar en el alert de confirmación para eliminar un usuario
   eliminarUsuario(): void {
     // validación para prevenir errores de sistema (mal estado)
-    if (!this.usuarioSeleccionado?.ID) {
+    if (!this.usuarioSeleccionado?.id) {
       return;
     }
 
     // petición a la API para eliminar un usuario
-    this.usuarioService.eliminarUsuario(this.usuarioSeleccionado.ID)
+    this.usuarioService.eliminarUsuario(this.usuarioSeleccionado.id)
       .subscribe({
         next: () => {
           // obtiene nuevamente los usuarios para solo renderizar los no eliminadas
@@ -236,7 +236,7 @@ export class EmpleadosComponent {
   // al hacer click en Eliminar Usuario en la pestaña Gestión de Usuario
   confirmarEliminarUsuario(): void {
     // validación para prevenir errores de sistema (mal estado)
-    if (!this.usuarioSeleccionado?.ID) {
+    if (!this.usuarioSeleccionado?.id) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Atención',
