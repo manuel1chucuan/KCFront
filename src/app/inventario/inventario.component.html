@@ -28,7 +28,7 @@
                 <div class="tab-pane fade" id="addService" [ngClass]="{'show active': pestanaActiva === 'agregarServicio'}">
                     <div class="mb-3">
                       <h6>Servicio</h6>
-                       <!-- este input setea this.nuevoServicio.nombre -->
+                       <!-- Este input setea this.nuevoServicio.nombre -->
                                                                               <!-- ngModel conecta el valor de un input con una variable -->
                       <input type="text" class="form-control" id="ServiceName" [(ngModel)]="nuevoServicio.nombre" placeholder="Ingresa el nombre" required (keydown.enter)="crearServicio()">
                     </div>
