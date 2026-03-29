@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // necesario para operativas básicas en HTML (ngFor, ngIf, etc.)
 import { FormsModule } from '@angular/forms'; // necesario para habilitar ngModel en el HTML
-import { CrearServicio, Servicio, Sucursal, ServicioPorSucursal } from '../models/modelos';
-import { ServiciosService } from '../services/web-services-servicios.service';
+import { CrearProducto, Producto, Sucursal, ProductoPorSucursal } from '../models/modelos';
+import { ProductosService } from '../services/web-services-productos.service';
 import { SucursalesService } from '../services/web-services-sucursales.service';
 import { MessageService } from 'primeng/api'; // imprime notificaciones
 import { PrimeNGConfig } from 'primeng/api'; // para habilitar efecto ripple
@@ -22,23 +22,24 @@ import Swal from 'sweetalert2';
 })
 export class InventarioComponent {
 
-  nuevoServicio: CrearServicio = {
+      nuevoProducto: CrearProducto = {
         nombre: '',
         descripcion: ''
       };
   
-      nuevoDetalleDelServicio: ServicioPorSucursal = {
+      nuevoDetalleDelProducto: ProductoPorSucursal = {
         idSucursal: '',
         precio: 0,
+        stock: 0,
         fechaCreacion: null,
         creadoPor: null
       };
     
-      servicios: Servicio[] = [];
+      productos: Producto[] = [];
       sucursales: Sucursal[] = [];
       sucursalesDisponibles: Sucursal[] = [];
     
-      constructor(private serviciosService: ServiciosService,private sucursalesService: SucursalesService, 
+      constructor(private productosService: ProductosService,private sucursalesService: SucursalesService, 
         private primengConfig: PrimeNGConfig , private messageService: MessageService) {}
     
       ngOnInit() {
@@ -48,48 +49,46 @@ export class InventarioComponent {
         this.obtenerSucursales(); // Cargar sucursales al iniciar el componente
       }
     
-      // al hacer click en Agregar Servicio
-      crearServicio(): void {
-        // valida que el input Servicio no esté vacío 
-        if (!this.nuevoServicio.nombre) {
-          console.log('El nombre del servicio es obligatorio.');
-          this.messageService.add({severity: 'error', summary: 'Error', detail: 'El nombre del servicio es obligatorio.', life: 10000});
+      // al hacer click en Agregar Producto
+      crearProducto(): void {
+        // valida que el input Producto no esté vacío 
+        if (!this.nuevoProducto.nombre) {
+          console.log('El nombre del producto es obligatorio.');
+          this.messageService.add({severity: 'error', summary: 'Error', detail: 'El nombre del producto es obligatorio.', life: 10000});
           return;
         }
     
         // crea un nuevo servicio a travez través de ServiciosService
-        this.serviciosService.crearServicio(this.nuevoServicio).subscribe({
-          next: (servicioCreado) => {
-            console.log('Servicio creado:', servicioCreado);
-            this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Servicio creado exitosamente.', life: 10000});
-            // limpia el formulario Agregar Servicio
+        this.productosService.crearProducto(this.nuevoProducto).subscribe({
+          next: (response) => {
+            console.log('Producto creado:', response);
+            this.messageService.add({severity: 'success', summary: 'Éxito', detail: 'Producto creado exitosamente.', life: 10000});
+            // limpia el formulario Agregar Producto
             this.limpiarFormulario();
-            // obtiene nuevamente los servicios para renderizar el nuevo servicio agregado
-            this.obtenerServicios();
+            // obtiene nuevamente los productos para renderizar el nuevo producto agregado
+            this.obtenerProductos();
           },
           error: (err) => {
-            console.error('Error al crear el servicio:', err);
+            console.error('Error al crear el producto:', err);
             // IMPROVEMENT: "Intente con otro nombre". El error puede deberse a otras razones.
-            this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error al crear el servicio. Intente con otro nombre', life: 10000});
+            this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error al crear el producto. Intente con otro nombre', life: 10000});
           }
         });
       }
     
-      // obtiene los sucursales a través de ServiciosService
-      obtenerServicios(): void {
-        this.serviciosService.obtenerServicios().subscribe({
+      // obtiene los productos a través de productosService
+      obtenerProductos(): void {
+        this.productosService.obtenerProductos().subscribe({
           next: (response: any) => {
             console.log('Respuesta de la API:', response);
       
             if (response && response.data && Array.isArray(response.data)) {
-              // guarda la respuesta en this.servicios
-              this.servicios = response.data; 
-              // al ejecutar obtenerServicios() en ngOnInit() o al eliminar un servicio, this.servicioSeleccionado
-              // será null; en otras ejecuciones, hay que actualizarlo por la nueva respuesta   
-              this.servicioSeleccionado = this.servicios.find(s => s.id === this.servicioSeleccionado?.id) ?? null;
+              // guarda la respuesta en this.productos
+              this.productos = response.data;   
+              this.productoSeleccionado = this.productos.find(s => s.id === this.productoSeleccionado?.id) ?? null;
             } else {
               console.error('La API no devolvió un array dentro de "data".', response);
-              this.servicios = [];
+              this.productos = [];
             }
           },
           error: (err) => {
@@ -101,36 +100,36 @@ export class InventarioComponent {
     
       // REFACTOR: variables declaradas en medio de la clase
   
-      servicioSeleccionado: Servicio | null = null; 
-      nombreServicioSeleccionado: string = ""; // CLEANUP: variable innecesaria, puede usarse this.servicioSeleccionado.Nombre
-      descripcionServicioSeleccionado: string = ""; // CLEANUP: variable innecesaria, puede usarse this.servicioSeleccionado.Descripcion
-      pestanaActiva: string = 'agregarServicio';
+      productoSeleccionado: Producto | null = null; 
+      nombreProductoSeleccionado: string = ""; // CLEANUP: variable innecesaria, puede usarse this.ProductoSeleccionado.Nombre
+      descripcionProductoSeleccionado: string = ""; // CLEANUP: variable innecesaria, puede usarse this.ProductoSeleccionado.Descripcion
+      pestanaActiva: string = 'agregarProducto';
       nuevoPrecio: number | null = null;
       sucursalSeleccionadaId: string | null = null;
     
       // al hacer click en cualquier servicio
       // recibe el servicio seleccionado
-      seleccionarServicio(servicio: Servicio): void {
-        this.servicioSeleccionado = servicio;
+      seleccionarProducto(producto: Producto): void {
+        this.productoSeleccionado = producto;
         // CLEANUP: variables innecesarias 
-        this.nombreServicioSeleccionado = this.servicioSeleccionado.nombre;
-        this.descripcionServicioSeleccionado = this.servicioSeleccionado.descripcion;
+        this.nombreProductoSeleccionado = this.productoSeleccionado.nombre;
+        this.descripcionProductoSeleccionado = this.productoSeleccionado.descripcion;
   
-        // "navega" a la pestaña Gestión de Servicios en el lado izquiero del componente
-        this.pestanaActiva = 'gestionServicios';
+        // "navega" a la pestaña Gestión de Productos en el lado izquiero del componente
+        this.pestanaActiva = 'gestionProductos';
       }
     
       // al hacer click en Guardar Cambios
       // modifica un servicio
       confirmarGuardarCambios(): void {
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado) {
+        if (!this.productoSeleccionado) {
           return;
         }
   
         // Validación previa (antes de preguntar)
-        // IMPROVEMENT: usar "this.servicioSeleccionado.Nombre"
-        if (!this.nombreServicioSeleccionado) {
+        // IMPROVEMENT: usar "this.ProductoSeleccionado.Nombre"
+        if (!this.nombreProductoSeleccionado) {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -143,7 +142,7 @@ export class InventarioComponent {
         // renderiza el alert de confirmación para modificar un servicio
         Swal.fire({
           title: 'Guardar cambios',
-          text: '¿Deseas guardar los cambios realizados en el servicio?',
+          text: '¿Deseas guardar los cambios realizados en el producto?',
           icon: 'question',
   
           showCancelButton: true,
@@ -167,29 +166,29 @@ export class InventarioComponent {
         });
       }
   
-      // al hacer click en Guardar en el alert de confirmación para modificar un servicio
+      // al hacer click en Guardar en el alert de confirmación para modificar un producto
       guardarCambios(): void {
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado) {
+        if (!this.productoSeleccionado) {
           return;
         }
   
         // CLEANUP: innecesario
-        this.servicioSeleccionado.nombre = this.nombreServicioSeleccionado;
-        this.servicioSeleccionado.descripcion = this.descripcionServicioSeleccionado;
+        this.productoSeleccionado.nombre = this.nombreProductoSeleccionado;
+        this.productoSeleccionado.descripcion = this.descripcionProductoSeleccionado;
   
-        // modifica un servicio a travez través de ServiciosService
-        this.serviciosService.modificarServicio(this.servicioSeleccionado)
+        // modifica un producto a travez través de ProductosService
+        this.productosService.modificarProducto(this.productoSeleccionado)
           .subscribe({
             next: () => {
-              // obtiene nuevamente los servicios para renderizar el servicio modificado
-              this.obtenerServicios();
+              // obtiene nuevamente los productos para renderizar el servicio modificado
+              this.obtenerProductos();
   
               // renderiza un alert de exito
               Swal.fire({
                 icon: 'success',
                 title: 'Guardado',
-                text: 'Servicio modificado exitosamente',
+                text: 'Producto modificado exitosamente',
                 timer: 1500,
                 showConfirmButton: false,
                 scrollbarPadding: false,
@@ -197,12 +196,12 @@ export class InventarioComponent {
               });
             },
             error: (err) => {
-              console.error('Error al modificar servicio:', err);
+              console.error('Error al modificar producto:', err);
               // renderiza un alert de error
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Error al actualizar servicio, intenta con datos diferentes',
+                text: 'Error al actualizar producto, intenta con datos diferentes',
                 scrollbarPadding: false,
                 heightAuto: false
               });
@@ -213,7 +212,7 @@ export class InventarioComponent {
       // al hacer click en Eliminar Precio en el modal de sucursal
       confirmarEliminarPrecioSucursal(): void {
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado || !this.servicioPorSucursalSeleccionado) {
+        if (!this.productoSeleccionado || !this.productoPorSucursalSeleccionado) {
           return;
         }
   
@@ -251,18 +250,18 @@ export class InventarioComponent {
       eliminarPrecioSucursal(): void {
   
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado || !this.servicioPorSucursalSeleccionado) {
+        if (!this.productoSeleccionado || !this.productoPorSucursalSeleccionado) {
           return;
         }
   
         // elimina un ServiciosPorSucursal de el Servicio 
         // 🔥 quitamos la relación precio–sucursal
-        this.servicioSeleccionado.serviciosPorSucursal =
-          this.servicioSeleccionado.serviciosPorSucursal
-            .filter(sp => sp.idSucursal !== this.servicioPorSucursalSeleccionado.idSucursal);
+        this.productoSeleccionado.productoPorSucursal =
+          this.productoSeleccionado.productoPorSucursal
+            .filter(sp => sp.idSucursal !== this.productoPorSucursalSeleccionado.idSucursal);
   
         // petición para modificar el Servicio eliminandole un ServicioPorSucursal
-        this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
+        this.productosService.modificarProducto(this.productoSeleccionado).subscribe({
           next: () => {
             this.messageService.add({
               severity: 'success',
@@ -273,8 +272,8 @@ export class InventarioComponent {
   
             // cierra el modal de sucursal
             this.showTogleUpdatePrecio = false;
-            // obtiene nuevamente los servicios para renderizar el servicio modificado sin el precio
-            this.obtenerServicios();
+            // obtiene nuevamente los productos para renderizar el servicio modificado sin el precio
+            this.obtenerProductos();
           },
           error: () => {
             this.messageService.add({
@@ -292,9 +291,9 @@ export class InventarioComponent {
   
   
       // al hacer click en Eliminar Servicio
-      confirmarEliminarServicio(): void {
+      confirmarEliminarProducto(): void {
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado?.id) {
+        if (!this.productoSeleccionado?.id) {
           this.messageService.add({
             severity: 'warn',
             summary: 'Atención',
@@ -307,7 +306,7 @@ export class InventarioComponent {
         // renderiza alert de confirmación para eliminar un servicio
         Swal.fire({
           title: 'Confirmar eliminación',
-          text: '¿Seguro que deseas eliminar el servicio?',
+          text: '¿Seguro que deseas eliminar el producto?',
           icon: 'warning',
   
           showCancelButton: true,
@@ -326,30 +325,30 @@ export class InventarioComponent {
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            this.eliminarServicio(); // 🔥 aquí sí elimina
+            this.eliminarProducto(); // 🔥 aquí sí elimina
           }
         });
       }
   
-    // al hacer click en Eliminar Servicio en el alert de confirmación para eliminar un servicio
-      eliminarServicio(): void {
+    // al hacer click en Eliminar producto en el alert de confirmación para eliminar un producto
+      eliminarProducto(): void {
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado?.id) {
+        if (!this.productoSeleccionado?.id) {
           return;
         }
   
-        // petición para eliminar el Servicio
-        this.serviciosService.eliminarServicio(this.servicioSeleccionado.id)
+        // petición para eliminar el producto
+        this.productosService.eliminarProducto(this.productoSeleccionado.id)
           .subscribe({
             next: () => {
-              // obtiene nuevamente los servicios para solo renderizar los no eliminados
-              this.obtenerServicios();
-              this.servicioSeleccionado = null; // el contenido en pestaña Gestión de Servicio desaparece
+              // obtiene nuevamente los productos para solo renderizar los no eliminados
+              this.obtenerProductos();
+              this.productoSeleccionado = null; // el contenido en pestaña Gestión de Servicio desaparece
   
               Swal.fire({
                 icon: 'success',
                 title: 'Eliminado',
-                text: 'Servicio eliminado correctamente',
+                text: 'Producto eliminado correctamente',
                 timer: 1500,
                 showConfirmButton: false,
                 scrollbarPadding: false,
@@ -357,12 +356,12 @@ export class InventarioComponent {
               });
             },
             error: (err) => {
-              console.error('Error al eliminar servicio:', err);
+              console.error('Error al eliminar producto:', err);
   
               Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se pudo eliminar el servicio',
+                text: 'No se pudo eliminar el producto',
                 scrollbarPadding: false,
                 heightAuto: false
               });
@@ -384,8 +383,8 @@ export class InventarioComponent {
               this.sucursales = [];
             }
             
-            // despues de obtenes las sucursales, se obtienen los servicios
-            this.obtenerServicios();
+            // despues de obtenes las sucursales, se obtienen los productos
+            this.obtenerProductos();
           },
           error: (err) => {
             this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error obtener sucursales', life: 10000});
@@ -404,7 +403,7 @@ export class InventarioComponent {
     
       // limpia el formulario Agregar Servicio
       limpiarFormulario(): void {
-        this.nuevoServicio = {
+        this.nuevoProducto = {
           nombre: '',
           descripcion: ''
         };
@@ -415,9 +414,10 @@ export class InventarioComponent {
       showToglePrecio: boolean = false;
       showTogleUpdatePrecio: boolean = false;
       precioAnterior: number | null = null;
-      servicioPorSucursalSeleccionado: ServicioPorSucursal = {
+      productoPorSucursalSeleccionado: ProductoPorSucursal = {
         idSucursal: '',
         precio: 0,
+        stock: 0,
         fechaCreacion: null,
         creadoPor: null
       };
@@ -431,12 +431,12 @@ export class InventarioComponent {
         if 
         (
           this.precioAnterior !== null &&
-          this.servicioPorSucursalSeleccionado
+          this.productoPorSucursalSeleccionado
         )
         // el precio del ServicioPorSucursal seleccionado regresa al precio original
         // (se cancela la modificación del precio)  
         {
-          this.servicioPorSucursalSeleccionado.precio = this.precioAnterior;
+          this.productoPorSucursalSeleccionado.precio = this.precioAnterior;
         }
   
         // cierra el modal de sucursal
@@ -446,14 +446,12 @@ export class InventarioComponent {
       // al hacer click en una sucursal,
       // recibe el Servicio al que pertenece la sucursal y el ServicioPorSucural al que
       // pertenece el Servicio
-      handleClickUpdatePrecio(servicio: Servicio, servicioPorSucursal: ServicioPorSucursal) {
-        // CLEANUP: innecesario. al hacer click a una sucursal también se esta haciendo click a
-        // un servicio (propagation), activando seleccionarServicio, el cual ya setea servicioSeleccionado
-          this.servicioSeleccionado = servicio;
-          // setea this.servicioPorSucursalSeleccionado 
-          this.servicioPorSucursalSeleccionado = servicioPorSucursal;
-          // el "precio anterior" es el precio original con el que se creó el ServicioPorSucursal
-          this.precioAnterior = servicioPorSucursal.precio;
+      handleClickUpdatePrecio(producto: Producto, ProductoPorSucursal: ProductoPorSucursal) {
+          this.productoSeleccionado = producto;
+          // setea this.productoPorSucursalSeleccionado 
+          this.productoPorSucursalSeleccionado = ProductoPorSucursal;
+          // el "precio anterior" es el precio original con el que se creó el ProductoPorSucursal
+          this.precioAnterior = ProductoPorSucursal.precio;
           // renderiza el modal de sucursal
           // IMPROVEMENT: simplemente igualar a true
           this.showTogleUpdatePrecio = !this.showTogleUpdatePrecio;
@@ -461,10 +459,10 @@ export class InventarioComponent {
   
       // al hacer click en el ícono para agregar una sucursal,
       // recibe el Servicio al que pertenece la sucursal
-      handleClickAddPrecio(servicio: Servicio) {
+      handleClickAddPrecio(producto: Producto) {
         // CLEANUP: innecesario. al hacer click a una sucursal también se esta haciendo click a
-        // un servicio (propagation), activando seleccionarServicio, el cual ya setea servicioSeleccionado
-          this.servicioSeleccionado = servicio;
+        // un servicio (propagation), activando seleccionarServicio, el cual ya setea ProductoSeleccionado
+          this.productoSeleccionado = producto;
   
           this.filtrarSucursalesDisponibles();
   
@@ -478,7 +476,7 @@ export class InventarioComponent {
         // si el Servicio seleccionado no tiene ServiciosPorSucursal
         // CLEANUP: imposible aunque un servicio no tenga nada en ServiciosPorSucursal,
         // el valor de su propiedad ServiciosPorSucursal será al menos "[]"
-        if (!this.servicioSeleccionado?.serviciosPorSucursal) {
+        if (!this.productoSeleccionado?.productoPorSucursal) {
           // setea sucursalesDisponibles con todas las sucursales (obtenidas en ngOnInit)
           this.sucursalesDisponibles = [...this.sucursales];
           return;
@@ -486,7 +484,7 @@ export class InventarioComponent {
   
         // IMPROVEMENT: las sucursales "con precio" son las ids de las sucursales del servicio seleccionado??
         // el nombre de la variable confunde ya que el precio no parece tener nada que ver
-        const sucursalesConPrecio = this.servicioSeleccionado.serviciosPorSucursal
+        const sucursalesConPrecio = this.productoSeleccionado.productoPorSucursal
           .map(sp => sp.idSucursal);
   
         // setea sucursalesDisponibles filtrando las sucursales que YA pertenecen al servicio seleccionado
@@ -499,7 +497,7 @@ export class InventarioComponent {
       // al hacer click en Guardar en el modal de sucursal
       guardarUpdatePrecio() {
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado) {
+        if (!this.productoSeleccionado) {
           return;
         }
         // se cierra el modal de sucursal
@@ -524,25 +522,25 @@ export class InventarioComponent {
               return;
             } 
             // debido al código asíncrono, nuevamente se valida para prevenir errores de sistema (mal estado)
-            if (!this.servicioSeleccionado) {
+            if (!this.productoSeleccionado) {
               return;
             }
   
             // petición para modificar el servicio seleccionado (las modificaciones fueron echas
             // en la función onPrecioInput)
-            this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
+            this.productosService.modificarProducto(this.productoSeleccionado).subscribe({
               next: () => {
                 this.messageService.add({
                   severity: 'success',
                   summary: 'Éxito',
-                  detail: 'Precio modificado correctamente',
+                  detail: 'Producto modificado correctamente',
                   life: 3000
                 });
   
                 // se cierra el modal de sucursal
                 this.showTogleUpdatePrecio = false;
-                // se vuelven a obtener los servicios para reflejar las modificaciones
-                this.obtenerServicios();
+                // se vuelven a obtener los productos para reflejar las modificaciones
+                this.obtenerProductos();
               },
               error: () => {
                 this.messageService.add({
@@ -560,32 +558,33 @@ export class InventarioComponent {
       // al hacer click en Guardar en el modal para agregar una sucursal
       guardarPrecio(): void {
         // validación para prevenir errores de sistema (mal estado)
-        if (!this.servicioSeleccionado || !this.sucursalSeleccionadaId || this.nuevoPrecio === null) {
+        if (!this.productoSeleccionado || !this.sucursalSeleccionadaId || this.nuevoPrecio === null) {
           return;
         }
   
         // CLEANUP: imposible. Todos los servicios tienen el valor de ServiciosPorSucursal 
         // en minimamente "[]"
-        if (!this.servicioSeleccionado.serviciosPorSucursal) {
-          this.servicioSeleccionado.serviciosPorSucursal = [];
+        if (!this.productoSeleccionado.productoPorSucursal) {
+          this.productoSeleccionado.productoPorSucursal = [];
         }
   
         // el "nuevo detalle" es un nuevo ServicioPorSucursal agregado al servicio seleccionado
-        const nuevoDetalle: ServicioPorSucursal = {
+        const nuevoDetalle: ProductoPorSucursal = {
           idSucursal: this.sucursalSeleccionadaId, // se crea con la misma id que la sucursal seleccionada
           precio: this.nuevoPrecio, // nuevoPrecio es seteado en onPrecioInput
+          stock: 0,
           fechaCreacion: null,
           creadoPor: null
         };
   
         // 👉 PUSH NECESARIO
-        this.servicioSeleccionado.serviciosPorSucursal.push(nuevoDetalle);
+        this.productoSeleccionado.productoPorSucursal.push(nuevoDetalle);
   
         // Guardamos índice para posible rollback
-        const index = this.servicioSeleccionado.serviciosPorSucursal.length - 1;
+        const index = this.productoSeleccionado.productoPorSucursal.length - 1;
   
-        // petición para modificar el servicio agregandole un nuevo ServicioPorSucursal
-        this.serviciosService.modificarServicio(this.servicioSeleccionado).subscribe({
+        // petición para modificar el producto agregandole un nuevo serviciosPorSucursal
+        this.productosService.modificarProducto(this.productoSeleccionado).subscribe({
           next: () => {
             this.messageService.add({
               severity: 'success',
@@ -597,13 +596,13 @@ export class InventarioComponent {
             this.sucursalSeleccionadaId = null; // se actualiza a null ya que se hace una modificación en la API
             this.closeMessagePrecio();
             // se obtienen los servicios nuevamente para reflejar los cambios
-            this.obtenerServicios();
+            this.obtenerProductos();
           },
           error: (err) => {
             console.error('Error al guardar precio:', err);
   
             // 🔥 rollback SOLO si falla el PUT
-            this.servicioSeleccionado?.serviciosPorSucursal.splice(index, 1);
+            this.productoSeleccionado?.productoPorSucursal.splice(index, 1);
   
             this.messageService.add({
               severity: 'error',

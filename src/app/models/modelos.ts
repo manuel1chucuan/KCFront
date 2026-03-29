@@ -50,6 +50,32 @@ export interface ServicioPorSucursal {
   creadoPor?: string | null;
 }
 
+//////////////////////////////////////Productos////////////////////////////////////////
+export interface CrearProducto {
+    nombre: string;
+    descripcion: string;
+}
+
+
+export interface Producto {
+    id: string;
+    nombre: string;
+    descripcion: string;
+    fechaModificacion: Date;
+    modifico: string;
+    productoPorSucursal: ProductoPorSucursal[];
+    version: number;
+}
+
+export interface ProductoPorSucursal {
+  idSucursal: string;
+  precio: number | null;
+  stock: number | null;
+  fechaCreacion?: Date | null;
+  creadoPor?: string | null;
+}
+
+
 
 //////////////////////////////////////Sucursales////////////////////////////////////////
 export interface CrearSucursal {

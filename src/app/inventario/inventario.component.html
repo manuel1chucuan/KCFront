@@ -1,4 +1,4 @@
-<div class="empleados-vista">
+<div class="productos-vista">
     <div class="row d-flex contenedor-principal">
       <!-- lado izquierdo -->
         <div class="col-md-4" style="height: 100%;position: relative;background-color: rgba(255, 255, 255, 0.767);padding: 0px; border-radius: 8px; border: solid 1px rgb(216, 216, 216);">
@@ -7,66 +7,66 @@
             <ul class="nav nav-tabs">
               <li class="nav-item">
                 <button class="nav-link" 
-                        [ngClass]="{'active': pestanaActiva === 'gestionServicios'}"  
-                        (click)="pestanaActiva = 'gestionServicios'">
-                  Gestión de Servicio
+                        [ngClass]="{'active': pestanaActiva === 'gestionProductos'}"  
+                        (click)="pestanaActiva = 'gestionProductos'">
+                  Gestión de Producto
                 </button>
               </li>
               <li class="nav-item">
                 <button class="nav-link" 
-                        [ngClass]="{'active': pestanaActiva === 'agregarServicio'}" 
-                        (click)="pestanaActiva = 'agregarServicio'">
-                  Agregar Servicio
+                        [ngClass]="{'active': pestanaActiva === 'agregarProducto'}" 
+                        (click)="pestanaActiva = 'agregarProducto'">
+                  Agregar Producto
                 </button>
               </li>
             </ul>
         
             <!-- Contenido de las pestañas -->
-            <div class="tab-content" id="ServicesTabsContent" style="margin-top: 1rem;">
-                <!-- Pestaña de Agregar servicio -->
+            <div class="tab-content" id="ProductsTabsContent" style="margin-top: 1rem;">
+                <!-- Pestaña de Agregar producto -->
                 
-                <div class="tab-pane fade" id="addService" [ngClass]="{'show active': pestanaActiva === 'agregarServicio'}">
+                <div class="tab-pane fade" id="addProduct" [ngClass]="{'show active': pestanaActiva === 'agregarProducto'}">
                     <div class="mb-3">
-                      <h6>Servicio</h6>
-                       <!-- Este input setea this.nuevoServicio.nombre -->
+                      <h6>Producto:</h6>
+                       <!-- Este input setea this.nuevoProducto.nombre -->
                                                                               <!-- ngModel conecta el valor de un input con una variable -->
-                      <input type="text" class="form-control" id="ServiceName" [(ngModel)]="nuevoServicio.nombre" placeholder="Ingresa el nombre" required (keydown.enter)="crearServicio()">
+                      <input type="text" class="form-control" id="ProductName" [(ngModel)]="nuevoProducto.nombre" placeholder="Ingresa el nombre" required (keydown.enter)="crearProducto()">
                     </div>
                     <div class="mb-3">
-                      <h6>Descripcion</h6>
-                      <!-- este input setea this.nuevoServicio.descripcion -->
-                      <input type="text" class="form-control" id="ServiceDescription" [(ngModel)]="nuevoServicio.descripcion" placeholder="Breve descripcion" (keydown.enter)="crearServicio()">
+                      <h6>Descripcion:</h6>
+                      <!-- este input setea this.nuevoProducto.descripcion -->
+                      <input type="text" class="form-control" id="ServiceDescription" [(ngModel)]="nuevoProducto.descripcion" placeholder="Breve descripcion" (keydown.enter)="crearProducto()">
                     </div>
 
                     <div class="d-flex justify-content-center mt-4">
-                      <button class="btn btn-primary" (click)="crearServicio()" style="width: 100%;">Agregar Servicio</button>
+                      <button class="btn btn-primary" (click)="crearProducto()" style="width: 100%;">Agregar Producto</button>
                     </div>
                 </div>
         
-                <!-- Pestaña de Gestión de Servicio -->
-                <div class="tab-pane fade show active" id="manageUsers" [ngClass]="{'show active': pestanaActiva === 'gestionServicios'}">
+                <!-- Pestaña de Gestión de Productos -->
+                <div class="tab-pane fade show active" id="gestiosProductos" [ngClass]="{'show active': pestanaActiva === 'gestionProductos'}">
 
-                    <div *ngIf="servicioSeleccionado" class="card card-large" style="margin-top: 20px;">
+                    <div *ngIf="productoSeleccionado" class="card card-large" style="margin-top: 20px;">
                         <div class="card-body">
 
                             <!-- Nombre Editable -->
                             <div>
-                            <strong>Servicio:</strong>
-                            <!-- IMPROVEMENT: reemplazar por this.servicioSeleccionado.Nombre -->
-                            <input type="text" [(ngModel)]="nombreServicioSeleccionado" class="form-control">
+                            <strong>Producto:</strong>
+                            <!-- IMPROVEMENT: reemplazar por this.productoSeleccionado.Nombre -->
+                            <input type="text" [(ngModel)]="nombreProductoSeleccionado" class="form-control">
                             </div>
                             
                             <!-- Correo Editable -->
                             <div>
                             <strong>Descripcion:</strong>
-                            <!-- IMPROVEMENT: reemplazar por this.servicioSeleccionado.Descripcion -->
-                            <input type="text" [(ngModel)]="descripcionServicioSeleccionado" class="form-control">
+                            <!-- IMPROVEMENT: reemplazar por this.productoSeleccionado.Descripcion -->
+                            <input type="text" [(ngModel)]="descripcionProductoSeleccionado" class="form-control">
                             </div>
                       
                             <div class="row" style="padding-top:1rem;">
                                 <!-- Botón de eliminar (alineado a la izquierda) -->
                                 <div class="col-6" style="text-align: left;">
-                                <button class="btn btn-danger btn-sm" (click)="confirmarEliminarServicio()" style="width: 100%;">Eliminar Servicio</button>
+                                <button class="btn btn-danger btn-sm" (click)="confirmarEliminarProducto()" style="width: 100%;">Eliminar Producto</button>
                                 </div>
                             
                                 <!-- Botón de guardar (alineado a la derecha) -->
@@ -88,29 +88,32 @@
           <div class="overflow-div-ext">
             <div class="d-flex flex-column overflow-div">
 
-              <!-- itera y renderiza los servicios -->
-              <div *ngFor="let servicio of servicios" class="separador-servicio"
+              <!-- itera y renderiza los productos -->
+              <div *ngFor="let producto of productos" class="separador-servicio"
               [ngClass] = "{
-              'selected-card': servicioSeleccionado && servicioSeleccionado.id === servicio.id,
-              'card-default': !(servicioSeleccionado && servicioSeleccionado.id === servicio.id)}">
-                <div class="contenido-servicio" (click)="seleccionarServicio(servicio)">
-                  <p class="servicio-select">{{ servicio.nombre }} 
-                    [<span style="color: grey;">{{ servicio.descripcion }}</span>]
+              'selected-card': productoSeleccionado && productoSeleccionado.id === producto.id,
+              'card-default': !(productoSeleccionado && productoSeleccionado.id === producto.id)}">
+                <div class="contenido-servicio" (click)="seleccionarProducto(producto)">
+                  <p class="servicio-select">{{ producto.nombre }} 
+                    [<span style="color: grey;">{{ producto.descripcion }}</span>]
                   </p>
 
                   <div class="d-flex flex-wrap contenido-servicio-interno">
                     <!-- itera y renderiza las sucursales -->
-                    <div *ngFor="let sucursal of servicio.serviciosPorSucursal" 
+                    <div *ngFor="let sucursal of producto.productoPorSucursal" 
                     class="p-2 border mini-contenido"
-                    (click)="handleClickUpdatePrecio(servicio,sucursal)">
+                    (click)="handleClickUpdatePrecio(producto,sucursal)">
                       {{ getNombreSucursal(sucursal.idSucursal)}} 
                       <span class="mini-contenido-interno">
                         ${{ sucursal.precio }}
                       </span>
+                      <span class="mini-contenido-interno">
+                        Stock: {{ sucursal.stock }}
+                      </span>
                     </div>
 
                     <!-- botón para agregar sucursal -->
-                    <div class="mini-contenido-plus" (click)="handleClickAddPrecio(servicio)">
+                    <div class="mini-contenido-plus" (click)="handleClickAddPrecio(producto)">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
                         <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
                         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
@@ -134,13 +137,13 @@
      class="select-flotante2"
      (click)="$event.stopPropagation()">
 
-  <h3>{{ servicioSeleccionado?.nombre }}</h3>
-  <p>{{ servicioSeleccionado?.descripcion }}</p>
+  <h3>{{ productoSeleccionado?.nombre }}</h3>
+  <p>{{ productoSeleccionado?.descripcion }}</p>
 
   <!-- SIN SUCURSALES DISPONIBLES -->
   <div *ngIf="sucursalesDisponibles.length === 0"
        class="alert alert-info mt-3">
-    Todas las sucursales ya tienen un precio asignado para este servicio.
+    Todas las sucursales ya tienen un precio asignado para este producto.
   </div>
 
   <!-- FORM SOLO SI HAY SUCURSALES -->
@@ -196,15 +199,15 @@
      class="select-flotante2"
      (click)="$event.stopPropagation()">
 
-  <h3>{{ servicioSeleccionado?.nombre }}</h3>
-  <p>{{ servicioSeleccionado?.descripcion }}</p>
+  <h3>{{ productoSeleccionado?.nombre }}</h3>
+  <p>{{ productoSeleccionado?.descripcion }}</p>
 
   <div class="mb-2">
     <label>Sucursal</label>
     <input
       type="text"
       class="form-control"
-      [value]="getNombreSucursal(servicioPorSucursalSeleccionado.idSucursal)"
+      [value]="getNombreSucursal(productoPorSucursalSeleccionado.idSucursal)"
       disabled
     />
   </div>
@@ -214,7 +217,7 @@
       <label>Precio</label>
       <input type="number"
               class="form-control"
-              [(ngModel)]="servicioPorSucursalSeleccionado.precio"/>
+              [(ngModel)]="productoPorSucursalSeleccionado.precio"/>
     </div>
 
   <!-- BOTONES -->
@@ -235,7 +238,7 @@
               [disabled]="
                 nuevoPrecio === null ||
                 nuevoPrecio === undefined ||
-                servicioPorSucursalSeleccionado.precio === precioAnterior
+                productoPorSucursalSeleccionado.precio === precioAnterior
               ">
         Guardar
       </button>
