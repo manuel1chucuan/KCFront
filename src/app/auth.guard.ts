@@ -16,5 +16,5 @@ export const authGuard: CanActivateFn = (route, state) => {
   // retorna true si hay token en sessionStorage
   // rediriecciona a /login en caso contrario
   // TODO: el token no esta siendo validado 
-  return !!sessionStorage.getItem('authToken') ? true : router.navigate(['/login']);
+  return !!sessionStorage.getItem('authToken') ? true : router.navigate(['']);
 };
