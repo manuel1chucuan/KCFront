@@ -1,11 +1,18 @@
 <div class="container-fluid mt-3 contenedorLogin">
-    <div class="row">
-      <div class="col-sm-4"></div>
-      <div class="col-sm-4 body-form">
-      </div>
-      <div class="col-sm-4"></div>
-    </div>
+  <div class="row justify-content-center contenido-inicio">
+    <div class="col-12 col-lg-10 col-xl-9 body-form">
+      <button class="cajero-card" type="button" (click)="ingresarModoCajero()">
+        <span class="cajero-media">
+          <img class="cajero-imagen" src="assets/caja.png" alt="Modo Cajero">
+        </span>
 
-    <!-- renderiza las notificaciones de MessageService -->
-    <p-toast></p-toast>
+        <span class="cajero-contenido">
+          <span class="cajero-etiqueta">Acceso rapido</span>
+          <span class="label-form">Modo Cajero</span>
+        </span>
+      </button>
+    </div>
   </div>
+
+  <p-toast></p-toast>
+</div>
