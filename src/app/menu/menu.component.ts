@@ -27,6 +27,7 @@ export class MenuComponent {
   filtro: string = '';
   showTogle: boolean = false; // Controla la visibilidad del mensaje
   showTogle2: boolean = false; // Controla la visibilidad del mensaje
+  nombreUsuario: string = 'Usuario';
 
   componenteActual: string = 'caja'; // Componente inicial
 
@@ -36,6 +37,7 @@ export class MenuComponent {
   ngOnInit() {
     const almacenado = localStorage.getItem('componenteActual');
     this.componenteActual = almacenado ? almacenado : 'caja'; // valor por defecto
+    this.nombreUsuario = this.authService.getNombreUsuario() ?? 'Usuario';
   }
 
   // método para "navegar" entre las vistas cambiando el valor de this.componenteActual
