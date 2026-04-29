@@ -6,14 +6,22 @@ $border-radius2: 4px;
 
 .contenedorLogin{
     margin-top: 0 !important;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    background:
+      radial-gradient(circle at top left, rgba(255, 211, 255, 0.5), transparent 32%),
+      linear-gradient(135deg, #fff8fb 0%, #f3f6fb 100%);
 }
 
 .label-form{
-    border-top-left-radius: $border-radius2;
-    border-top-right-radius: $border-radius2;
-    font-size: 2rem;
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
     font-family:'Times New Roman', Times, serif;
     color:  rgb(77, 77, 77);
+    display: block;
+    line-height: 1.05;
 }
 
 .label-form-bot{
@@ -28,11 +36,9 @@ $border-radius2: 4px;
 }
 
 .body-form{
-    margin-top: 2rem !important;
+    margin-top: 0 !important;
     padding: 0;
-
-    border-top-left-radius: $border-radius;
-    border-top-right-radius: $border-radius;
+    border-radius: $border-radius;
 }
 .custom-dialog {
     position: absolute;
@@ -42,7 +48,123 @@ $border-radius2: 4px;
     z-index: 1000; /* Asegúrate de que el diálogo esté por encima de otros elementos */
   }
   
-  .dialog-container {
+.dialog-container {
     position: relative;
     display: inline-block;
   }
+
+.contenido-inicio{
+    width: min(1120px, 100%);
+}
+
+.cajero-card{
+    width: 100%;
+    min-height: 460px;
+    border: 1px solid rgba(139, 139, 139, 0.2);
+    border-radius: 28px;
+    box-shadow: 0 24px 60px rgba(55, 63, 84, 0.14);
+    padding: clamp(2rem, 5vw, 4rem);
+    display: grid;
+    grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    text-align: left;
+    background: linear-gradient(145deg, #ffffff 0%, #fff7fa 100%);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.cajero-imagen{
+    width: min(100%, 260px);
+    display: block;
+    margin: 0 auto;
+}
+
+.cajero-texto{
+    color: rgb(77, 77, 77);
+    margin: 1rem 0 0;
+    font-size: 1.15rem;
+    line-height: 1.6;
+}
+
+.cajero-media{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    padding: 2rem;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255, 211, 255, 0.55) 0%, rgba(255, 255, 255, 0.95) 100%);
+}
+
+.cajero-contenido{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cajero-etiqueta{
+    display: inline-flex;
+    width: fit-content;
+    margin-bottom: 1rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(77, 77, 77, 0.08);
+    color: rgb(77, 77, 77);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.cajero-cta{
+    display: inline-flex;
+    width: fit-content;
+    margin-top: 2rem;
+    padding: 0.95rem 1.4rem;
+    border-radius: 999px;
+    background: rgb(77, 77, 77);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.cajero-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 30px 70px rgba(55, 63, 84, 0.18);
+    border-color: rgba(77, 77, 77, 0.3);
+}
+
+.cajero-card:focus-visible{
+    outline: 3px solid rgba(77, 77, 77, 0.35);
+    outline-offset: 4px;
+}
+
+@media (max-width: 991.98px) {
+    .cajero-card{
+        grid-template-columns: 1fr;
+        min-height: auto;
+        text-align: center;
+    }
+
+    .cajero-contenido{
+        align-items: center;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .contenedorLogin{
+        padding: 1rem;
+    }
+
+    .cajero-card{
+        padding: 1.5rem;
+        border-radius: 22px;
+    }
+
+    .cajero-media{
+        padding: 1.5rem;
+    }
+}
