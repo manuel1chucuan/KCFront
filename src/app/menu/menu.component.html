@@ -74,22 +74,22 @@
                 <label class="navegacion-lbl">Caja</label>
             </div>
 
-            <div class="navegacion-div" (click)="mostrarComponente('servicios')">
+            <div *ngIf="esAdmin" class="navegacion-div" (click)="mostrarComponente('servicios')">
                 <img src="../../assets/bella.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Servicios</label>
             </div>
 
-            <div class="navegacion-div" (click)="mostrarComponente('inventario')">
+            <div *ngIf="esAdmin" class="navegacion-div" (click)="mostrarComponente('inventario')">
                 <img src="../../assets/inventario.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Inventario</label>
             </div>
 
-            <div class="navegacion-div" (click)="mostrarComponente('empleados')">
+            <div *ngIf="esAdmin" class="navegacion-div" (click)="mostrarComponente('empleados')">
                 <img src="../../assets/empleados.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Empleados</label>
             </div>
 
-            <div class="navegacion-div" (click)="mostrarComponente('sucursales')">
+            <div *ngIf="esAdmin" class="navegacion-div" (click)="mostrarComponente('sucursales')">
                 <img src="../../assets/sucursal2.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Sucursales</label>
             </div>
@@ -102,10 +102,10 @@
         <!-- las 6 vistas se renderizan condicionalmente con *ngIf -->
                                                       <!-- se manda controlLongitud como input del componente caja -->
         <app-caja *ngIf="componenteActual === 'caja'" [controlLongitud]="selectedValue"></app-caja>
-        <app-servicios *ngIf="componenteActual === 'servicios'"></app-servicios>
-        <app-inventario *ngIf="componenteActual === 'inventario'"></app-inventario>
-        <app-empleados *ngIf="componenteActual === 'empleados'"></app-empleados>
-        <app-sucursales *ngIf="componenteActual === 'sucursales'"></app-sucursales>
+        <app-servicios *ngIf="esAdmin && componenteActual === 'servicios'"></app-servicios>
+        <app-inventario *ngIf="esAdmin && componenteActual === 'inventario'"></app-inventario>
+        <app-empleados *ngIf="esAdmin && componenteActual === 'empleados'"></app-empleados>
+        <app-sucursales *ngIf="esAdmin && componenteActual === 'sucursales'"></app-sucursales>
         <app-ventas *ngIf="componenteActual === 'ventas'"></app-ventas>
     </div>
 </div>
