@@ -1,16 +1,50 @@
 <div class="container-fluid mt-3 contenedorLogin">
   <div class="row justify-content-center contenido-inicio">
-    <div class="col-12 col-lg-10 col-xl-9 body-form">
-      <button class="cajero-card" type="button" (click)="ingresarModoCajero()">
-        <span class="cajero-media">
-          <img class="cajero-imagen" src="assets/caja.png" alt="Modo Cajero">
+    <div class="col-12 col-lg-6 body-form">
+      <button class="inicio-card" type="button" (click)="ingresarModoCajero()">
+        <span class="inicio-card-media">
+          <img class="inicio-card-imagen" src="assets/caja.png" alt="Modo Cajero">
         </span>
 
-        <span class="cajero-contenido">
-          <span class="cajero-etiqueta">Acceso rapido</span>
+        <span class="inicio-card-contenido">
+          <span class="inicio-card-etiqueta">Acceso rapido</span>
           <span class="label-form">Modo Cajero</span>
         </span>
       </button>
+    </div>
+
+    <div class="col-12 col-lg-6 body-form">
+      <button *ngIf="!mostrarFormularioAdministrador" class="inicio-card" type="button" (click)="ingresarModoAdministrador()">
+        <span class="inicio-card-media inicio-card-media-admin">
+          <img class="inicio-card-imagen" src="assets/empleados.png" alt="Modo Administrador">
+        </span>
+
+        <span class="inicio-card-contenido">
+          <span class="inicio-card-etiqueta">Acceso seguro</span>
+          <span class="label-form">Modo Administrador</span>
+        </span>
+      </button>
+
+      <div *ngIf="mostrarFormularioAdministrador" class="inicio-card inicio-card-formulario">
+        <div class="inicio-card-contenido inicio-card-contenido-formulario">
+          <span class="inicio-card-etiqueta">Acceso seguro</span>
+          <span class="label-form">Modo Administrador</span>
+
+          <div class="inicio-formulario">
+            <div class="mb-1 margen-form mt-2">
+              <input type="text" class="form-control" id="email" placeholder="Usuario" name="email" [(ngModel)]="correo">
+            </div>
+
+            <div class="mb-2 margen-form">
+              <input type="password" class="form-control" id="pwd" placeholder="Contraseña" name="pswd" [(ngModel)]="contrasena" (keydown.enter)="onLoginAdministrador()">
+            </div>
+
+            <div class="d-flex flex-row-reverse label-form-bot">
+              <button class="btn btn-secondary btn-sm" type="button" (click)="onLoginAdministrador()">Iniciar sesion</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
