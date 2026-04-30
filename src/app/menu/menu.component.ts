@@ -11,6 +11,8 @@ import { InventarioComponent } from '../inventario/inventario.component';
 import { SucursalesComponent } from '../sucursales/sucursales.component';
 import { VentasComponent } from '../ventas/ventas.component';
 
+type VistaMenu = 'caja' | 'servicios' | 'inventario' | 'empleados' | 'sucursales' | 'ventas';
+
 // este componente dinámico contiene 6 vistas:
 // caja, servicios, inventario, empleados, sucursales, y ventas
 @Component({
@@ -23,25 +25,36 @@ import { VentasComponent } from '../ventas/ventas.component';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
+  private readonly vistaDefault: VistaMenu = 'caja';
   selectedValue: number = 8;
   filtro: string = '';
   showTogle: boolean = false; // Controla la visibilidad del mensaje
   showTogle2: boolean = false; // Controla la visibilidad del mensaje
   nombreUsuario: string = 'Usuario';
+  esAdmin: boolean = false;
 
-  componenteActual: string = 'caja'; // Componente inicial
+  componenteActual: VistaMenu = 'caja'; // Componente inicial
 
   // en cada renderizado del componente, se obtiene el componenteActual almacenado 
   // en localStorage y el valor es asignado a this.componenteActual
   // esto es para que al refrescar la página se mantenga la misma vista
   ngOnInit() {
     const almacenado = localStorage.getItem('componenteActual');
-    this.componenteActual = almacenado ? almacenado : 'caja'; // valor por defecto
+    this.esAdmin = this.authService.getPermisosUsuario()?.admin ?? false;
+    this.componenteActual = this.obtenerVistaPermitida(almacenado); // valor por defecto
     this.nombreUsuario = this.authService.getNombreUsuario() ?? 'Usuario';
+    localStorage.setItem('componenteActual', this.componenteActual);
   }
 
   // método para "navegar" entre las vistas cambiando el valor de this.componenteActual
-  mostrarComponente(componente: string): void {
+  mostrarComponente(componente: VistaMenu): void {
+    if (!this.puedeAccederA(componente)) {
+      this.componenteActual = this.vistaDefault;
+      localStorage.setItem('componenteActual', this.componenteActual);
+      this.closeMessage2();
+      return;
+    }
+
     this.componenteActual = componente;
     localStorage.setItem('componenteActual', componente);
     // cierra el menú de navegación
@@ -76,7 +89,7 @@ export class MenuComponent {
   // cierra la sesión
   onLogOut(): void {
     // setea el componente actual a su valor default
-    localStorage.setItem('componenteActual', 'caja');
+    localStorage.setItem('componenteActual', this.vistaDefault);
     // cierra sesión a través del servicio AuthServiceService
     this.authService.logout();
   }
@@ -89,5 +102,22 @@ export class MenuComponent {
 
     // Llama al método del servicio para establecer los datos filtrados
     this.dataService.setFilteredData(this.filtro);
+  }
+
+  puedeAccederA(componente: string | null): componente is VistaMenu {
+    if (this.esAdmin) {
+      return componente === 'caja' ||
+        componente === 'servicios' ||
+        componente === 'inventario' ||
+        componente === 'empleados' ||
+        componente === 'sucursales' ||
+        componente === 'ventas';
+    }
+
+    return componente === 'caja' || componente === 'ventas';
+  }
+
+  private obtenerVistaPermitida(componente: string | null): VistaMenu {
+    return this.puedeAccederA(componente) ? componente : this.vistaDefault;
   }
 }
