@@ -24,7 +24,7 @@
         </div>
         <div class="col-sm-3 d-flex justify-content-end mx-0 p-2">
             <!-- usuario -->
-            <span class="user">
+            <span class="user" (click)="toggleUserMenu()">
                 <svg width="16" height="16" fill="currentColor" class="bi bi-person-gear me-1 user-icon" viewBox="0 0 16 16">
                     <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
                 </svg>
@@ -63,6 +63,29 @@
                 </div>
             </div>
 
+        </div>
+        <div *ngIf="showUserMenu" class="overlay" (click)="closeUserMenu()"></div>
+        <div *ngIf="showUserMenu" class="select-flotante3" (click)="$event.stopPropagation()">
+            <h6 class="mb-3">Cuenta</h6>
+
+            <button *ngIf="esAdmin && !showCambioContrasena" class="btn btn-outline-secondary w-100" type="button" (click)="mostrarCambioContrasena()">
+                Cambiar contraseña
+            </button>
+
+            <div *ngIf="showCambioContrasena" class="cambio-contrasena-formulario">
+                <label class="cambio-contrasena-label" for="contrasenaActual">Contraseña actual</label>
+                <input class="form-control mb-3" id="contrasenaActual" type="password" [(ngModel)]="contrasenaActual">
+
+                <label class="cambio-contrasena-label" for="nuevaContrasena">Nueva contraseña</label>
+                <input class="form-control mb-3" id="nuevaContrasena" type="password" [(ngModel)]="nuevaContrasena">
+
+                <label class="cambio-contrasena-label" for="confirmacionContrasena">Confirmar nueva contraseña</label>
+                <input class="form-control mb-3" id="confirmacionContrasena" type="password" [(ngModel)]="confirmacionContrasena" (keydown.enter)="cambiarContrasena()">
+
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-secondary btn-sm" type="button" (click)="cambiarContrasena()">Guardar cambio</button>
+                </div>
+            </div>
         </div>
         <!-- sirve para activar la función closeMessage2 -->
         <div *ngIf="showTogle2" class="overlay" (click)="closeMessage2()"></div>
@@ -108,4 +131,6 @@
         <app-sucursales *ngIf="esAdmin && componenteActual === 'sucursales'"></app-sucursales>
         <app-ventas *ngIf="componenteActual === 'ventas'"></app-ventas>
     </div>
+
+    <p-toast></p-toast>
 </div>

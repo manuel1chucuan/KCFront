@@ -3,6 +3,8 @@ import { RouterModule } from '@angular/router'; // CLEANUP: no se usa
 import { AuthServiceService } from '../login/auth-service.service';
 import { FormsModule } from '@angular/forms'; // necesario para habilitar ngModel en el HTML
 import { CommonModule } from '@angular/common';  // necesario para operativas básicas en HTML (ngFor, ngIf, etc.)
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { CajaComponent } from '../caja/caja.component';
 import { FiltroPrincipal } from '../services/fliltro-principal.service';
 import { ServiciosComponent } from "../servicios/servicios.component";
@@ -19,7 +21,7 @@ type VistaMenu = 'caja' | 'servicios' | 'inventario' | 'empleados' | 'sucursales
   selector: 'app-menu',
   standalone: true,
   imports: [
-  FormsModule, RouterModule, CommonModule, CajaComponent, ServiciosComponent, EmpleadosComponent, 
+  FormsModule, RouterModule, CommonModule, ToastModule, CajaComponent, ServiciosComponent, EmpleadosComponent, 
     InventarioComponent, SucursalesComponent, VentasComponent],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
@@ -30,8 +32,13 @@ export class MenuComponent {
   filtro: string = '';
   showTogle: boolean = false; // Controla la visibilidad del mensaje
   showTogle2: boolean = false; // Controla la visibilidad del mensaje
+  showUserMenu: boolean = false;
+  showCambioContrasena: boolean = false;
   nombreUsuario: string = 'Usuario';
   esAdmin: boolean = false;
+  contrasenaActual: string = '';
+  nuevaContrasena: string = '';
+  confirmacionContrasena: string = '';
 
   componenteActual: VistaMenu = 'caja'; // Componente inicial
 
@@ -63,6 +70,7 @@ export class MenuComponent {
 
   // al dar click en Ajustes, se renderizan las configuraciones de la caja, o se ocultan
   handleClick() {
+    this.closeUserMenu();
     this.showTogle = !this.showTogle; // Alterna la visibilidad del mensaje
   }
 
@@ -74,6 +82,7 @@ export class MenuComponent {
 
   // al dar click en el menú, se renderizan las imagenes para cambiar de vista, o se ocultan
   handleClick2() {
+    this.closeUserMenu();
     this.showTogle2 = !this.showTogle2; // Alterna la visibilidad del mensaje
   }
 
@@ -84,7 +93,11 @@ export class MenuComponent {
   }
 
   // REFACTOR: el constructor de esta clase esta en medio de los métodos
-  constructor(private authService: AuthServiceService, private dataService: FiltroPrincipal) { }
+  constructor(
+    private authService: AuthServiceService,
+    private dataService: FiltroPrincipal,
+    private messageService: MessageService
+  ) { }
 
   // cierra la sesión
   onLogOut(): void {
@@ -104,6 +117,59 @@ export class MenuComponent {
     this.dataService.setFilteredData(this.filtro);
   }
 
+  toggleUserMenu(): void {
+    if (!this.esAdmin) {
+      return;
+    }
+
+    this.closeMessage();
+    this.closeMessage2();
+    this.showUserMenu = !this.showUserMenu;
+
+    if (!this.showUserMenu) {
+      this.resetCambioContrasena();
+    }
+  }
+
+  closeUserMenu(): void {
+    this.showUserMenu = false;
+    this.resetCambioContrasena();
+  }
+
+  mostrarCambioContrasena(): void {
+    this.showCambioContrasena = true;
+  }
+
+  cambiarContrasena(): void {
+    if (!this.contrasenaActual || !this.nuevaContrasena || !this.confirmacionContrasena) {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Completa todos los campos'});
+      return;
+    }
+
+    if (this.nuevaContrasena !== this.confirmacionContrasena) {
+      this.messageService.add({severity:'error', summary:'Error', detail:'La nueva contraseña y su confirmación no coinciden'});
+      return;
+    }
+
+    this.authService.cambiarContrasena(
+      this.contrasenaActual,
+      this.nuevaContrasena,
+      this.confirmacionContrasena
+    ).subscribe({
+      next: () => {
+        this.messageService.add({severity:'success', summary:'Éxito', detail:'Contraseña actualizada correctamente'});
+        this.closeUserMenu();
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity:'error',
+          summary:'Error',
+          detail: err.message || 'No fue posible cambiar la contraseña'
+        });
+      }
+    });
+  }
+
   puedeAccederA(componente: string | null): componente is VistaMenu {
     if (this.esAdmin) {
       return componente === 'caja' ||
@@ -119,5 +185,12 @@ export class MenuComponent {
 
   private obtenerVistaPermitida(componente: string | null): VistaMenu {
     return this.puedeAccederA(componente) ? componente : this.vistaDefault;
+  }
+
+  private resetCambioContrasena(): void {
+    this.showCambioContrasena = false;
+    this.contrasenaActual = '';
+    this.nuevaContrasena = '';
+    this.confirmacionContrasena = '';
   }
 }
