@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -62,6 +62,17 @@ export class AuthServiceService {
       );
   }
 
+  cambiarContrasena(contrasenaActual: string, nuevaContrasena: string, confirmacionContrasena: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/login/contrasena`, {
+      contrasenaActual,
+      nuevaContrasena,
+      confirmacionContrasena,
+    }, { headers: this.getAuthHeaders() })
+      .pipe(
+        catchError(this.handleError<any>('cambiarContrasena'))
+      );
+  }
+
   getNombreUsuario(): string | null {
     if (!this.nombreUsuario) {
       this.hidratarSesionDesdeToken();
@@ -82,8 +93,9 @@ export class AuthServiceService {
   // como la operación que falló
   private handleError<T>(operation = 'operation'): (error: any) => Observable<T> {
     return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      return throwError(() => new Error(error.message));
+      const errorMessage = error?.error?.error || error?.message || 'Ocurrió un error inesperado';
+      console.error(`${operation} failed: ${errorMessage}`);
+      return throwError(() => new Error(errorMessage));
     };
   }
 
@@ -169,6 +181,12 @@ export class AuthServiceService {
     }
 
     return sessionStorage.getItem('authToken');
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': `Bearer ${this.obtenerTokenGuardado() ?? ''}`,
+    });
   }
 
   private tieneSessionStorage(): boolean {
