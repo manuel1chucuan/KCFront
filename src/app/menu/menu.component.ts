@@ -10,6 +10,8 @@ import { FiltroPrincipal } from '../services/fliltro-principal.service';
 import { ServiciosComponent } from "../servicios/servicios.component";
 import { EmpleadosComponent } from '../empleados/empleados.component';
 import { InventarioComponent } from '../inventario/inventario.component';
+import { Sucursal } from '../models/modelos';
+import { SucursalesService } from '../services/web-services-sucursales.service';
 import { SucursalesComponent } from '../sucursales/sucursales.component';
 import { VentasComponent } from '../ventas/ventas.component';
 
@@ -33,12 +35,18 @@ export class MenuComponent {
   showTogle: boolean = false; // Controla la visibilidad del mensaje
   showTogle2: boolean = false; // Controla la visibilidad del mensaje
   showUserMenu: boolean = false;
+  showSucursalMenu: boolean = false;
   showCambioContrasena: boolean = false;
   nombreUsuario: string = 'Usuario';
+  nombreSucursal: string = 'Sucursal';
   esAdmin: boolean = false;
   contrasenaActual: string = '';
   nuevaContrasena: string = '';
   confirmacionContrasena: string = '';
+  sucursalesDisponibles: Sucursal[] = [];
+  sucursalSeleccionadaId: string = '';
+  cargandoSucursales: boolean = false;
+  asignandoSucursal: boolean = false;
 
   componenteActual: VistaMenu = 'caja'; // Componente inicial
 
@@ -50,6 +58,7 @@ export class MenuComponent {
     this.esAdmin = this.authService.getPermisosUsuario()?.admin ?? false;
     this.componenteActual = this.obtenerVistaPermitida(almacenado); // valor por defecto
     this.nombreUsuario = this.authService.getNombreUsuario() ?? 'Usuario';
+    this.actualizarSucursalActual();
     localStorage.setItem('componenteActual', this.componenteActual);
   }
 
@@ -71,6 +80,7 @@ export class MenuComponent {
   // al dar click en Ajustes, se renderizan las configuraciones de la caja, o se ocultan
   handleClick() {
     this.closeUserMenu();
+    this.closeSucursalMenu();
     this.showTogle = !this.showTogle; // Alterna la visibilidad del mensaje
   }
 
@@ -83,6 +93,7 @@ export class MenuComponent {
   // al dar click en el menú, se renderizan las imagenes para cambiar de vista, o se ocultan
   handleClick2() {
     this.closeUserMenu();
+    this.closeSucursalMenu();
     this.showTogle2 = !this.showTogle2; // Alterna la visibilidad del mensaje
   }
 
@@ -96,7 +107,8 @@ export class MenuComponent {
   constructor(
     private authService: AuthServiceService,
     private dataService: FiltroPrincipal,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private sucursalesService: SucursalesService
   ) { }
 
   // cierra la sesión
@@ -122,6 +134,7 @@ export class MenuComponent {
       return;
     }
 
+    this.closeSucursalMenu();
     this.closeMessage();
     this.closeMessage2();
     this.showUserMenu = !this.showUserMenu;
@@ -134,6 +147,29 @@ export class MenuComponent {
   closeUserMenu(): void {
     this.showUserMenu = false;
     this.resetCambioContrasena();
+  }
+
+  toggleSucursalMenu(): void {
+    if (!this.esAdmin) {
+      return;
+    }
+
+    this.closeUserMenu();
+    this.closeMessage();
+    this.closeMessage2();
+    this.showSucursalMenu = !this.showSucursalMenu;
+
+    if (!this.showSucursalMenu) {
+      this.resetSucursalMenu();
+      return;
+    }
+
+    this.prepararCambioSucursal();
+  }
+
+  closeSucursalMenu(): void {
+    this.showSucursalMenu = false;
+    this.resetSucursalMenu();
   }
 
   mostrarCambioContrasena(): void {
@@ -170,6 +206,37 @@ export class MenuComponent {
     });
   }
 
+  cambiarSucursal(): void {
+    if (!this.sucursalSeleccionadaId) {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Selecciona una sucursal'});
+      return;
+    }
+
+    this.asignandoSucursal = true;
+
+    this.sucursalesService.asignarSucursal(this.sucursalSeleccionadaId).subscribe({
+      next: (response) => {
+        this.actualizarSucursalActual();
+        this.messageService.add({
+          severity:'success',
+          summary:'Éxito',
+          detail:`Sucursal ${response.data.sucursal.nombre} asignada correctamente`
+        });
+        this.closeSucursalMenu();
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity:'error',
+          summary:'Error',
+          detail: err?.message || 'No fue posible cambiar la sucursal'
+        });
+      },
+      complete: () => {
+        this.asignandoSucursal = false;
+      }
+    });
+  }
+
   puedeAccederA(componente: string | null): componente is VistaMenu {
     if (this.esAdmin) {
       return componente === 'caja' ||
@@ -187,10 +254,51 @@ export class MenuComponent {
     return this.puedeAccederA(componente) ? componente : this.vistaDefault;
   }
 
+  private prepararCambioSucursal(): void {
+    if (this.cargandoSucursales) {
+      return;
+    }
+
+    this.sucursalSeleccionadaId = this.sucursalesService.obtenerSucursalAsignadaId() ?? '';
+
+    if (this.sucursalesDisponibles.length > 0) {
+      return;
+    }
+
+    this.cargandoSucursales = true;
+
+    this.sucursalesService.obtenerSucursales().subscribe({
+      next: (response) => {
+        this.sucursalesDisponibles = response.data ?? [];
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity:'error',
+          summary:'Error',
+          detail: err?.message || 'No fue posible cargar las sucursales'
+        });
+        this.closeSucursalMenu();
+      },
+      complete: () => {
+        this.cargandoSucursales = false;
+      }
+    });
+  }
+
+  private actualizarSucursalActual(): void {
+    this.nombreSucursal = this.sucursalesService.obtenerSucursalAsignada()?.nombre ?? 'Sucursal';
+  }
+
   private resetCambioContrasena(): void {
     this.showCambioContrasena = false;
     this.contrasenaActual = '';
     this.nuevaContrasena = '';
     this.confirmacionContrasena = '';
+  }
+
+  private resetSucursalMenu(): void {
+    this.sucursalSeleccionadaId = '';
+    this.cargandoSucursales = false;
+    this.asignandoSucursal = false;
   }
 }

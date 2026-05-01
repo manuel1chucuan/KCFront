@@ -23,6 +23,10 @@
               </div>
         </div>
         <div class="col-sm-3 d-flex justify-content-end mx-0 p-2">
+            <span class="sucursal-actual" [class.sucursal-actual-clickable]="esAdmin" (click)="toggleSucursalMenu()">
+                <img src="../../assets/sucursal2.png" alt="Sucursal asignada" class="sucursal-actual-icono">
+                <span class="sucursal-actual-texto">{{ nombreSucursal }}</span>
+            </span>
             <!-- usuario -->
             <span class="user" [class.user-clickable]="esAdmin" (click)="toggleUserMenu()">
                 <svg width="16" height="16" fill="currentColor" class="bi bi-person-gear me-1 user-icon" viewBox="0 0 16 16">
@@ -63,6 +67,28 @@
                 </div>
             </div>
 
+        </div>
+        <div *ngIf="showSucursalMenu" class="overlay" (click)="closeSucursalMenu()"></div>
+        <div *ngIf="showSucursalMenu" class="select-flotante4" (click)="$event.stopPropagation()">
+            <h6 class="mb-2">Sucursal asignada</h6>
+            <p class="sucursal-menu-texto">Selecciona la sucursal que debe quedar asociada a este navegador.</p>
+
+            <label class="cambio-contrasena-label" for="sucursalAsignadaSelect">Sucursal</label>
+            <select id="sucursalAsignadaSelect" class="form-control mb-3" [(ngModel)]="sucursalSeleccionadaId" [disabled]="cargandoSucursales || asignandoSucursal">
+                <option value="" disabled>Selecciona una sucursal</option>
+                <option *ngFor="let sucursal of sucursalesDisponibles" [value]="sucursal.id">
+                    {{ sucursal.nombre }}
+                </option>
+            </select>
+
+            <p *ngIf="cargandoSucursales" class="sucursal-menu-estado">Cargando sucursales...</p>
+            <p *ngIf="!cargandoSucursales && sucursalesDisponibles.length === 0" class="sucursal-menu-estado">No hay sucursales disponibles.</p>
+
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-secondary btn-sm" type="button" (click)="cambiarSucursal()" [disabled]="cargandoSucursales || asignandoSucursal || !sucursalSeleccionadaId || sucursalesDisponibles.length === 0">
+                    {{ asignandoSucursal ? 'Guardando...' : 'Guardar cambio' }}
+                </button>
+            </div>
         </div>
         <div *ngIf="showUserMenu" class="overlay" (click)="closeUserMenu()"></div>
         <div *ngIf="showUserMenu" class="select-flotante3" (click)="$event.stopPropagation()">
