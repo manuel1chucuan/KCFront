@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CrearSucursal, Sucursal } from '../models/modelos';
-import { catchError } from 'rxjs/operators';
+import { AsignacionSucursal, CrearSucursal, Sucursal } from '../models/modelos';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 // con @Injectable, Angular instancia la clase e inyecta sus dependencias al ser necesitada por primera vez
@@ -11,6 +11,8 @@ import { environment } from '../../environments/environment';
 })
 export class SucursalesService {
   private apiUrl = environment.apiUrl + "/sucursales";
+  private readonly tokenSucursalStorageKey = 'tokenSucursal';
+  private readonly sucursalAsignadaStorageKey = 'sucursalAsignada';
 
   constructor(private http: HttpClient) {}
 
@@ -19,6 +21,18 @@ export class SucursalesService {
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`,  // Agregamos el token en el header
     });
+  }
+
+  asignarSucursal(sucursalId: string): Observable<{ data: AsignacionSucursal }> {
+    return this.http
+      .post<{ data: AsignacionSucursal }>(`${this.apiUrl}/asignacion`, { sucursalId }, { headers: this.getHeaders() })
+      .pipe(
+        tap((response) => this.guardarSucursalAsignada(response.data.tokenSucursal, response.data.sucursal)),
+        catchError((error) => {
+          console.error('Error asignando sucursal:', error);
+          throw error;
+        })
+      );
   }
 
   // Crear un nuevo usuario
@@ -77,5 +91,119 @@ export class SucursalesService {
           throw error;
         })
       );
+  }
+
+  tieneSucursalAsignadaValida(): boolean {
+    const tokenSucursal = this.obtenerTokenSucursalGuardado();
+    if (!tokenSucursal) {
+      return false;
+    }
+
+    const claims = this.extraerClaimsTokenSucursal(tokenSucursal);
+    if (!claims) {
+      this.limpiarSucursalAsignada();
+      return false;
+    }
+
+    return true;
+  }
+
+  obtenerSucursalAsignada(): Sucursal | null {
+    if (!this.tieneSucursalAsignadaValida() || !this.tieneLocalStorage()) {
+      return null;
+    }
+
+    const sucursalGuardada = localStorage.getItem(this.sucursalAsignadaStorageKey);
+    if (!sucursalGuardada) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(sucursalGuardada) as Sucursal;
+    } catch (error) {
+      console.error('No fue posible leer la sucursal asignada.', error);
+      return null;
+    }
+  }
+
+  obtenerSucursalAsignadaId(): string | null {
+    const tokenSucursal = this.obtenerTokenSucursalGuardado();
+    if (!tokenSucursal) {
+      return null;
+    }
+
+    const claims = this.extraerClaimsTokenSucursal(tokenSucursal);
+    if (!claims) {
+      this.limpiarSucursalAsignada();
+      return null;
+    }
+
+    return claims.sucursalId;
+  }
+
+  limpiarSucursalAsignada(): void {
+    if (!this.tieneLocalStorage()) {
+      return;
+    }
+
+    localStorage.removeItem(this.tokenSucursalStorageKey);
+    localStorage.removeItem(this.sucursalAsignadaStorageKey);
+  }
+
+  private guardarSucursalAsignada(tokenSucursal: string, sucursal: Sucursal): void {
+    if (!this.tieneLocalStorage()) {
+      throw new Error('LocalStorage no está disponible.');
+    }
+
+    localStorage.setItem(this.tokenSucursalStorageKey, tokenSucursal);
+    localStorage.setItem(this.sucursalAsignadaStorageKey, JSON.stringify(sucursal));
+  }
+
+  private obtenerTokenSucursalGuardado(): string | null {
+    if (!this.tieneLocalStorage()) {
+      return null;
+    }
+
+    return localStorage.getItem(this.tokenSucursalStorageKey);
+  }
+
+  private tieneLocalStorage(): boolean {
+    return typeof window !== 'undefined' && !!window.localStorage;
+  }
+
+  private extraerClaimsTokenSucursal(tokenSucursal: string): { exp: number; sucursalId: string; tokenType: string } | null {
+    const parts = tokenSucursal.split('.');
+    if (parts.length !== 3) {
+      return null;
+    }
+
+    try {
+      const payload = this.decodificarBase64Url(parts[1]);
+      const claims = JSON.parse(payload) as Partial<{ exp: number; sucursalId: string; tokenType: string }>;
+
+      if (
+        typeof claims.exp !== 'number' ||
+        claims.exp <= Math.floor(Date.now() / 1000) ||
+        typeof claims.sucursalId !== 'string' ||
+        claims.sucursalId.length === 0 ||
+        claims.tokenType !== 'sucursal'
+      ) {
+        return null;
+      }
+
+      return claims as { exp: number; sucursalId: string; tokenType: string };
+    } catch (error) {
+      console.error('No fue posible decodificar el token de sucursal.', error);
+      return null;
+    }
+  }
+
+  private decodificarBase64Url(base64Url: string): string {
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+    const binary = window.atob(paddedBase64);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+
+    return new TextDecoder().decode(bytes);
   }
 }

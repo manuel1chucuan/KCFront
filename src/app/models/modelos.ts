@@ -103,3 +103,8 @@ export interface Sucursal {
     numeroExt: number;
     version: number;
 }
+
+export interface AsignacionSucursal {
+    tokenSucursal: string;
+    sucursal: Sucursal;
+}
