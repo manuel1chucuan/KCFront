@@ -23,13 +23,16 @@
               </div>
         </div>
         <div class="col-sm-3 d-flex justify-content-end mx-0 p-2">
+            <span class="sucursal-actual" [class.sucursal-actual-clickable]="esAdmin" (click)="toggleSucursalMenu()">
+                <img src="../../assets/sucursal2.png" alt="Sucursal asignada" class="sucursal-actual-icono">
+                <span class="sucursal-actual-texto">{{ nombreSucursal }}</span>
+            </span>
             <!-- usuario -->
-            <span class="user">
+            <span class="user" [class.user-clickable]="esAdmin" (click)="toggleUserMenu()">
                 <svg width="16" height="16" fill="currentColor" class="bi bi-person-gear me-1 user-icon" viewBox="0 0 16 16">
                     <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
                 </svg>
-                            <!-- // TODO: cambiar valor hardcoded por variable -->
-                <span class="user-text">Manuel Chucuan(cambiar)</span>
+                <span class="user-text">{{ nombreUsuario }}</span>
             </span>
             <!-- cerrar sesión -->
             <svg (click)="onLogOut()" style="color: rgb(163, 39, 39);" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right logout" viewBox="0 0 16 16">
@@ -65,6 +68,51 @@
             </div>
 
         </div>
+        <div *ngIf="showSucursalMenu" class="overlay" (click)="closeSucursalMenu()"></div>
+        <div *ngIf="showSucursalMenu" class="select-flotante4" (click)="$event.stopPropagation()">
+            <h6 class="mb-2">Sucursal asignada</h6>
+            <p class="sucursal-menu-texto">Selecciona la sucursal que debe quedar asociada a este navegador.</p>
+
+            <label class="cambio-contrasena-label" for="sucursalAsignadaSelect">Sucursal</label>
+            <select id="sucursalAsignadaSelect" class="form-control mb-3" [(ngModel)]="sucursalSeleccionadaId" [disabled]="cargandoSucursales || asignandoSucursal">
+                <option value="" disabled>Selecciona una sucursal</option>
+                <option *ngFor="let sucursal of sucursalesDisponibles" [value]="sucursal.id">
+                    {{ sucursal.nombre }}
+                </option>
+            </select>
+
+            <p *ngIf="cargandoSucursales" class="sucursal-menu-estado">Cargando sucursales...</p>
+            <p *ngIf="!cargandoSucursales && sucursalesDisponibles.length === 0" class="sucursal-menu-estado">No hay sucursales disponibles.</p>
+
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-secondary btn-sm" type="button" (click)="cambiarSucursal()" [disabled]="cargandoSucursales || asignandoSucursal || !sucursalSeleccionadaId || sucursalesDisponibles.length === 0">
+                    {{ asignandoSucursal ? 'Guardando...' : 'Guardar cambio' }}
+                </button>
+            </div>
+        </div>
+        <div *ngIf="showUserMenu" class="overlay" (click)="closeUserMenu()"></div>
+        <div *ngIf="showUserMenu" class="select-flotante3" (click)="$event.stopPropagation()">
+            <h6 class="mb-3">Cuenta</h6>
+
+            <button *ngIf="esAdmin && !showCambioContrasena" class="btn btn-outline-secondary w-100" type="button" (click)="mostrarCambioContrasena()">
+                Cambiar contraseña
+            </button>
+
+            <div *ngIf="showCambioContrasena" class="cambio-contrasena-formulario">
+                <label class="cambio-contrasena-label" for="contrasenaActual">Contraseña actual</label>
+                <input class="form-control mb-3" id="contrasenaActual" type="password" [(ngModel)]="contrasenaActual">
+
+                <label class="cambio-contrasena-label" for="nuevaContrasena">Nueva contraseña</label>
+                <input class="form-control mb-3" id="nuevaContrasena" type="password" [(ngModel)]="nuevaContrasena">
+
+                <label class="cambio-contrasena-label" for="confirmacionContrasena">Confirmar nueva contraseña</label>
+                <input class="form-control mb-3" id="confirmacionContrasena" type="password" [(ngModel)]="confirmacionContrasena" (keydown.enter)="cambiarContrasena()">
+
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-secondary btn-sm" type="button" (click)="cambiarContrasena()">Guardar cambio</button>
+                </div>
+            </div>
+        </div>
         <!-- sirve para activar la función closeMessage2 -->
         <div *ngIf="showTogle2" class="overlay" (click)="closeMessage2()"></div>
         <!-- el componente que se renderiza al dar click en el menú (navbar) -->
@@ -75,22 +123,22 @@
                 <label class="navegacion-lbl">Caja</label>
             </div>
 
-            <div class="navegacion-div" (click)="mostrarComponente('servicios')">
+            <div *ngIf="esAdmin" class="navegacion-div" (click)="mostrarComponente('servicios')">
                 <img src="../../assets/bella.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Servicios</label>
             </div>
 
-            <div class="navegacion-div" (click)="mostrarComponente('inventario')">
+            <div *ngIf="esAdmin" class="navegacion-div" (click)="mostrarComponente('inventario')">
                 <img src="../../assets/inventario.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Inventario</label>
             </div>
 
-            <div class="navegacion-div" (click)="mostrarComponente('empleados')">
+            <div *ngIf="esAdmin" class="navegacion-div" (click)="mostrarComponente('empleados')">
                 <img src="../../assets/empleados.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Empleados</label>
             </div>
 
-            <div class="navegacion-div" (click)="mostrarComponente('sucursales')">
+            <div *ngIf="esAdmin" class="navegacion-div" (click)="mostrarComponente('sucursales')">
                 <img src="../../assets/sucursal2.png" class="rounded" alt="Cinque Terre" width="100" height="100" style="display: block;"> 
                 <label class="navegacion-lbl">Sucursales</label>
             </div>
@@ -103,10 +151,12 @@
         <!-- las 6 vistas se renderizan condicionalmente con *ngIf -->
                                                       <!-- se manda controlLongitud como input del componente caja -->
         <app-caja *ngIf="componenteActual === 'caja'" [controlLongitud]="selectedValue"></app-caja>
-        <app-servicios *ngIf="componenteActual === 'servicios'"></app-servicios>
-        <app-inventario *ngIf="componenteActual === 'inventario'"></app-inventario>
-        <app-empleados *ngIf="componenteActual === 'empleados'"></app-empleados>
-        <app-sucursales *ngIf="componenteActual === 'sucursales'"></app-sucursales>
+        <app-servicios *ngIf="esAdmin && componenteActual === 'servicios'"></app-servicios>
+        <app-inventario *ngIf="esAdmin && componenteActual === 'inventario'"></app-inventario>
+        <app-empleados *ngIf="esAdmin && componenteActual === 'empleados'"></app-empleados>
+        <app-sucursales *ngIf="esAdmin && componenteActual === 'sucursales'"></app-sucursales>
         <app-ventas *ngIf="componenteActual === 'ventas'"></app-ventas>
     </div>
+
+    <p-toast></p-toast>
 </div>

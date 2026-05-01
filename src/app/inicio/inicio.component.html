@@ -1,0 +1,116 @@
+<div class="container-fluid mt-3 contenedorLogin">
+  <div class="estado-sucursal" [class.estado-sucursal-pendiente]="requiereAsignacionSucursal">
+    <span class="estado-sucursal-etiqueta">
+      {{ requiereAsignacionSucursal ? 'Sucursal pendiente' : 'Sucursal asignada' }}
+    </span>
+
+    <strong *ngIf="!requiereAsignacionSucursal && sucursalAsignada; else estadoPendiente" class="estado-sucursal-titulo">
+      {{ sucursalAsignada.nombre }}
+    </strong>
+
+    <ng-template #estadoPendiente>
+      <strong class="estado-sucursal-titulo">
+        {{ requiereAsignacionSucursal ? 'Un administrador debe asignar la sucursal antes de continuar.' : 'Configuración guardada en este navegador.' }}
+      </strong>
+    </ng-template>
+
+    <span class="estado-sucursal-texto">
+      {{ requiereAsignacionSucursal ? 'Inicia sesión como administrador para seleccionar la sucursal de este equipo.' : 'La sucursal actual quedará disponible para los próximos accesos.' }}
+    </span>
+  </div>
+
+  <div class="row justify-content-center contenido-inicio">
+    <div class="col-12 col-lg-6 body-form">
+      <button class="inicio-card" [class.inicio-card-bloqueada]="requiereAsignacionSucursal" type="button" (click)="ingresarModoCajero()">
+        <span class="inicio-card-media">
+          <img class="inicio-card-imagen" src="assets/caja.png" alt="Modo Cajero">
+        </span>
+
+        <span class="inicio-card-contenido">
+          <span class="inicio-card-etiqueta">{{ requiereAsignacionSucursal ? 'Sucursal requerida' : 'Acceso rapido' }}</span>
+          <span class="label-form">Modo Cajero</span>
+          <span *ngIf="requiereAsignacionSucursal" class="inicio-card-ayuda">
+            Asigna primero la sucursal para habilitar las ventas.
+          </span>
+        </span>
+      </button>
+    </div>
+
+    <div class="col-12 col-lg-6 body-form">
+      <button *ngIf="!mostrarFormularioAdministrador" class="inicio-card" type="button" (click)="ingresarModoAdministrador()">
+        <span class="inicio-card-media inicio-card-media-admin">
+          <img class="inicio-card-imagen" src="assets/empleados.png" alt="Modo Administrador">
+        </span>
+
+        <span class="inicio-card-contenido">
+          <span class="inicio-card-etiqueta">{{ requiereAsignacionSucursal ? 'Configuracion inicial' : 'Acceso seguro' }}</span>
+          <span class="label-form">{{ requiereAsignacionSucursal ? 'Asignar Sucursal' : 'Modo Administrador' }}</span>
+          <span *ngIf="requiereAsignacionSucursal" class="inicio-card-ayuda">
+            Un administrador debe iniciar sesión para completar esta configuración.
+          </span>
+        </span>
+      </button>
+
+      <div *ngIf="mostrarFormularioAdministrador" class="inicio-card inicio-card-formulario">
+        <div class="inicio-card-contenido inicio-card-contenido-formulario">
+          <ng-container *ngIf="!mostrarAsignacionSucursal; else asignacionSucursalTpl">
+            <span class="inicio-card-etiqueta">Acceso seguro</span>
+            <span class="label-form">Modo Administrador</span>
+
+            <div class="inicio-formulario">
+              <div class="mb-1 margen-form mt-2">
+                <input type="text" class="form-control" id="email" placeholder="Usuario" name="email" [(ngModel)]="correo">
+              </div>
+
+              <div class="mb-2 margen-form">
+                <input type="password" class="form-control" id="pwd" placeholder="Contraseña" name="pswd" [(ngModel)]="contrasena" (keydown.enter)="onLoginAdministrador()">
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center label-form-bot">
+                <button class="btn btn-outline-secondary btn-sm" type="button" (click)="cancelarModoAdministrador()">Cancelar</button>
+                <button class="btn btn-secondary btn-sm" type="button" (click)="onLoginAdministrador()">Iniciar sesion</button>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #asignacionSucursalTpl>
+            <span class="inicio-card-etiqueta">Configuracion inicial</span>
+            <span class="label-form">Asignar Sucursal</span>
+            <span class="inicio-formulario-texto">
+              Selecciona la sucursal que quedará asociada a este navegador para los próximos accesos.
+            </span>
+
+            <div class="inicio-formulario">
+              <div class="mb-2 margen-form mt-3">
+                <label class="inicio-formulario-label" for="sucursalSelect">Sucursal</label>
+                <select id="sucursalSelect" class="form-control" name="sucursalSelect" [(ngModel)]="sucursalSeleccionadaId" [disabled]="cargandoSucursales || asignandoSucursal">
+                  <option value="" disabled>Selecciona una sucursal</option>
+                  <option *ngFor="let sucursal of sucursalesDisponibles" [value]="sucursal.id">
+                    {{ sucursal.nombre }}
+                  </option>
+                </select>
+              </div>
+
+              <span *ngIf="cargandoSucursales" class="inicio-formulario-estado">
+                Cargando sucursales...
+              </span>
+
+              <span *ngIf="!cargandoSucursales && sucursalesDisponibles.length === 0" class="inicio-formulario-estado">
+                No hay sucursales disponibles para asignar.
+              </span>
+
+              <div class="d-flex justify-content-between align-items-center label-form-bot mt-3">
+                <button class="btn btn-outline-secondary btn-sm" type="button" (click)="cancelarModoAdministrador()" [disabled]="asignandoSucursal">Cancelar</button>
+                <button class="btn btn-secondary btn-sm" type="button" (click)="asignarSucursal()" [disabled]="cargandoSucursales || asignandoSucursal || sucursalesDisponibles.length === 0 || !sucursalSeleccionadaId">
+                  {{ asignandoSucursal ? 'Guardando...' : 'Asignar sucursal' }}
+                </button>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p-toast></p-toast>
+</div>
